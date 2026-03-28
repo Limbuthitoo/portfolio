@@ -12,8 +12,8 @@ export async function PUT(req: NextRequest) {
     if (!currentPassword || typeof currentPassword !== 'string') {
       return NextResponse.json({ error: 'Current password required' }, { status: 400 });
     }
-    if (!newPassword || typeof newPassword !== 'string' || newPassword.length < 6) {
-      return NextResponse.json({ error: 'New password must be at least 6 characters' }, { status: 400 });
+    if (!newPassword || typeof newPassword !== 'string' || newPassword.length < 8) {
+      return NextResponse.json({ error: 'New password must be at least 8 characters' }, { status: 400 });
     }
 
     // Verify current password
@@ -25,8 +25,15 @@ export async function PUT(req: NextRequest) {
       }
     } else {
       // Fall back to env var for first-time password change
+      const { timingSafeEqual } = await import('crypto');
       const envPassword = process.env.DASHBOARD_PASSWORD;
-      if (!envPassword || currentPassword !== envPassword) {
+      if (!envPassword) {
+        return NextResponse.json({ error: 'Current password is incorrect' }, { status: 401 });
+      }
+      const bufA = Buffer.from(currentPassword);
+      const bufB = Buffer.from(envPassword);
+      const match = bufA.length === bufB.length && timingSafeEqual(bufA, bufB);
+      if (!match) {
         return NextResponse.json({ error: 'Current password is incorrect' }, { status: 401 });
       }
     }
@@ -36,7 +43,8 @@ export async function PUT(req: NextRequest) {
     savePasswordHash(hash);
 
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (error) {
+    console.error('/api/auth/password error:', error);
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 }

@@ -2,18 +2,8 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Games — Bijay Subbalimbu",
-  description: "Mini games built with React.",
+  description: "Mini games coming soon.",
 };
-
-const GAMES = [
-  {
-    slug: "shadow-quest",
-    title: "Shadow Quest",
-    emoji: "⚔️",
-    description: "A dungeon platformer with sword combat, traps, potions, and 5 challenging levels.",
-    color: "var(--violet)",
-  },
-];
 
 export default function GamesPage() {
   return (
@@ -34,24 +24,12 @@ export default function GamesPage() {
           Mini games built for fun. Take a break and play!
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {GAMES.map((game) => (
-            <Link
-              key={game.slug}
-              href={`/games/${game.slug}`}
-              className="group relative rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 hover:border-[var(--border-hover)] transition-all hover:shadow-lg"
-            >
-              <div className="text-4xl mb-4">{game.emoji}</div>
-              <h2 className="text-lg font-semibold text-[var(--fg)] mb-1 group-hover:text-[var(--violet)] transition-colors">
-                {game.title}
-              </h2>
-              <p className="text-sm text-[var(--fg-3)]">{game.description}</p>
-              <div
-                className="absolute top-4 right-4 w-2 h-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ background: game.color, boxShadow: `0 0 8px ${game.color}` }}
-              />
-            </Link>
-          ))}
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <div className="text-6xl mb-6">♟</div>
+          <h2 className="text-2xl font-bold text-[var(--fg)] mb-3">Coming Soon</h2>
+          <p className="text-[var(--fg-3)] text-sm max-w-md">
+            New games are being crafted. Check back soon for fun mini-games you can play right in your browser.
+          </p>
         </div>
       </div>
     </div>

@@ -58,12 +58,14 @@ export function validateExperience(data: unknown): data is Experience {
 export function validateSiteConfig(data: unknown): data is SiteConfig {
   if (!data || typeof data !== 'object') return false;
   const c = data as Record<string, unknown>;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return (
     isNonEmptyString(c.name) &&
     typeof c.title === 'string' &&
     typeof c.role === 'string' &&
     typeof c.description === 'string' &&
     typeof c.email === 'string' &&
+    emailRegex.test(c.email) &&
     typeof c.social === 'object' && c.social !== null &&
     typeof c.availability === 'string' &&
     typeof c.location === 'string'

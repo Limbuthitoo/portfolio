@@ -1,33 +1,210 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio — Bijay Subbalimbu
 
-## Getting Started
+Personal portfolio built with Next.js 16, React 19, Tailwind CSS v4, and Framer Motion.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Framework:** Next.js 16.2.1 (App Router)
+- **UI:** React 19, Tailwind CSS v4, Framer Motion 12
+- **Auth:** JWT (jose) + bcrypt password hashing
+- **Data:** Flat-file JSON storage (`content/` directory)
+
+## Project Structure
+
+```
+src/
+├── app/            # Pages & API routes
+│   ├── api/        # REST API (auth, projects, experience, config)
+│   ├── dashboard/  # Admin panel (login, projects, experience, settings)
+│   ├── about/      # About page
+│   ├── contact/    # Contact page
+│   ├── games/      # Games (coming soon)
+│   └── work/       # Projects showcase
+├── components/     # React components
+├── data/           # Seed data (used on first run)
+├── lib/            # Auth, DB, utilities
+└── types/          # TypeScript types
+content/            # Runtime JSON data (projects, experience, config, auth)
+public/             # Static assets
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.example` to `.env.local` and fill in:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp .env.example .env.local
+```
 
-## Learn More
+| Variable | Required | Description |
+|---|---|---|
+| `DASHBOARD_SECRET` | Yes | JWT signing secret (min 32 characters) |
+| `DASHBOARD_PASSWORD` | Yes | Dashboard login password |
 
-To learn more about Next.js, take a look at the following resources:
+## Local Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Deploying on cPanel
+
+Next.js requires a Node.js runtime. cPanel supports this via the **Setup Node.js App** feature.
+
+### Prerequisites
+
+- cPanel with **Setup Node.js App** (CloudLinux / LiteSpeed)
+- Node.js 18+ available in cPanel
+- SSH access (recommended) or cPanel Terminal
+
+### Step 1 — Upload Files
+
+**Option A: Git (recommended)**
+
+SSH into your server and clone:
+
+```bash
+cd ~/
+git clone <your-repo-url> portfolio
+```
+
+**Option B: File Manager**
+
+1. Build locally first: `npm run build`
+2. Zip the entire project **excluding** `node_modules/` and `.next/cache/`
+3. Upload the zip via cPanel File Manager to your home directory
+4. Extract it (e.g., to `~/portfolio`)
+
+### Step 2 — Create Node.js App in cPanel
+
+1. Go to **cPanel → Setup Node.js App**
+2. Click **Create Application**
+3. Configure:
+
+| Setting | Value |
+|---|---|
+| Node.js version | `18` or higher |
+| Application mode | `Production` |
+| Application root | `portfolio` (or wherever you extracted) |
+| Application URL | Your domain or subdomain |
+| Application startup file | `server.js` |
+
+4. Click **Create**
+
+### Step 3 — Create the Startup File
+
+Create `server.js` in your project root (this is what cPanel's Phusion Passenger expects):
+
+```js
+const { createServer } = require("http");
+const { parse } = require("url");
+const next = require("next");
+
+const app = next({ dir: __dirname, dev: false });
+const handle = app.getRequestHandler();
+const port = process.env.PORT || 3000;
+
+app.prepare().then(() => {
+  createServer((req, res) => {
+    handle(req, res, parse(req.url, true));
+  }).listen(port, () => {
+    console.log(`> Ready on port ${port}`);
+  });
+});
+```
+
+### Step 4 — Set Environment Variables
+
+In **cPanel → Setup Node.js App**, click your app, then add environment variables:
+
+| Key | Value |
+|---|---|
+| `DASHBOARD_SECRET` | A random 32+ character string |
+| `DASHBOARD_PASSWORD` | Your dashboard password |
+| `NODE_ENV` | `production` |
+
+Or create `~/portfolio/.env.local` via SSH:
+
+```bash
+cd ~/portfolio
+cat > .env.local << 'EOF'
+DASHBOARD_SECRET=your-random-secret-at-least-32-characters
+DASHBOARD_PASSWORD=your-secure-password
+EOF
+chmod 600 .env.local
+```
+
+### Step 5 — Install Dependencies & Build
+
+From the cPanel Node.js app page, click **Run NPM Install**.
+
+Or via SSH (activate the virtual environment first):
+
+```bash
+# Enter the Node.js virtual environment (path shown in cPanel)
+source /home/YOUR_USER/nodevenv/portfolio/18/bin/activate
+
+cd ~/portfolio
+npm install --production=false
+npm run build
+```
+
+> `--production=false` is needed so devDependencies (Tailwind, TypeScript) are installed for the build step.
+
+### Step 6 — Restart the App
+
+In **cPanel → Setup Node.js App**, click **Restart** on your application.
+
+Your site should now be live at your configured domain.
+
+### Step 7 — Verify
+
+- Visit your domain — the portfolio should load
+- Visit `/dashboard/login` — log in with your password
+- Check the browser console for errors
+
+---
+
+## Updating on cPanel
+
+After pushing changes to your repo:
+
+```bash
+# SSH into server
+source /home/YOUR_USER/nodevenv/portfolio/18/bin/activate
+cd ~/portfolio
+git pull
+npm install --production=false
+npm run build
+```
+
+Then restart the app in **cPanel → Setup Node.js App**.
+
+## Troubleshooting
+
+| Issue | Fix |
+|---|---|
+| 503 / Application Error | Check `stderr.log` in your app root |
+| Blank page | Ensure `npm run build` completed without errors |
+| Static assets not loading | Verify `Application root` points to the correct folder |
+| Dashboard login fails | Check that `.env.local` exists with correct values and has `chmod 600` |
+| `DASHBOARD_SECRET` error | Make sure the env variable is set (min 32 chars) |
+| Build fails on server | Ensure Node 18+, and run with `--production=false` to include dev deps |
+
+## Content Management
+
+The dashboard at `/dashboard` lets you manage:
+- **Projects** — Add, edit, delete portfolio projects
+- **Experience** — Manage work experience timeline
+- **Settings** — Update site config (name, role, social links)
+- **Password** — Change dashboard password
+
+All data is stored in the `content/` directory as JSON files.
 
 ## Deploy on Vercel
 
