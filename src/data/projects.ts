@@ -1,0 +1,217 @@
+import { Project } from '@/types';
+
+export const projects: Project[] = [
+  {
+    slug: 'aurora',
+    title: 'Aurora',
+    category: 'Web Application',
+    type: 'frontend',
+    description:
+      'A real-time collaborative design platform with spatial audio and infinite canvas.',
+    longDescription:
+      'Aurora is a next-generation collaborative design tool that brings teams together through spatial audio, infinite canvas, and real-time multiplayer editing. Built for distributed design teams who need to think and create together.',
+    problem:
+      'Remote design teams struggled with fragmented tools — separate apps for design, communication, and feedback created context-switching overhead.',
+    solution:
+      'Built a unified workspace with real-time cursors, spatial audio that adjusts based on proximity, and an infinite canvas that supports vector, raster, and 3D elements seamlessly.',
+    impact:
+      '40% reduction in design review cycles, adopted by 200+ teams in first quarter, featured in Product Hunt top 5.',
+    thumbnail: '/projects/aurora.svg',
+    images: ['/projects/aurora-1.svg', '/projects/aurora-2.svg'],
+    technologies: ['Next.js', 'TypeScript', 'WebRTC', 'Canvas API', 'Framer Motion'],
+    role: 'Lead Frontend Developer & UI Designer',
+    year: '2024',
+    liveUrl: 'https://aurora.app',
+    featured: true,
+  },
+  {
+    slug: 'meridian',
+    title: 'Meridian',
+    category: 'Dashboard',
+    type: 'uiux',
+    description:
+      'Analytics dashboard with real-time data visualization and predictive insights.',
+    longDescription:
+      'Meridian transforms complex datasets into intuitive visual narratives. An analytics platform designed for decision-makers who need clarity without complexity.',
+    problem:
+      'Enterprise analytics tools were powerful but overwhelming — key insights were buried under layers of configuration and noise.',
+    solution:
+      'Designed a progressive disclosure interface that surfaces the most critical metrics first, with drill-down capabilities that reveal deeper patterns on demand.',
+    impact:
+      'Reduced time-to-insight by 60%, increased dashboard engagement by 3x across pilot customers.',
+    thumbnail: '/projects/meridian.svg',
+    images: ['/projects/meridian-1.svg', '/projects/meridian-2.svg'],
+    technologies: ['React', 'D3.js', 'TypeScript', 'Node.js', 'PostgreSQL'],
+    role: 'UI/UX Designer & Frontend Developer',
+    year: '2024',
+    featured: true,
+    timeline: '4 months',
+    team: '4 (UX, Frontend, Backend, PM)',
+    responsibilities: [
+      'User research & stakeholder interviews',
+      'End-to-end UX design',
+      'UI design & prototyping',
+      'Frontend implementation',
+      'Usability testing',
+    ],
+    research: {
+      summary: 'We interviewed 12 enterprise analysts and observed their daily workflows to understand where existing tools fell short.',
+      quotes: [
+        { text: 'I spend more time configuring dashboards than actually analyzing data.', source: 'Data Analyst', insight: 'Configuration overhead kills productivity' },
+        { text: 'By the time I find the insight, the meeting is already over.', source: 'Product Manager', insight: 'Speed-to-insight is critical' },
+      ],
+    },
+    personas: [
+      { name: 'Decision Maker', type: 'Primary', needs: 'Quick insights, executive summaries, trend alerts' },
+      { name: 'Data Analyst', type: 'Primary', needs: 'Deep drill-downs, custom queries, export capabilities' },
+      { name: 'Team Lead', type: 'Secondary', needs: 'Team metrics, shared dashboards, scheduled reports' },
+    ],
+    designDecisions: [
+      { question: 'Why progressive disclosure over full-feature dashboard?', answer: 'Users were overwhelmed by dense dashboards. We designed a layered approach: surface critical metrics first, with drill-down for depth. This reduced cognitive load while preserving power-user capabilities.' },
+      { question: 'How do we handle real-time data without causing distraction?', answer: 'Instead of constant live updates that create anxiety, we used a calm notification system with configurable thresholds. Data refreshes silently unless a metric crosses a user-defined alert boundary.' },
+    ],
+    learnings: [
+      'The biggest design win was removing features, not adding them. The initial prototype had 40+ configurable widgets — the shipped version has 8 that cover 95% of use cases.',
+      'Real-time doesn\'t mean constant updates. Users needed calm technology — data that\'s fresh but not distracting.',
+      'Progressive disclosure only works when the first layer is genuinely useful. We spent 60% of design time on the default view.',
+    ],
+    outcome: {
+      title: 'Reduced time-to-insight by 60%',
+      description: 'Meridian was adopted by pilot customers within 2 weeks of launch, with dashboard engagement increasing 3x compared to the previous tool.',
+      highlights: [
+        '60% faster time-to-insight vs previous tools',
+        '3x increase in dashboard engagement',
+        'NPS score of 72 from pilot users',
+      ],
+    },
+  },
+  {
+    slug: 'vertex',
+    title: 'Vertex',
+    category: 'E-Commerce',
+    type: 'frontend',
+    description:
+      'Premium e-commerce experience with 3D product visualization and AR try-on.',
+    longDescription:
+      'Vertex reimagines online shopping through immersive 3D product explorations and AR-powered try-on experiences, bridging the gap between digital browsing and physical interaction.',
+    problem:
+      'High return rates in online fashion due to inability to experience products before purchase.',
+    solution:
+      'Developed WebGL-powered 3D product viewers with real-time material simulation and AR spatial mapping for virtual try-on.',
+    impact:
+      '35% reduction in returns, 28% increase in conversion rate, 4.8 star average app rating.',
+    thumbnail: '/projects/vertex.svg',
+    images: ['/projects/vertex-1.svg', '/projects/vertex-2.svg'],
+    technologies: ['Three.js', 'React', 'WebXR', 'GLSL', 'Tailwind CSS'],
+    role: 'Creative Developer',
+    year: '2023',
+    liveUrl: 'https://vertex.store',
+    featured: true,
+  },
+  {
+    slug: 'echo',
+    title: 'Echo',
+    category: 'Mobile App',
+    type: 'uiux',
+    description:
+      'Mindfulness app with generative audio landscapes and biometric feedback.',
+    longDescription:
+      'Echo creates personalized soundscapes that adapt to your physiological state, using biometric data to guide meditation sessions that respond to your body in real-time.',
+    problem:
+      'Existing meditation apps offered static, one-size-fits-all content that failed to adapt to individual needs.',
+    solution:
+      'Built a generative audio engine driven by heart rate variability and breathing patterns, creating unique soundscapes per session.',
+    impact:
+      '92% daily retention rate, featured by Apple as App of the Day, 500K+ downloads in first month.',
+    thumbnail: '/projects/echo.svg',
+    images: ['/projects/echo-1.svg', '/projects/echo-2.svg'],
+    technologies: ['React Native', 'Web Audio API', 'TensorFlow Lite', 'Swift'],
+    role: 'UI/UX Designer & Motion Designer',
+    year: '2023',
+    featured: true,
+    timeline: '6 months',
+    team: '5 (UX, iOS, ML, Audio, PM)',
+    responsibilities: [
+      'User research & journey mapping',
+      'Interaction design & prototyping',
+      'Motion design for breathing exercises',
+      'Biometric data visualization design',
+      'Usability testing with 30+ participants',
+    ],
+    research: {
+      summary: 'We conducted diary studies with 25 meditation practitioners across experience levels — from beginners to 10+ year practitioners.',
+      quotes: [
+        { text: 'Every meditation app feels like someone else\'s practice. I want something that meets me where I am.', source: 'Daily Practitioner', insight: 'Personalization is the core need' },
+        { text: 'I can never tell if it\'s actually helping or if I\'m just sitting with my eyes closed.', source: 'Beginner', insight: 'Users need tangible feedback' },
+      ],
+    },
+    personas: [
+      { name: 'Beginner', type: 'Primary', needs: 'Guided sessions, progress visibility, gentle onboarding' },
+      { name: 'Practitioner', type: 'Primary', needs: 'Adaptive sessions, biometric insights, minimal UI' },
+      { name: 'Therapist', type: 'Secondary', needs: 'Client progress tracking, session recommendations' },
+    ],
+    designDecisions: [
+      { question: 'Why generative audio over curated playlists?', answer: 'Curated content hits a wall — users grow tired of the same tracks. Generative audio creates infinite variety while maintaining therapeutic value. Each session is unique but familiar.' },
+      { question: 'How do we show biometric data without creating anxiety?', answer: 'We designed abstract visualizations — flowing gradients and gentle particle systems — that represent physiological state without showing raw numbers. Users feel their progress rather than analyzing it.' },
+    ],
+    learnings: [
+      'Designing for calm is harder than designing for engagement. Every animation, transition, and color choice had to be evaluated for its physiological effect.',
+      'Biometric data is deeply personal. We learned to present it as narrative ("Your body responded well to this session") rather than metrics ("HRV: 42ms").',
+      'The empty state is the first impression. New users with no data need to feel the app\'s value immediately, not after weeks of usage data.',
+    ],
+    outcome: {
+      title: 'Featured as App of the Day',
+      description: 'Apple featured Echo as App of the Day within the first month. The app achieved a 92% daily retention rate, far above the meditation app average of 15%.',
+      highlights: [
+        '92% daily retention rate',
+        'Apple App of the Day feature',
+        '500K+ downloads in first month',
+        '4.8 star average rating',
+      ],
+    },
+  },
+  {
+    slug: 'flux',
+    title: 'Flux',
+    category: 'SaaS Platform',
+    type: 'frontend',
+    description:
+      'Workflow automation platform with visual programming and AI-powered suggestions.',
+    longDescription:
+      'Flux empowers non-technical teams to build complex automations through an intuitive visual programming interface, augmented by AI that suggests optimizations.',
+    problem:
+      'Business teams relied on engineering resources for routine automations, creating bottlenecks.',
+    solution:
+      'Created a node-based visual editor with drag-and-drop workflows, natural language triggers, and ML models that identify optimization opportunities.',
+    impact:
+      'Saved average client 20 engineering hours per week, 300+ organizations onboarded.',
+    thumbnail: '/projects/flux.svg',
+    images: ['/projects/flux-1.svg', '/projects/flux-2.svg'],
+    technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'OpenAI API', 'Redis'],
+    role: 'Frontend Developer',
+    year: '2022',
+    featured: false,
+  },
+  {
+    slug: 'prism',
+    title: 'Prism',
+    category: 'Design System',
+    type: 'other',
+    description:
+      'Enterprise design system serving 40+ products and 200+ developers.',
+    longDescription:
+      'Prism is a comprehensive design system built to unify the visual language and component architecture across a portfolio of enterprise products.',
+    problem:
+      'Inconsistent experiences across products eroded brand trust and multiplied maintenance costs.',
+    solution:
+      'Designed and engineered a token-based system with composable components, automated accessibility checks, and living documentation.',
+    impact:
+      'Cut UI development time by 45%, achieved WCAG AA compliance across all products, adopted by 40+ internal products.',
+    thumbnail: '/projects/prism.svg',
+    images: ['/projects/prism-1.svg', '/projects/prism-2.svg'],
+    technologies: ['React', 'Storybook', 'TypeScript', 'Figma API', 'Chromatic'],
+    role: 'Design System Lead',
+    year: '2022',
+    featured: false,
+  },
+];

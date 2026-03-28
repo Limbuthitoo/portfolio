@@ -1,0 +1,47 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0c0418"/><stop offset="100%" stop-color="#180838"/></linearGradient>
+    <linearGradient id="pur" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#6D28D9"/></linearGradient>
+    <radialGradient id="g1" cx="50%" cy="50%"><stop offset="0%" stop-color="#F43F5E" stop-opacity=".08"/><stop offset="100%" stop-color="#F43F5E" stop-opacity="0"/></radialGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="30"/></filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/><rect width="1200" height="800" fill="url(#g1)"/>
+  <rect x="80" y="50" width="1040" height="700" rx="16" fill="#0d0d1a" stroke="#2d1b69"/>
+  <rect x="80" y="50" width="1040" height="44" rx="16" fill="#1a1035"/><rect x="80" y="78" width="1040" height="16" fill="#1a1035"/>
+  <circle cx="110" cy="72" r="6" fill="#FF5F57"/><circle cx="132" cy="72" r="6" fill="#FEBC2E"/><circle cx="154" cy="72" r="6" fill="#28C840"/>
+  <rect x="80" y="94" width="1040" height="48" fill="#120e24"/>
+  <rect x="110" y="110" width="80" height="10" rx="5" fill="#8B5CF6" opacity=".5"/>
+  <!-- Product grid -->
+  <rect x="110" y="165" width="296" height="380" rx="16" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="130" y="185" width="256" height="200" rx="12" fill="#12082a" stroke="#2d1b69" stroke-width=".5"/>
+  <rect x="180" y="240" width="160" height="100" rx="8" fill="url(#pur)" opacity=".1"/>
+  <text x="210" y="300" fill="#8B5CF6" font-family="system-ui" font-size="18" font-weight="bold" opacity=".4">PRODUCT</text>
+  <rect x="130" y="400" width="160" height="10" rx="5" fill="#2d1b69" opacity=".4"/>
+  <rect x="130" y="420" width="100" height="8" rx="4" fill="#2d1b69" opacity=".25"/>
+  <text x="130" y="460" fill="#fff" font-family="system-ui" font-size="20" font-weight="bold" opacity=".6">$199.00</text>
+  <rect x="130" y="480" width="256" height="36" rx="8" fill="url(#pur)" opacity=".5"/>
+  <rect x="422" y="165" width="296" height="380" rx="16" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="442" y="185" width="256" height="200" rx="12" fill="#12082a" stroke="#2d1b69" stroke-width=".5"/>
+  <rect x="492" y="240" width="160" height="100" rx="8" fill="#00F0FF" opacity=".06"/>
+  <text x="522" y="300" fill="#00F0FF" font-family="system-ui" font-size="18" font-weight="bold" opacity=".3">PRODUCT</text>
+  <rect x="442" y="400" width="140" height="10" rx="5" fill="#2d1b69" opacity=".4"/>
+  <rect x="442" y="420" width="80" height="8" rx="4" fill="#2d1b69" opacity=".25"/>
+  <text x="442" y="460" fill="#fff" font-family="system-ui" font-size="20" font-weight="bold" opacity=".6">$349.00</text>
+  <rect x="442" y="480" width="256" height="36" rx="8" fill="url(#pur)" opacity=".5"/>
+  <rect x="734" y="165" width="296" height="380" rx="16" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="754" y="185" width="256" height="200" rx="12" fill="#12082a" stroke="#2d1b69" stroke-width=".5"/>
+  <rect x="804" y="240" width="160" height="100" rx="8" fill="#F43F5E" opacity=".06"/>
+  <text x="834" y="300" fill="#F43F5E" font-family="system-ui" font-size="18" font-weight="bold" opacity=".3">PRODUCT</text>
+  <rect x="754" y="400" width="120" height="10" rx="5" fill="#2d1b69" opacity=".4"/>
+  <rect x="754" y="420" width="90" height="8" rx="4" fill="#2d1b69" opacity=".25"/>
+  <text x="754" y="460" fill="#fff" font-family="system-ui" font-size="20" font-weight="bold" opacity=".6">$449.00</text>
+  <rect x="754" y="480" width="256" height="36" rx="8" fill="url(#pur)" opacity=".5"/>
+  <!-- Filter bar -->
+  <rect x="110" y="565" width="920" height="50" rx="10" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="130" y="582" width="80" height="20" rx="6" fill="url(#pur)" opacity=".4"/><rect x="220" y="582" width="60" height="20" rx="6" fill="#1a1035" stroke="#2d1b69"/><rect x="290" y="582" width="70" height="20" rx="6" fill="#1a1035" stroke="#2d1b69"/><rect x="370" y="582" width="50" height="20" rx="6" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="110" y="635" width="920" height="90" rx="12" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="130" y="655" width="100" height="8" rx="4" fill="#2d1b69" opacity=".4"/>
+  <rect x="130" y="678" width="880" height="6" rx="3" fill="#2d1b69" opacity=".15"/>
+  <rect x="130" y="695" width="600" height="6" rx="3" fill="#2d1b69" opacity=".12"/>
+  <circle cx="600" cy="400" r="200" fill="#8B5CF6" opacity=".03" filter="url(#glow)"/>
+</svg>

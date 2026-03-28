@@ -1,0 +1,19 @@
+import { SiteConfig } from '@/types';
+
+export const siteConfig: SiteConfig = {
+  name: 'Bijay Subbalimbu',
+  title: 'Creative Frontend Developer',
+  role: 'Frontend Developer & UI/UX Designer',
+  description:
+    '12+ years crafting at the intersection of design & code — from pixels to motion to interfaces.',
+  email: 'hello@bijaysubbalimbu.com',
+  social: {
+    github: 'https://github.com',
+    linkedin: 'https://linkedin.com',
+    dribbble: 'https://dribbble.com',
+    behance: 'https://behance.net',
+    twitter: 'https://twitter.com',
+  },
+  availability: 'Available for freelance',
+  location: 'Kathmandu, Nepal',
+};

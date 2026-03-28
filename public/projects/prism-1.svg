@@ -1,0 +1,68 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0b0418"/><stop offset="100%" stop-color="#160838"/></linearGradient>
+    <linearGradient id="pur" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#6D28D9"/></linearGradient>
+    <linearGradient id="rainbow" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#F43F5E"/><stop offset="25%" stop-color="#F59E0B"/><stop offset="50%" stop-color="#10B981"/><stop offset="75%" stop-color="#00F0FF"/><stop offset="100%" stop-color="#8B5CF6"/></linearGradient>
+    <radialGradient id="g1" cx="50%" cy="50%"><stop offset="0%" stop-color="#8B5CF6" stop-opacity=".15"/><stop offset="100%" stop-color="#8B5CF6" stop-opacity="0"/></radialGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="30"/></filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/><rect width="1200" height="800" fill="url(#g1)"/>
+  <rect x="80" y="50" width="1040" height="700" rx="16" fill="#0d0d1a" stroke="#2d1b69"/>
+  <rect x="80" y="50" width="1040" height="44" rx="16" fill="#1a1035"/><rect x="80" y="78" width="1040" height="16" fill="#1a1035"/>
+  <circle cx="110" cy="72" r="6" fill="#FF5F57"/><circle cx="132" cy="72" r="6" fill="#FEBC2E"/><circle cx="154" cy="72" r="6" fill="#28C840"/>
+  <!-- Toolbar -->
+  <rect x="80" y="94" width="60" height="656" fill="#120e24"/>
+  <rect x="92" y="114" width="36" height="36" rx="8" fill="#1a1035" stroke="#2d1b69"/><rect x="92" y="164" width="36" height="36" rx="8" fill="url(#pur)" opacity=".3"/><rect x="92" y="214" width="36" height="36" rx="8" fill="#1a1035" stroke="#2d1b69"/><rect x="92" y="264" width="36" height="36" rx="8" fill="#1a1035" stroke="#2d1b69"/>
+  <!-- Component library view -->
+  <rect x="140" y="94" width="980" height="656" fill="#0a0818"/>
+  <!-- Library header -->
+  <rect x="160" y="114" width="940" height="50" rx="0" fill="#120e24"/>
+  <rect x="180" y="132" width="100" height="10" rx="5" fill="#8B5CF6" opacity=".5"/>
+  <rect x="860" y="128" width="220" height="26" rx="6" fill="#12082a" stroke="#2d1b69"/><rect x="878" y="136" width="100" height="8" rx="4" fill="#2d1b69" opacity=".25"/>
+  <!-- Component grid -->
+  <rect x="180" y="184" width="280" height="200" rx="12" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="200" y="204" width="240" height="120" rx="8" fill="#12082a"/>
+  <!-- Button component preview -->
+  <rect x="230" y="240" width="120" height="36" rx="8" fill="url(#pur)" opacity=".5"/><rect x="370" y="240" width="50" height="36" rx="8" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="230" y="286" width="80" height="20" rx="4" fill="url(#pur)" opacity=".3"/><rect x="320" y="286" width="80" height="20" rx="4" fill="#00F0FF" opacity=".15"/>
+  <rect x="200" y="340" width="100" height="8" rx="4" fill="#2d1b69" opacity=".4"/>
+  <rect x="200" y="358" width="60" height="6" rx="3" fill="#2d1b69" opacity=".25"/>
+  <rect x="500" y="184" width="280" height="200" rx="12" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="520" y="204" width="240" height="120" rx="8" fill="#12082a"/>
+  <!-- Card component preview -->
+  <rect x="548" y="224" width="180" height="80" rx="10" fill="#1a1035" stroke="#8B5CF6" stroke-width=".5"/>
+  <rect x="564" y="240" width="100" height="8" rx="4" fill="#8B5CF6" opacity=".35"/><rect x="564" y="256" width="140" height="6" rx="3" fill="#2d1b69" opacity=".25"/><rect x="564" y="270" width="60" height="16" rx="4" fill="url(#pur)" opacity=".3"/>
+  <rect x="520" y="340" width="80" height="8" rx="4" fill="#2d1b69" opacity=".4"/>
+  <rect x="520" y="358" width="100" height="6" rx="3" fill="#2d1b69" opacity=".25"/>
+  <rect x="820" y="184" width="280" height="200" rx="12" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="840" y="204" width="240" height="120" rx="8" fill="#12082a"/>
+  <!-- Input component preview -->
+  <rect x="868" y="234" width="180" height="36" rx="8" fill="#1a1035" stroke="#2d1b69"/><rect x="884" y="246" width="80" height="8" rx="4" fill="#2d1b69" opacity=".2"/>
+  <rect x="868" y="280" width="180" height="36" rx="8" fill="#1a1035" stroke="#8B5CF6" stroke-width=".5"/><rect x="884" y="292" width="60" height="8" rx="4" fill="#8B5CF6" opacity=".3"/>
+  <rect x="840" y="340" width="100" height="8" rx="4" fill="#2d1b69" opacity=".4"/>
+  <rect x="840" y="358" width="60" height="6" rx="3" fill="#2d1b69" opacity=".25"/>
+  <!-- Row 2 -->
+  <rect x="180" y="404" width="280" height="200" rx="12" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="200" y="424" width="240" height="120" rx="8" fill="#12082a"/>
+  <!-- Toggle component -->
+  <rect x="260" y="464" width="50" height="26" rx="13" fill="url(#pur)" opacity=".5"/><circle cx="297" cy="477" r="10" fill="#fff" opacity=".6"/>
+  <rect x="330" y="470" width="80" height="8" rx="4" fill="#2d1b69" opacity=".3"/>
+  <rect x="200" y="560" width="80" height="8" rx="4" fill="#2d1b69" opacity=".4"/>
+  <rect x="200" y="578" width="100" height="6" rx="3" fill="#2d1b69" opacity=".25"/>
+  <rect x="500" y="404" width="280" height="200" rx="12" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="520" y="424" width="240" height="120" rx="8" fill="#12082a"/>
+  <!-- Badge components -->
+  <rect x="548" y="460" width="60" height="22" rx="11" fill="url(#pur)" opacity=".4"/><rect x="618" y="460" width="50" height="22" rx="11" fill="#10B981" opacity=".3"/><rect x="678" y="460" width="55" height="22" rx="11" fill="#00F0FF" opacity=".3"/>
+  <rect x="548" y="494" width="70" height="22" rx="11" fill="#F43F5E" opacity=".3"/><rect x="628" y="494" width="45" height="22" rx="11" fill="#F59E0B" opacity=".3"/>
+  <rect x="520" y="560" width="80" height="8" rx="4" fill="#2d1b69" opacity=".4"/>
+  <rect x="520" y="578" width="60" height="6" rx="3" fill="#2d1b69" opacity=".25"/>
+  <rect x="820" y="404" width="280" height="200" rx="12" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="840" y="424" width="240" height="120" rx="8" fill="#12082a"/>
+  <!-- Avatar component -->
+  <circle cx="890" cy="478" r="22" fill="url(#pur)" opacity=".3" stroke="#8B5CF6" stroke-width="1"/><circle cx="940" cy="478" r="22" fill="#00F0FF" opacity=".15" stroke="#00F0FF" stroke-width="1"/><circle cx="990" cy="478" r="22" fill="#F43F5E" opacity=".15" stroke="#F43F5E" stroke-width="1"/>
+  <rect x="840" y="560" width="80" height="8" rx="4" fill="#2d1b69" opacity=".4"/>
+  <rect x="840" y="578" width="100" height="6" rx="3" fill="#2d1b69" opacity=".25"/>
+  <!-- Spectrum bar bottom -->
+  <rect x="180" y="630" width="920" height="6" rx="3" fill="url(#rainbow)" opacity=".15"/>
+  <circle cx="600" cy="400" r="200" fill="#8B5CF6" opacity=".03" filter="url(#glow)"/>
+</svg>

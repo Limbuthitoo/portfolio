@@ -1,0 +1,62 @@
+<svg width="1200" height="800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0d0520"/><stop offset="100%" stop-color="#180a3a"/></linearGradient>
+    <linearGradient id="pur" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#6D28D9"/></linearGradient>
+    <linearGradient id="fire" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#F59E0B"/><stop offset="100%" stop-color="#F43F5E"/></linearGradient>
+    <radialGradient id="g1" cx="50%" cy="50%"><stop offset="0%" stop-color="#F59E0B" stop-opacity=".08"/><stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/></radialGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="30"/></filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/><rect width="1200" height="800" fill="url(#g1)"/>
+  <rect x="80" y="50" width="1040" height="700" rx="16" fill="#0d0d1a" stroke="#2d1b69"/>
+  <rect x="80" y="50" width="1040" height="44" rx="16" fill="#1a1035"/><rect x="80" y="78" width="1040" height="16" fill="#1a1035"/>
+  <circle cx="110" cy="72" r="6" fill="#FF5F57"/><circle cx="132" cy="72" r="6" fill="#FEBC2E"/><circle cx="154" cy="72" r="6" fill="#28C840"/>
+  <rect x="80" y="94" width="1040" height="50" fill="#120e24"/>
+  <rect x="110" y="112" width="90" height="10" rx="5" fill="#F59E0B" opacity=".5"/>
+  <!-- Pipeline builder view -->
+  <rect x="110" y="170" width="980" height="540" rx="12" fill="#0a0818" stroke="#2d1b69"/>
+  <!-- Nodes connected by lines -->
+  <!-- Node 1 - trigger -->
+  <rect x="160" y="220" width="180" height="80" rx="12" fill="#1a1035" stroke="#8B5CF6"/>
+  <circle cx="190" cy="260" r="14" fill="url(#pur)" opacity=".4"/>
+  <rect x="214" y="248" width="80" height="8" rx="4" fill="#8B5CF6" opacity=".5"/>
+  <rect x="214" y="264" width="50" height="6" rx="3" fill="#2d1b69" opacity=".3"/>
+  <!-- Connection line -->
+  <line x1="340" y1="260" x2="420" y2="260" stroke="#8B5CF6" stroke-width="2" opacity=".3"/>
+  <circle cx="380" cy="260" r="4" fill="#8B5CF6" opacity=".5"/>
+  <!-- Node 2 - process -->
+  <rect x="420" y="220" width="180" height="80" rx="12" fill="#1a1035" stroke="#F59E0B"/>
+  <circle cx="450" cy="260" r="14" fill="url(#fire)" opacity=".3"/>
+  <rect x="474" y="248" width="100" height="8" rx="4" fill="#F59E0B" opacity=".4"/>
+  <rect x="474" y="264" width="60" height="6" rx="3" fill="#2d1b69" opacity=".3"/>
+  <!-- Branch lines -->
+  <line x1="600" y1="260" x2="680" y2="200" stroke="#8B5CF6" stroke-width="2" opacity=".3"/>
+  <line x1="600" y1="260" x2="680" y2="320" stroke="#8B5CF6" stroke-width="2" opacity=".3"/>
+  <!-- Node 3a -->
+  <rect x="680" y="160" width="180" height="80" rx="12" fill="#1a1035" stroke="#00F0FF"/>
+  <circle cx="710" cy="200" r="14" fill="#00F0FF" opacity=".2"/>
+  <rect x="734" y="188" width="90" height="8" rx="4" fill="#00F0FF" opacity=".35"/>
+  <rect x="734" y="204" width="50" height="6" rx="3" fill="#2d1b69" opacity=".3"/>
+  <!-- Node 3b -->
+  <rect x="680" y="280" width="180" height="80" rx="12" fill="#1a1035" stroke="#10B981"/>
+  <circle cx="710" cy="320" r="14" fill="#10B981" opacity=".2"/>
+  <rect x="734" y="308" width="80" height="8" rx="4" fill="#10B981" opacity=".35"/>
+  <rect x="734" y="324" width="60" height="6" rx="3" fill="#2d1b69" opacity=".3"/>
+  <!-- Merge lines -->
+  <line x1="860" y1="200" x2="940" y2="260" stroke="#8B5CF6" stroke-width="2" opacity=".3"/>
+  <line x1="860" y1="320" x2="940" y2="260" stroke="#8B5CF6" stroke-width="2" opacity=".3"/>
+  <!-- Node 4 - output -->
+  <rect x="940" y="220" width="120" height="80" rx="12" fill="#1a1035" stroke="#8B5CF6"/>
+  <circle cx="1000" cy="260" r="16" fill="url(#pur)" opacity=".3"/>
+  <rect x="980" y="254" width="40" height="8" rx="4" fill="#8B5CF6" opacity=".5"/>
+  <!-- Bottom: execution log -->
+  <rect x="140" y="420" width="920" height="260" rx="10" fill="#1a1035" stroke="#2d1b69"/>
+  <rect x="160" y="440" width="80" height="8" rx="4" fill="#2d1b69" opacity=".4"/>
+  <rect x="160" y="470" width="880" height="24" rx="4" fill="#12082a"/><rect x="172" y="478" width="8" height="8" rx="2" fill="#10B981" opacity=".4"/><rect x="190" y="478" width="300" height="6" rx="3" fill="#2d1b69" opacity=".25"/><rect x="760" y="478" width="50" height="6" rx="3" fill="#2d1b69" opacity=".2"/>
+  <rect x="160" y="500" width="880" height="24" rx="4" fill="#12082a"/><rect x="172" y="508" width="8" height="8" rx="2" fill="#10B981" opacity=".4"/><rect x="190" y="508" width="260" height="6" rx="3" fill="#2d1b69" opacity=".25"/><rect x="760" y="508" width="60" height="6" rx="3" fill="#2d1b69" opacity=".2"/>
+  <rect x="160" y="530" width="880" height="24" rx="4" fill="#12082a"/><rect x="172" y="538" width="8" height="8" rx="2" fill="#F59E0B" opacity=".4"/><rect x="190" y="538" width="340" height="6" rx="3" fill="#2d1b69" opacity=".25"/><rect x="760" y="538" width="45" height="6" rx="3" fill="#2d1b69" opacity=".2"/>
+  <rect x="160" y="560" width="880" height="24" rx="4" fill="#12082a"/><rect x="172" y="568" width="8" height="8" rx="2" fill="#10B981" opacity=".4"/><rect x="190" y="568" width="280" height="6" rx="3" fill="#2d1b69" opacity=".25"/><rect x="760" y="568" width="55" height="6" rx="3" fill="#2d1b69" opacity=".2"/>
+  <rect x="160" y="590" width="880" height="24" rx="4" fill="#12082a"/><rect x="172" y="598" width="8" height="8" rx="2" fill="#10B981" opacity=".4"/><rect x="190" y="598" width="320" height="6" rx="3" fill="#2d1b69" opacity=".25"/><rect x="760" y="598" width="40" height="6" rx="3" fill="#2d1b69" opacity=".2"/>
+  <rect x="160" y="620" width="880" height="24" rx="4" fill="#12082a"/><rect x="172" y="628" width="8" height="8" rx="2" fill="#F43F5E" opacity=".4"/><rect x="190" y="628" width="380" height="6" rx="3" fill="#F43F5E" opacity=".15"/><rect x="760" y="628" width="50" height="6" rx="3" fill="#2d1b69" opacity=".2"/>
+  <rect x="160" y="650" width="880" height="24" rx="4" fill="#12082a"/><rect x="172" y="658" width="8" height="8" rx="2" fill="#10B981" opacity=".4"/><rect x="190" y="658" width="250" height="6" rx="3" fill="#2d1b69" opacity=".25"/><rect x="760" y="658" width="48" height="6" rx="3" fill="#2d1b69" opacity=".2"/>
+  <circle cx="600" cy="400" r="200" fill="#F59E0B" opacity=".02" filter="url(#glow)"/>
+</svg>
