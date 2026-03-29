@@ -96,27 +96,9 @@ git clone <your-repo-url> portfolio
 
 4. Click **Create**
 
-### Step 3 — Create the Startup File
+### Step 3 — Verify the Startup File
 
-Create `server.js` in your project root (this is what cPanel's Phusion Passenger expects):
-
-```js
-const { createServer } = require("http");
-const { parse } = require("url");
-const next = require("next");
-
-const app = next({ dir: __dirname, dev: false });
-const handle = app.getRequestHandler();
-const port = process.env.PORT || 3000;
-
-app.prepare().then(() => {
-  createServer((req, res) => {
-    handle(req, res, parse(req.url, true));
-  }).listen(port, () => {
-    console.log(`> Ready on port ${port}`);
-  });
-});
-```
+The project includes `server.js` in the root — this is what cPanel's Phusion Passenger uses to start the app. No action needed, just confirm the file exists.
 
 ### Step 4 — Set Environment Variables
 
