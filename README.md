@@ -148,14 +148,12 @@ In the same Node.js App page, add these variables:
 | `DASHBOARD_PASSWORD` | Your password |
 | `NODE_ENV` | `production` |
 
-Or create a `.env.local` file via SSH:
+Or create a `.env.local` file via cPanel Terminal:
 
 ```bash
 cd ~/portfolio
-cat > .env.local << 'EOF'
-DASHBOARD_SECRET=your-random-secret-at-least-32-characters
-DASHBOARD_PASSWORD=your-secure-password
-EOF
+echo "DASHBOARD_SECRET=your-random-secret-at-least-32-characters" > .env.local
+echo "DASHBOARD_PASSWORD=your-secure-password" >> .env.local
 chmod 600 .env.local
 ```
 
