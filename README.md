@@ -1,116 +1,135 @@
 # Portfolio — Bijay Subbalimbu
 
-Personal portfolio built with Next.js 16, React 19, Tailwind CSS v4, and Framer Motion.
+A personal portfolio website with a built-in admin dashboard to manage projects, experience, and settings.
 
-## Tech Stack
+**Live pages:** Home, About, Work, Contact, Games
 
-- **Framework:** Next.js 16.2.1 (App Router)
-- **UI:** React 19, Tailwind CSS v4, Framer Motion 12
-- **Auth:** JWT (jose) + bcrypt password hashing
-- **Data:** Flat-file JSON storage (`content/` directory)
+**Admin dashboard:** `/dashboard` — add/edit/delete projects, experience, and site settings
 
-## Project Structure
+## Built With
 
-```
-src/
-├── app/            # Pages & API routes
-│   ├── api/        # REST API (auth, projects, experience, config)
-│   ├── dashboard/  # Admin panel (login, projects, experience, settings)
-│   ├── about/      # About page
-│   ├── contact/    # Contact page
-│   ├── games/      # Games (coming soon)
-│   └── work/       # Projects showcase
-├── components/     # React components
-├── data/           # Seed data (used on first run)
-├── lib/            # Auth, DB, utilities
-└── types/          # TypeScript types
-content/            # Runtime JSON data (projects, experience, config, auth)
-public/             # Static assets
+- Next.js 16 (React 19)
+- Tailwind CSS v4
+- Framer Motion
+- TypeScript
+
+---
+
+## Getting Started
+
+### 1. Clone the project
+
+```bash
+git clone https://github.com/Limbuthitoo/portfolio.git
+cd portfolio
 ```
 
-## Environment Variables
-
-Copy `.env.example` to `.env.local` and fill in:
+### 2. Set up environment variables
 
 ```bash
 cp .env.example .env.local
 ```
 
-| Variable | Required | Description |
-|---|---|---|
-| `DASHBOARD_SECRET` | Yes | JWT signing secret (min 32 characters) |
-| `DASHBOARD_PASSWORD` | Yes | Dashboard login password |
+Open `.env.local` and fill in:
 
-## Local Development
+```
+DASHBOARD_SECRET=any-random-string-at-least-32-characters-long
+DASHBOARD_PASSWORD=your-dashboard-login-password
+```
+
+### 3. Install and run
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open **http://localhost:3000** in your browser.
 
 ---
 
-## Deploying on cPanel
+## Admin Dashboard
 
-Next.js requires a Node.js runtime. cPanel supports this via the **Setup Node.js App** feature.
+Go to **http://localhost:3000/dashboard/login** and enter your `DASHBOARD_PASSWORD`.
 
-### Prerequisites
+From the dashboard you can:
 
-- cPanel with **Setup Node.js App** (CloudLinux / LiteSpeed)
-- Node.js 18+ available in cPanel
-- SSH access (recommended) or cPanel Terminal
+- **Projects** — Add, edit, or delete portfolio projects
+- **Experience** — Manage your work timeline
+- **Settings** — Change your name, role, email, social links
+- **Password** — Update your dashboard password
 
-### Step 1 — Upload Files
+All data is saved as JSON files in the `content/` folder.
 
-**Option A: Git (recommended)**
+---
 
-SSH into your server and clone:
+## Project Structure
+
+```
+src/
+├── app/            # All pages and API routes
+│   ├── api/        # Backend API
+│   ├── dashboard/  # Admin panel
+│   ├── about/      # About page
+│   ├── contact/    # Contact page
+│   ├── work/       # Projects showcase
+│   └── games/      # Games (coming soon)
+├── components/     # Reusable UI components
+├── data/           # Default seed data
+├── lib/            # Helpers (auth, database, utils)
+└── types/          # TypeScript types
+content/            # Your data (auto-created on first run)
+public/             # Images and static files
+server.js           # Startup file for cPanel hosting
+```
+
+---
+
+## Deploy to cPanel
+
+### What you need
+
+- cPanel hosting with **"Setup Node.js App"** feature
+- Node.js 18 or higher
+- SSH access (or cPanel Terminal)
+
+### Step 1 — Upload your code
+
+SSH into your server:
 
 ```bash
 cd ~/
-git clone <your-repo-url> portfolio
+git clone https://github.com/Limbuthitoo/portfolio.git portfolio
 ```
 
-**Option B: File Manager**
+Or upload a zip via **cPanel File Manager** and extract it to `~/portfolio`.
 
-1. Build locally first: `npm run build`
-2. Zip the entire project **excluding** `node_modules/` and `.next/cache/`
-3. Upload the zip via cPanel File Manager to your home directory
-4. Extract it (e.g., to `~/portfolio`)
+### Step 2 — Create the app in cPanel
 
-### Step 2 — Create Node.js App in cPanel
-
-1. Go to **cPanel → Setup Node.js App**
-2. Click **Create Application**
-3. Configure:
+1. Go to **cPanel → Setup Node.js App → Create Application**
+2. Fill in:
 
 | Setting | Value |
 |---|---|
 | Node.js version | `18` or higher |
 | Application mode | `Production` |
-| Application root | `portfolio` (or wherever you extracted) |
-| Application URL | Your domain or subdomain |
-| Application startup file | `server.js` |
+| Application root | `portfolio` |
+| Application URL | Your domain |
+| Startup file | `server.js` |
 
-4. Click **Create**
+3. Click **Create**
 
-### Step 3 — Verify the Startup File
+### Step 3 — Add environment variables
 
-The project includes `server.js` in the root — this is what cPanel's Phusion Passenger uses to start the app. No action needed, just confirm the file exists.
-
-### Step 4 — Set Environment Variables
-
-In **cPanel → Setup Node.js App**, click your app, then add environment variables:
+In the same Node.js App page, add these variables:
 
 | Key | Value |
 |---|---|
 | `DASHBOARD_SECRET` | A random 32+ character string |
-| `DASHBOARD_PASSWORD` | Your dashboard password |
+| `DASHBOARD_PASSWORD` | Your password |
 | `NODE_ENV` | `production` |
 
-Or create `~/portfolio/.env.local` via SSH:
+Or create a `.env.local` file via SSH:
 
 ```bash
 cd ~/portfolio
@@ -121,43 +140,39 @@ EOF
 chmod 600 .env.local
 ```
 
-### Step 5 — Install Dependencies & Build
+### Step 4 — Install and build
 
-From the cPanel Node.js app page, click **Run NPM Install**.
-
-Or via SSH (activate the virtual environment first):
+Via SSH:
 
 ```bash
-# Enter the Node.js virtual environment (path shown in cPanel)
 source /home/YOUR_USER/nodevenv/portfolio/18/bin/activate
-
 cd ~/portfolio
 npm install --production=false
 npm run build
 ```
 
-> `--production=false` is needed so devDependencies (Tailwind, TypeScript) are installed for the build step.
+> **Why `--production=false`?** Tailwind and TypeScript are dev dependencies but are needed to build the app.
 
-### Step 6 — Restart the App
+Or just click **"Run NPM Install"** in cPanel, then run `npm run build` via Terminal.
 
-In **cPanel → Setup Node.js App**, click **Restart** on your application.
+### Step 5 — Start the app
 
-Your site should now be live at your configured domain.
+Click **Restart** in **cPanel → Setup Node.js App**.
 
-### Step 7 — Verify
+Your site is now live!
 
-- Visit your domain — the portfolio should load
-- Visit `/dashboard/login` — log in with your password
-- Check the browser console for errors
+### Step 6 — Check it works
+
+- Visit your domain — you should see the portfolio
+- Visit `yourdomain.com/dashboard/login` — log in with your password
 
 ---
 
-## Updating on cPanel
+## Updating Your Site
 
-After pushing changes to your repo:
+After making changes and pushing to GitHub:
 
 ```bash
-# SSH into server
 source /home/YOUR_USER/nodevenv/portfolio/18/bin/activate
 cd ~/portfolio
 git pull
@@ -165,31 +180,29 @@ npm install --production=false
 npm run build
 ```
 
-Then restart the app in **cPanel → Setup Node.js App**.
+Then click **Restart** in cPanel.
+
+---
+
+## Deploy to Vercel (Alternative)
+
+If you prefer Vercel over cPanel:
+
+1. Go to [vercel.com/new](https://vercel.com/new)
+2. Import your GitHub repo
+3. Add environment variables (`DASHBOARD_SECRET`, `DASHBOARD_PASSWORD`)
+4. Click **Deploy**
+
+That's it — Vercel handles everything automatically.
+
+---
 
 ## Troubleshooting
 
-| Issue | Fix |
+| Problem | Solution |
 |---|---|
-| 503 / Application Error | Check `stderr.log` in your app root |
-| Blank page | Ensure `npm run build` completed without errors |
-| Static assets not loading | Verify `Application root` points to the correct folder |
-| Dashboard login fails | Check that `.env.local` exists with correct values and has `chmod 600` |
-| `DASHBOARD_SECRET` error | Make sure the env variable is set (min 32 chars) |
-| Build fails on server | Ensure Node 18+, and run with `--production=false` to include dev deps |
-
-## Content Management
-
-The dashboard at `/dashboard` lets you manage:
-- **Projects** — Add, edit, delete portfolio projects
-- **Experience** — Manage work experience timeline
-- **Settings** — Update site config (name, role, social links)
-- **Password** — Change dashboard password
-
-All data is stored in the `content/` directory as JSON files.
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| 503 error | Check `stderr.log` in your app folder |
+| Blank page | Run `npm run build` again and check for errors |
+| Can't log in to dashboard | Make sure `.env.local` has the correct password |
+| Build fails | Make sure you're using Node 18+ and ran `npm install --production=false` |
+| Static files missing | Check that `Application root` in cPanel points to the right folder |
