@@ -95,14 +95,33 @@ server.js           # Startup file for cPanel hosting
 
 ### Step 1 — Upload your code
 
-SSH into your server:
+**Option A: SSH (recommended)**
+
+1. Log in to your cPanel and go to **Security → SSH Access → Manage SSH Keys**
+2. Generate a key or add your existing public key
+3. Authorize the key
+4. Connect from your terminal:
+
+```bash
+ssh your-cpanel-username@your-domain.com -p 22
+```
+
+> **Tip:** Some hosts use port `2222` instead of `22`. Check your hosting provider's docs.
+> You can also use **cPanel → Advanced → Terminal** directly in the browser.
+
+5. Clone your repo:
 
 ```bash
 cd ~/
 git clone https://github.com/Limbuthitoo/portfolio.git portfolio
 ```
 
-Or upload a zip via **cPanel File Manager** and extract it to `~/portfolio`.
+**Option B: File Manager (no SSH needed)**
+
+1. Build locally: `npm run build`
+2. Zip the project (exclude `node_modules/`)
+3. Upload via **cPanel → File Manager** to your home directory
+4. Extract it to `~/portfolio`
 
 ### Step 2 — Create the app in cPanel
 
