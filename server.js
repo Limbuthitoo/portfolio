@@ -1,12 +1,12 @@
 const path = require("path");
 const fs = require("fs");
-// Resolve symlinked node_modules for cPanel Passenger
-const nm = path.join(__dirname, "node_modules");
-try { module.paths.unshift(fs.realpathSync(nm)); } catch { module.paths.unshift(nm); }
-
 const { createServer } = require("http");
 const { parse } = require("url");
-const next = require("next");
+
+// Resolve symlinked node_modules for cPanel Passenger
+let nmPath = path.join(__dirname, "node_modules");
+try { nmPath = fs.realpathSync(nmPath); } catch {}
+const next = require(path.join(nmPath, "next"));
 
 const app = next({ dir: __dirname, dev: false });
 const handle = app.getRequestHandler();
