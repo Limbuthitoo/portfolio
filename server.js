@@ -1,6 +1,8 @@
 const path = require("path");
-// Ensure Passenger can find node_modules (cPanel symlink workaround)
-module.paths.unshift(path.join(__dirname, "node_modules"));
+const fs = require("fs");
+// Resolve symlinked node_modules for cPanel Passenger
+const nm = path.join(__dirname, "node_modules");
+try { module.paths.unshift(fs.realpathSync(nm)); } catch { module.paths.unshift(nm); }
 
 const { createServer } = require("http");
 const { parse } = require("url");
