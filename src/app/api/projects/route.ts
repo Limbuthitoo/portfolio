@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getProjects, saveProject, deleteProject, validateProject } from '@/lib/db';
 import { isAuthenticated, unauthorizedResponse } from '@/lib/auth';
 
@@ -13,6 +14,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid project data' }, { status: 400 });
   }
   saveProject(project);
+  revalidatePath('/');
+  revalidatePath('/work');
   return NextResponse.json({ success: true });
 }
 
@@ -23,5 +26,7 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid slug' }, { status: 400 });
   }
   deleteProject(body.slug);
+  revalidatePath('/');
+  revalidatePath('/work');
   return NextResponse.json({ success: true });
 }

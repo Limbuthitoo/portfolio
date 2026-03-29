@@ -1,10 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { siteConfig } from "@/data/siteConfig";
+import { SiteConfig } from "@/types";
+import { siteConfig as fallbackConfig } from "@/data/siteConfig";
 
 export default function ContactPage() {
+  const [siteConfig, setSiteConfig] = useState<SiteConfig>(fallbackConfig);
+
+  useEffect(() => {
+    fetch('/api/config').then((r) => r.ok ? r.json() : Promise.reject()).then(setSiteConfig).catch(() => {});
+  }, []);
+
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
 

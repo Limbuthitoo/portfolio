@@ -150,7 +150,10 @@ export function savePasswordHash(hash: string) {
 }
 
 // --- Seed ---
+let seeded = false;
 export function seedIfEmpty() {
+  if (seeded) return;
+  seeded = true;
   ensureDir();
   if (!fs.existsSync(path.join(CONTENT_DIR, 'projects.json'))) {
     writeJSON('projects.json', seedProjects);

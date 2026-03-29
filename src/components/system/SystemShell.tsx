@@ -1,12 +1,14 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import MeshBackground from "./MeshBackground";
 import StatusBar from "./StatusBar";
 import Dock from "./Dock";
-import CommandPalette from "./CommandPalette";
-import CustomCursor from "./CustomCursor";
 import { ThemeProvider } from "./ThemeProvider";
+
+const CommandPalette = dynamic(() => import("./CommandPalette"), { ssr: false });
+const CustomCursor = dynamic(() => import("./CustomCursor"), { ssr: false });
 
 export default function SystemShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

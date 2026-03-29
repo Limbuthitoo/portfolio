@@ -13,7 +13,7 @@ export default function EditExperiencePage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/experience/${id}`).then((r) => r.json()).then(setExp);
+    fetch(`/api/experience/${id}`).then((r) => r.ok ? r.json() : Promise.reject()).then(setExp).catch(() => {});
   }, [id]);
 
   const handleSave = async (updated: Experience) => {

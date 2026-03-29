@@ -8,7 +8,7 @@ export default function ExperienceListPage() {
   const [items, setItems] = useState<Experience[]>([]);
 
   useEffect(() => {
-    fetch('/api/experience').then((r) => r.json()).then(setItems);
+    fetch('/api/experience').then((r) => r.ok ? r.json() : Promise.reject()).then(setItems).catch(() => {});
   }, []);
 
   const handleDelete = async (id: string) => {

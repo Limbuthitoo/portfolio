@@ -8,7 +8,7 @@ export default function ProjectsListPage() {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    fetch('/api/projects').then((r) => r.json()).then(setProjects);
+    fetch('/api/projects').then((r) => r.ok ? r.json() : Promise.reject()).then(setProjects).catch(() => {});
   }, []);
 
   const handleDelete = async (slug: string) => {

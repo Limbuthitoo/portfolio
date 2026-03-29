@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getSiteConfig, saveSiteConfig, validateSiteConfig } from '@/lib/db';
 import { isAuthenticated, unauthorizedResponse } from '@/lib/auth';
 
@@ -13,5 +14,8 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid config data' }, { status: 400 });
   }
   saveSiteConfig(config);
+  revalidatePath('/');
+  revalidatePath('/about');
+  revalidatePath('/contact');
   return NextResponse.json({ success: true });
 }

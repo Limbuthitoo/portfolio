@@ -9,8 +9,8 @@ export default function DashboardOverview() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
 
   useEffect(() => {
-    fetch('/api/projects').then((r) => r.json()).then(setProjects);
-    fetch('/api/experience').then((r) => r.json()).then(setExperiences);
+    fetch('/api/projects').then((r) => r.ok ? r.json() : Promise.reject()).then(setProjects).catch(() => {});
+    fetch('/api/experience').then((r) => r.ok ? r.json() : Promise.reject()).then(setExperiences).catch(() => {});
   }, []);
 
   const stats = [

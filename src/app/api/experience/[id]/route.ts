@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getExperienceById, saveExperience, validateExperience } from '@/lib/db';
 import { isAuthenticated, unauthorizedResponse } from '@/lib/auth';
 
@@ -16,5 +17,7 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid experience data' }, { status: 400 });
   }
   saveExperience(exp);
+  revalidatePath('/');
+  revalidatePath('/about');
   return NextResponse.json({ success: true });
 }

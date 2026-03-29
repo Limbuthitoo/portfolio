@@ -13,7 +13,7 @@ export default function EditProjectPage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch(`/api/projects/${slug}`).then((r) => r.json()).then(setProject);
+    fetch(`/api/projects/${slug}`).then((r) => r.ok ? r.json() : Promise.reject()).then(setProject).catch(() => {});
   }, [slug]);
 
   const handleSave = async (updated: Project) => {

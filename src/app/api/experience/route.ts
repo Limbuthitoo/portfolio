@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getExperiences, saveExperience, deleteExperience, validateExperience } from '@/lib/db';
 import { isAuthenticated, unauthorizedResponse } from '@/lib/auth';
 
@@ -13,6 +14,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid experience data' }, { status: 400 });
   }
   saveExperience(exp);
+  revalidatePath('/');
+  revalidatePath('/about');
   return NextResponse.json({ success: true });
 }
 
@@ -23,5 +26,7 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid id' }, { status: 400 });
   }
   deleteExperience(body.id);
+  revalidatePath('/');
+  revalidatePath('/about');
   return NextResponse.json({ success: true });
 }

@@ -15,7 +15,7 @@ export default function SettingsPage() {
   const [passwordMessage, setPasswordMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    fetch('/api/config').then((r) => r.json()).then(setConfig);
+    fetch('/api/config').then((r) => r.ok ? r.json() : Promise.reject()).then(setConfig).catch(() => {});
   }, []);
 
   const handleSave = async () => {
@@ -36,8 +36,8 @@ export default function SettingsPage() {
       setPasswordMessage({ type: 'error', text: 'Enter your current password' });
       return;
     }
-    if (newPassword.length < 6) {
-      setPasswordMessage({ type: 'error', text: 'New password must be at least 6 characters' });
+    if (newPassword.length < 8) {
+      setPasswordMessage({ type: 'error', text: 'New password must be at least 8 characters' });
       return;
     }
     if (newPassword !== confirmPassword) {
