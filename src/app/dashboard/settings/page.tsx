@@ -370,19 +370,39 @@ function CapabilitiesEditor({ capabilities, onChange }: { capabilities: Capabili
 }
 
 function CurrentlyEditor({ items, onChange }: { items: CurrentlyItem[]; onChange: (v: CurrentlyItem[]) => void }) {
-  const add = () => onChange([...items, { emoji: '🔹', label: '', value: '' }]);
-  const update = (i: number, key: keyof CurrentlyItem, val: string) => {
+  const LABEL_EMOJI: Record<string, string> = {
+    Building: '🛠️', Creating: '✨', Learning: '📚', Reading: '📖',
+    Listening: '🎧', Watching: '📺', Playing: '🎮', Exploring: '🧭',
+    Designing: '🎨', Writing: '✍️', Cooking: '🍳', Traveling: '✈️',
+    Thinking: '💭', Shipping: '🚀',
+  };
+  const labels = Object.keys(LABEL_EMOJI);
+
+  const add = () => onChange([...items, { emoji: '🛠️', label: 'Building', value: '' }]);
+  const updateLabel = (i: number, label: string) => {
     const next = [...items];
-    next[i] = { ...next[i], [key]: val };
+    next[i] = { ...next[i], label, emoji: LABEL_EMOJI[label] || next[i].emoji };
+    onChange(next);
+  };
+  const updateValue = (i: number, value: string) => {
+    const next = [...items];
+    next[i] = { ...next[i], value };
     onChange(next);
   };
   return (
     <div className="space-y-2">
       {items.map((item, i) => (
         <div key={i} className="flex items-center gap-2">
-          <input className={`${inputCls} w-14 text-center`} value={item.emoji} onChange={(e) => update(i, 'emoji', e.target.value)} placeholder="🛠" />
-          <input className={`${inputCls} w-28`} value={item.label} onChange={(e) => update(i, 'label', e.target.value)} placeholder="Building" />
-          <input className={inputCls} value={item.value} onChange={(e) => update(i, 'value', e.target.value)} placeholder="Portfolio v2" />
+          <span className="w-10 text-center text-[18px] shrink-0">{item.emoji}</span>
+          <select
+            className={`${inputCls} w-32`}
+            value={labels.includes(item.label) ? item.label : ''}
+            onChange={(e) => updateLabel(i, e.target.value)}
+          >
+            {!labels.includes(item.label) && <option value="">{item.label || 'Select...'}</option>}
+            {labels.map((l) => <option key={l} value={l}>{l}</option>)}
+          </select>
+          <input className={inputCls} value={item.value} onChange={(e) => updateValue(i, e.target.value)} placeholder="e.g. Portfolio v2" />
           <button type="button" onClick={() => onChange(items.filter((_, idx) => idx !== i))} className={removeBtnCls}>✕</button>
         </div>
       ))}
