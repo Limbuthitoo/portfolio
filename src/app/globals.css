@@ -105,18 +105,6 @@ body {
 .bento-scroll::-webkit-scrollbar-thumb { background: var(--border-hover); border-radius: 99px; }
 .bento-scroll { scrollbar-width: thin; scrollbar-color: var(--border-hover) transparent; }
 
-/* Card marquee auto-scroll */
-.card-marquee {
-  display: flex;
-  flex-direction: column;
-  animation: card-marquee-scroll linear infinite;
-}
-
-@keyframes card-marquee-scroll {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-50%); }
-}
-
 ::selection { background: var(--cyan); color: var(--bg); }
 *:focus-visible { outline: 1px solid var(--cyan); outline-offset: 2px; }
 

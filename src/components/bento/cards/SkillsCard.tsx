@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import { SiteConfig } from "@/types";
 
 const COLORS = ["var(--cyan)", "var(--violet)", "var(--emerald)", "var(--rose)", "var(--amber)"];
@@ -44,9 +44,39 @@ function SkillContent({ groups }: { groups: { label: string; skills: string[] }[
   );
 }
 
+function useAutoScroll(speed = 0.4, delay = 1000) {
+  const ref = useRef<HTMLDivElement>(null);
+  const paused = useRef(false);
+
+  useEffect(() => {
+    let raf: number;
+    let started = false;
+
+    const timer = setTimeout(() => { started = true; }, delay);
+
+    const step = () => {
+      const el = ref.current;
+      if (started && el && !paused.current) {
+        const half = el.scrollHeight / 2;
+        if (half > 0 && el.scrollHeight > el.clientHeight) {
+          el.scrollTop += speed;
+          if (el.scrollTop >= half) {
+            el.scrollTop -= half;
+          }
+        }
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => { cancelAnimationFrame(raf); clearTimeout(timer); };
+  }, [speed, delay]);
+
+  return { ref, pause: () => { paused.current = true; }, resume: () => { paused.current = false; } };
+}
+
 export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) {
   const groups = siteConfig?.skills?.length ? siteConfig.skills : DEFAULT_GROUPS;
-  const [hovered, setHovered] = useState(false);
+  const { ref, pause, resume } = useAutoScroll(0.4, 1200);
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 overflow-hidden relative flex flex-col hover:border-[var(--violet)]/30 transition-colors duration-300 group">
       {/* Purple gradient bg */}
@@ -64,25 +94,16 @@ export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) 
         </span>
       </div>
 
-      {hovered ? (
-        <div
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          className="relative z-10 flex-1 overflow-y-auto bento-scroll"
-        >
-          <SkillContent groups={groups} />
-        </div>
-      ) : (
-        <div
-          onMouseEnter={() => setHovered(true)}
-          className="relative z-10 flex-1 overflow-hidden"
-        >
-          <div className="card-marquee" style={{ animationDuration: '18s' }}>
-            <SkillContent groups={groups} />
-            <SkillContent groups={groups} />
-          </div>
-        </div>
-      )}
+      <div
+        ref={ref}
+        onMouseEnter={pause}
+        onMouseLeave={resume}
+        className="relative z-10 flex-1 overflow-y-auto bento-scroll scroll-smooth"
+        style={{ scrollbarWidth: 'none' }}
+      >
+        <SkillContent groups={groups} />
+        <SkillContent groups={groups} />
+      </div>
     </div>
   );
 }
