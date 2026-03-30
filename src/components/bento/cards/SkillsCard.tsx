@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { SiteConfig } from "@/types";
 
 const COLORS = ["var(--cyan)", "var(--violet)", "var(--emerald)", "var(--rose)", "var(--amber)"];
@@ -12,6 +13,28 @@ const DEFAULT_GROUPS = [
 
 export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) {
   const groups = siteConfig?.skills?.length ? siteConfig.skills : DEFAULT_GROUPS;
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(false);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    let raf: number;
+    const speed = 0.3; // px per frame
+
+    const step = () => {
+      if (!pausedRef.current && el.scrollHeight > el.clientHeight) {
+        el.scrollTop += speed;
+        if (el.scrollTop >= el.scrollHeight - el.clientHeight) {
+          el.scrollTop = 0;
+        }
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 overflow-hidden relative flex flex-col hover:border-[var(--violet)]/30 transition-colors duration-300 group">
       {/* Purple gradient bg */}
@@ -29,7 +52,12 @@ export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) 
         </span>
       </div>
 
-      <div className="relative z-10 flex-1 flex flex-col gap-2.5 overflow-y-auto bento-scroll">
+      <div
+        ref={scrollRef}
+        onMouseEnter={() => (pausedRef.current = true)}
+        onMouseLeave={() => (pausedRef.current = false)}
+        className="relative z-10 flex-1 flex flex-col gap-2.5 overflow-y-auto bento-scroll"
+      >
         {groups.map((group, gi) => (
           <div key={group.label}>
             <div className="flex items-center gap-1.5 mb-1.5">

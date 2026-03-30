@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Experience } from "@/types";
 
 const NODE_COLORS = ["var(--cyan)", "var(--violet)", "var(--rose)", "var(--amber)"];
@@ -9,6 +10,28 @@ export default function ExperienceTimeline({
 }: {
   experiences: Experience[];
 }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(false);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    let raf: number;
+    const speed = 0.3;
+
+    const step = () => {
+      if (!pausedRef.current && el.scrollHeight > el.clientHeight) {
+        el.scrollTop += speed;
+        if (el.scrollTop >= el.scrollHeight - el.clientHeight) {
+          el.scrollTop = 0;
+        }
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 md:p-5 flex flex-col overflow-hidden hover:border-[var(--violet)]/30 transition-colors duration-300 relative group">
       {/* Purple gradient bg */}
@@ -26,7 +49,12 @@ export default function ExperienceTimeline({
         </span>
       </div>
 
-      <div className="relative z-10 flex-1 overflow-y-auto bento-scroll space-y-0 relative">
+      <div
+        ref={scrollRef}
+        onMouseEnter={() => (pausedRef.current = true)}
+        onMouseLeave={() => (pausedRef.current = false)}
+        className="relative z-10 flex-1 overflow-y-auto bento-scroll space-y-0 relative"
+      >
         {/* Vertical line */}
         <div className="absolute left-[5px] top-1 bottom-1 w-px bg-gradient-to-b from-[var(--violet)] via-[var(--cyan)] to-[var(--border)] opacity-30" />
 
