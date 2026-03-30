@@ -7,8 +7,8 @@ import { motion } from "framer-motion";
 const DOCK_ITEMS = [
   { href: "/", label: "Home", icon: "⌂", color: "var(--cyan)", rgb: "0,240,255" },
   { href: "/work", label: "Work", icon: "◆", color: "var(--violet)", rgb: "139,92,246" },
-  { href: "/about", label: "About", icon: "◉", color: "var(--rose)", rgb: "244,63,94" },
   { href: "/games", label: "Games", icon: "♟", color: "var(--emerald)", rgb: "16,185,129" },
+  { href: "/about", label: "About", icon: "◉", color: "var(--rose)", rgb: "244,63,94" },
   { href: "/contact", label: "Contact", icon: "✉", color: "var(--amber)", rgb: "245,158,11" },
 ];
 
@@ -18,8 +18,8 @@ export default function Dock() {
   if (pathname.startsWith("/dashboard")) return null;
 
   return (
-    <div className="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100vw-1.5rem)] sm:w-auto sm:max-w-[calc(100vw-2rem)]">
-      <div className="relative flex items-end justify-center gap-1.5 xs:gap-2 sm:gap-2 px-2 sm:px-3 py-2 sm:py-2 rounded-2xl bg-[var(--dock-bg)] backdrop-blur-2xl border border-[var(--border)] gradient-border">
+    <div className="fixed bottom-0 sm:bottom-4 left-1/2 -translate-x-1/2 z-50 w-full sm:w-auto sm:max-w-[calc(100vw-2rem)]">
+      <div className="relative flex items-end justify-center gap-3 sm:gap-2 px-4 sm:px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:py-2 sm:pb-2 rounded-t-2xl sm:rounded-2xl bg-[var(--dock-bg)] backdrop-blur-2xl border border-[var(--border)] sm:border gradient-border">
         {DOCK_ITEMS.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -31,7 +31,7 @@ export default function Dock() {
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
                 <div
-                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-[12px] sm:rounded-[14px] flex items-center justify-center text-base sm:text-lg transition-all duration-300"
+                  className="w-12 h-12 sm:w-12 sm:h-12 rounded-[14px] sm:rounded-[14px] flex items-center justify-center text-lg sm:text-lg transition-all duration-300"
                   style={{
                     background: isActive
                       ? `rgba(${item.rgb},0.12)`

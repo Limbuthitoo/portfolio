@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 // ── Board / Game constants ──
 const COLS = 10;
 const ROWS = 20;
-const CELL = 28;
 const EMPTY = 0;
 
 // Levels: each level has a points threshold and drop speed (ms)
@@ -315,13 +315,174 @@ export default function UltraTetris() {
 
   // Touch controls
   const touchStart = useRef<{ x: number; y: number; time: number } | null>(null);
+  const router = useRouter();
+
+  // Dynamic cell size: fill available space on mobile
+  const [cellSize, setCellSize] = useState(28);
+  useEffect(() => {
+    const calc = () => {
+      const isMobile = window.innerWidth < 640;
+      if (isMobile) {
+        // Reserve: 60px top bar, 120px bottom controls, 40px stats row, some padding
+        const availH = window.innerHeight - 230;
+        const availW = window.innerWidth - 32;
+        const byH = Math.floor(availH / ROWS);
+        const byW = Math.floor(availW / COLS);
+        setCellSize(Math.max(12, Math.min(byH, byW)));
+      } else {
+        setCellSize(28);
+      }
+    };
+    calc();
+    window.addEventListener("resize", calc);
+    return () => window.removeEventListener("resize", calc);
+  }, []);
+
+  const boardW = COLS * cellSize;
+  const boardH = ROWS * cellSize;
 
   return (
-    <div className="flex flex-col lg:flex-row items-start justify-center gap-6 w-full max-w-4xl mx-auto">
+    <>
+      {/* ── Mobile: fullscreen overlay ── */}
+      <div className="fixed inset-0 z-[100] bg-[#060606] flex flex-col sm:hidden">
+        {/* Top bar */}
+        <div className="shrink-0 flex items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-4">
+            <div>
+              <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Score</div>
+              <div className="text-sm font-bold text-white font-mono">{score.toLocaleString()}</div>
+            </div>
+            <div>
+              <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Level</div>
+              <div className="text-sm font-bold text-[#a855f7] font-mono">{level}</div>
+            </div>
+            <div>
+              <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Lines</div>
+              <div className="text-sm font-bold text-[#06b6d4] font-mono">{lines}</div>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {/* Next piece mini */}
+            <div className="flex flex-col items-center">
+              <div className="text-[7px] font-mono text-white/20 uppercase mb-0.5">Next</div>
+              <div>
+                {nextPiece.shape.map((row, ri) => (
+                  <div key={ri} className="flex">
+                    {row.map((cell, ci) => (
+                      <div key={ci} style={{ width: 10, height: 10, margin: 0.5, borderRadius: 2, background: cell ? COLORS[cell] : "transparent" }} />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Close button */}
+            <button
+              onClick={() => router.push("/games")}
+              className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center text-white/50 active:bg-white/[0.12] ml-2"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+
+        {/* Board */}
+        <div className="flex-1 flex items-center justify-center px-4">
+          <div
+            className="rounded-xl border border-white/[0.08] bg-[#0a0a0a] overflow-hidden relative"
+            style={{ width: boardW + 2, height: boardH + 2, padding: 1 }}
+            onTouchStart={(e) => {
+              const t = e.touches[0];
+              touchStart.current = { x: t.clientX, y: t.clientY, time: Date.now() };
+            }}
+            onTouchEnd={(e) => {
+              if (!touchStart.current || gameOver || paused) return;
+              const t = e.changedTouches[0];
+              const dx = t.clientX - touchStart.current.x;
+              const dy = t.clientY - touchStart.current.y;
+              const dt = Date.now() - touchStart.current.time;
+              touchStart.current = null;
+              if (dt < 200 && Math.abs(dx) < 20 && Math.abs(dy) < 20) { rotatePiece(); return; }
+              if (Math.abs(dx) > Math.abs(dy)) {
+                if (dx > 30) moveRight(); else if (dx < -30) moveLeft();
+              } else {
+                if (dy > 50) hardDrop(); else if (dy > 20) moveDown();
+              }
+            }}
+          >
+            {/* Grid */}
+            <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.04 }}>
+              {Array.from({ length: ROWS }).map((_, r) => (
+                <div key={r} className="absolute w-full border-b border-white" style={{ top: r * cellSize }} />
+              ))}
+              {Array.from({ length: COLS }).map((_, c) => (
+                <div key={c} className="absolute h-full border-r border-white" style={{ left: c * cellSize }} />
+              ))}
+            </div>
+            {/* Cells */}
+            {display.map((row, ri) =>
+              row.map((cell, ci) => {
+                const isGhost = cell < 0;
+                const colorId = Math.abs(cell);
+                if (!colorId) return null;
+                return (
+                  <div key={`${ri}-${ci}`} className="absolute rounded-[2px]" style={{
+                    left: ci * cellSize + 1, top: ri * cellSize + 1,
+                    width: cellSize - 2, height: cellSize - 2,
+                    background: isGhost ? `${COLORS[colorId]}15` : COLORS[colorId],
+                    border: isGhost ? `1px solid ${COLORS[colorId]}30` : "none",
+                    boxShadow: isGhost ? "none" : `0 0 6px ${COLORS[colorId]}40, inset 0 1px 0 rgba(255,255,255,0.15)`,
+                  }} />
+                );
+              })
+            )}
+            {/* Overlays */}
+            {!started && (
+              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center z-10">
+                <h2 className="text-xl font-bold text-white mb-1">ULTRA TETRIS</h2>
+                <p className="text-[10px] text-white/30 font-mono mb-4">Stack blocks. Clear lines.</p>
+                <button onClick={startGame} className="px-5 py-2 rounded-lg bg-[#a855f7] hover:bg-[#9333ea] text-white text-sm font-medium">Start Game</button>
+              </div>
+            )}
+            {paused && !gameOver && (
+              <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center z-10">
+                <div className="text-lg font-bold text-white mb-3">PAUSED</div>
+                <button onClick={() => setPaused(false)} className="px-4 py-2 rounded-lg bg-white/10 text-white text-sm">Resume</button>
+              </div>
+            )}
+            {gameOver && (
+              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center z-10 p-4">
+                <div className="text-lg font-bold text-red-400 mb-1">GAME OVER</div>
+                <div className="text-white/50 text-xs font-mono mb-1">Score: <span className="text-white font-bold">{score.toLocaleString()}</span></div>
+                <div className="text-white/30 text-[10px] font-mono mb-3">Level {level} · {lines} lines</div>
+                {showNameInput && !submitted && (
+                  <div className="flex flex-col items-center gap-2 mb-3 w-full max-w-[180px]">
+                    <input type="text" value={playerName} onChange={(e) => setPlayerName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitScore(); }} placeholder="Your name" maxLength={20} autoFocus className="w-full bg-white/[0.06] border border-white/[0.1] text-white text-sm px-3 py-2 rounded-lg outline-none focus:border-[#a855f7]/50 text-center" />
+                    <button onClick={submitScore} disabled={!playerName.trim()} className="w-full px-4 py-1.5 rounded-lg bg-[#a855f7] disabled:opacity-40 text-white text-sm font-medium">Save Score</button>
+                  </div>
+                )}
+                {submitted && <div className="text-green-400 text-xs font-mono mb-2">Score saved!</div>}
+                <button onClick={startGame} className="px-4 py-1.5 rounded-lg bg-white/10 text-white text-sm">Play Again</button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Mobile controls */}
+        <div className="shrink-0 flex justify-center gap-3 px-4 py-4 pb-6">
+          <button onClick={moveLeft} className="w-14 h-14 rounded-2xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-xl flex items-center justify-center">←</button>
+          <button onClick={moveDown} className="w-14 h-14 rounded-2xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-xl flex items-center justify-center">↓</button>
+          <button onClick={rotatePiece} className="w-14 h-14 rounded-2xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-xl flex items-center justify-center">↻</button>
+          <button onClick={moveRight} className="w-14 h-14 rounded-2xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-xl flex items-center justify-center">→</button>
+          <button onClick={hardDrop} className="w-14 h-14 rounded-2xl bg-[#a855f7]/20 active:bg-[#a855f7]/40 text-[#a855f7] text-xl flex items-center justify-center">⤓</button>
+        </div>
+      </div>
+
+      {/* ── Desktop layout ── */}
+      <div className="hidden sm:flex flex-row items-start justify-center gap-6 w-full max-w-4xl mx-auto">
       {/* Left panel: Next + Score */}
-      <div className="flex flex-row lg:flex-col gap-4 w-full lg:w-auto order-2 lg:order-1">
+      <div className="flex flex-col gap-4">
         {/* Next piece */}
-        <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-4 flex-1 lg:flex-none">
+        <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-4">
           <div className="text-[9px] font-mono text-white/30 uppercase tracking-[0.2em] mb-3">Next</div>
           <div className="flex items-center justify-center h-16">
             {nextPiece.shape.map((row, ri) => (
@@ -352,7 +513,7 @@ export default function UltraTetris() {
         </div>
 
         {/* Stats */}
-        <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-4 flex-1 lg:flex-none space-y-3">
+        <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-4 space-y-3">
           <div>
             <div className="text-[9px] font-mono text-white/30 uppercase tracking-[0.2em]">Score</div>
             <div className="text-xl font-bold text-white font-mono">{score.toLocaleString()}</div>
@@ -381,42 +542,18 @@ export default function UltraTetris() {
       </div>
 
       {/* Game board */}
-      <div className="relative order-1 lg:order-2">
+      <div className="relative">
         <div
           className="rounded-xl border border-white/[0.08] bg-[#0a0a0a] overflow-hidden relative"
-          style={{ width: COLS * CELL + 2, height: ROWS * CELL + 2, padding: 1 }}
-          onTouchStart={(e) => {
-            const t = e.touches[0];
-            touchStart.current = { x: t.clientX, y: t.clientY, time: Date.now() };
-          }}
-          onTouchEnd={(e) => {
-            if (!touchStart.current || gameOver || paused) return;
-            const t = e.changedTouches[0];
-            const dx = t.clientX - touchStart.current.x;
-            const dy = t.clientY - touchStart.current.y;
-            const dt = Date.now() - touchStart.current.time;
-            touchStart.current = null;
-
-            if (dt < 200 && Math.abs(dx) < 20 && Math.abs(dy) < 20) {
-              rotatePiece();
-              return;
-            }
-            if (Math.abs(dx) > Math.abs(dy)) {
-              if (dx > 30) moveRight();
-              else if (dx < -30) moveLeft();
-            } else {
-              if (dy > 50) hardDrop();
-              else if (dy > 20) moveDown();
-            }
-          }}
+          style={{ width: COLS * 28 + 2, height: ROWS * 28 + 2, padding: 1 }}
         >
           {/* Grid lines */}
           <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.04 }}>
             {Array.from({ length: ROWS }).map((_, r) => (
-              <div key={r} className="absolute w-full border-b border-white" style={{ top: r * CELL }} />
+              <div key={r} className="absolute w-full border-b border-white" style={{ top: r * 28 }} />
             ))}
             {Array.from({ length: COLS }).map((_, c) => (
-              <div key={c} className="absolute h-full border-r border-white" style={{ left: c * CELL }} />
+              <div key={c} className="absolute h-full border-r border-white" style={{ left: c * 28 }} />
             ))}
           </div>
 
@@ -431,10 +568,10 @@ export default function UltraTetris() {
                   key={`${ri}-${ci}`}
                   className="absolute rounded-[3px]"
                   style={{
-                    left: ci * CELL + 1,
-                    top: ri * CELL + 1,
-                    width: CELL - 2,
-                    height: CELL - 2,
+                    left: ci * 28 + 1,
+                    top: ri * 28 + 1,
+                    width: 28 - 2,
+                    height: 28 - 2,
                     background: isGhost ? `${COLORS[colorId]}15` : COLORS[colorId],
                     border: isGhost ? `1px solid ${COLORS[colorId]}30` : "none",
                     boxShadow: isGhost ? "none" : `0 0 8px ${COLORS[colorId]}40, inset 0 1px 0 rgba(255,255,255,0.15)`,
@@ -517,19 +654,10 @@ export default function UltraTetris() {
             </div>
           )}
         </div>
-
-        {/* Mobile controls */}
-        <div className="flex lg:hidden justify-center gap-2 mt-4">
-          <button onClick={moveLeft} className="w-12 h-12 rounded-xl bg-white/[0.06] active:bg-white/[0.12] text-white/50 text-lg flex items-center justify-center">←</button>
-          <button onClick={moveDown} className="w-12 h-12 rounded-xl bg-white/[0.06] active:bg-white/[0.12] text-white/50 text-lg flex items-center justify-center">↓</button>
-          <button onClick={rotatePiece} className="w-12 h-12 rounded-xl bg-white/[0.06] active:bg-white/[0.12] text-white/50 text-lg flex items-center justify-center">↻</button>
-          <button onClick={moveRight} className="w-12 h-12 rounded-xl bg-white/[0.06] active:bg-white/[0.12] text-white/50 text-lg flex items-center justify-center">→</button>
-          <button onClick={hardDrop} className="w-12 h-12 rounded-xl bg-[#a855f7]/20 active:bg-[#a855f7]/40 text-[#a855f7] text-lg flex items-center justify-center">⤓</button>
-        </div>
       </div>
 
       {/* Right panel: High Scores */}
-      <div className="order-3 w-full lg:w-auto">
+      <div>
         <div className="rounded-xl bg-white/[0.03] border border-white/[0.06] p-4 lg:min-w-[180px]">
           <div className="text-[9px] font-mono text-white/30 uppercase tracking-[0.2em] mb-3">🏆 High Scores</div>
           {highScores.length === 0 ? (
@@ -554,5 +682,6 @@ export default function UltraTetris() {
         </div>
       </div>
     </div>
+    </>
   );
 }
