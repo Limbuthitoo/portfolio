@@ -19,13 +19,11 @@ import {
   HighlightsExpanded,
   LocationExpanded,
   TechStackExpanded,
-  SkillsExpanded,
-  ExperienceExpanded,
   QuickLinksExpanded,
   CurrentlyExpanded,
 } from "./CardModalContent";
 
-type ModalType = "availability" | "highlights" | "location" | "techstack" | "skills" | "experience" | "quicklinks" | "currently" | null;
+type ModalType = "availability" | "highlights" | "location" | "techstack" | "quicklinks" | "currently" | null;
 
 interface Props {
   projects: Project[];
@@ -61,8 +59,6 @@ export default function BentoGrid({ projects, experiences, siteConfig }: Props) 
     highlights: "Highlights",
     location: "Based In",
     techstack: "Tech Stack",
-    skills: "Skills",
-    experience: "Experience",
     quicklinks: "Find Me On",
     currently: "Currently",
   };
@@ -72,8 +68,6 @@ export default function BentoGrid({ projects, experiences, siteConfig }: Props) 
     highlights: <HighlightsExpanded siteConfig={siteConfig} />,
     location: <LocationExpanded siteConfig={siteConfig} />,
     techstack: <TechStackExpanded siteConfig={siteConfig} />,
-    skills: <SkillsExpanded siteConfig={siteConfig} />,
-    experience: <ExperienceExpanded experiences={experiences} />,
     quicklinks: <QuickLinksExpanded siteConfig={siteConfig} />,
     currently: <CurrentlyExpanded siteConfig={siteConfig} />,
   };
@@ -105,11 +99,11 @@ export default function BentoGrid({ projects, experiences, siteConfig }: Props) 
         </motion.div>
 
         {/* Row 2-3: Skills + Experience + QuickLinks */}
-        <motion.div variants={item} className="col-span-2 sm:col-span-4 md:col-span-3 lg:col-span-3 row-span-2 cursor-pointer" onClick={() => setActiveModal("skills")}>
+        <motion.div variants={item} className="col-span-2 sm:col-span-4 md:col-span-3 lg:col-span-3 row-span-2">
           <TiltCard className="h-full" tiltStrength={5}><SkillsCard siteConfig={siteConfig} /></TiltCard>
         </motion.div>
 
-        <motion.div variants={item} className="col-span-2 sm:col-span-4 md:col-span-5 lg:col-span-5 row-span-2 cursor-pointer" onClick={() => setActiveModal("experience")}>
+        <motion.div variants={item} className="col-span-2 sm:col-span-4 md:col-span-5 lg:col-span-5 row-span-2">
           <TiltCard className="h-full" tiltStrength={5}><ExperienceTimeline experiences={experiences} /></TiltCard>
         </motion.div>
 
