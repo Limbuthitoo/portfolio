@@ -87,6 +87,11 @@ html, body {
   overflow: hidden;
 }
 
+.dashboard-layout {
+  overflow-y: auto;
+  height: 100vh;
+}
+
 body {
   background: var(--bg);
   color: var(--fg);
