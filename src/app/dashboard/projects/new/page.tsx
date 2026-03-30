@@ -11,12 +11,23 @@ export default function NewProjectPage() {
 
   const handleSave = async (project: Project) => {
     setSaving(true);
-    await fetch('/api/projects', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(project),
-    });
-    router.push('/dashboard/projects');
+    try {
+      const res = await fetch('/api/projects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(project),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'Failed to save project');
+        return;
+      }
+      router.push('/dashboard/projects');
+    } catch {
+      alert('Failed to save project');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (

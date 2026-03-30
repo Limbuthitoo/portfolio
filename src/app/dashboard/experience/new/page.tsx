@@ -11,12 +11,23 @@ export default function NewExperiencePage() {
 
   const handleSave = async (exp: Experience) => {
     setSaving(true);
-    await fetch('/api/experience', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(exp),
-    });
-    router.push('/dashboard/experience');
+    try {
+      const res = await fetch('/api/experience', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(exp),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'Failed to save experience');
+        return;
+      }
+      router.push('/dashboard/experience');
+    } catch {
+      alert('Failed to save experience');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (

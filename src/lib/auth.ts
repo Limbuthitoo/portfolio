@@ -14,7 +14,7 @@ const TOKEN_NAME = 'dashboard_token';
 export async function signToken(): Promise<string> {
   return new SignJWT({ role: 'admin' })
     .setProtectedHeader({ alg: 'HS256' })
-    .setExpirationTime('7d')
+    .setExpirationTime('2h')
     .sign(getJwtSecret());
 }
 
@@ -48,7 +48,7 @@ export function createAuthResponse(token: string) {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 2,
   });
   return res;
 }

@@ -13,12 +13,20 @@ export default function ProjectsListPage() {
 
   const handleDelete = async (slug: string) => {
     if (!confirm('Delete this project?')) return;
-    await fetch('/api/projects', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ slug }),
-    });
-    setProjects((prev) => prev.filter((p) => p.slug !== slug));
+    try {
+      const res = await fetch('/api/projects', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug }),
+      });
+      if (!res.ok) {
+        alert('Failed to delete project');
+        return;
+      }
+      setProjects((prev) => prev.filter((p) => p.slug !== slug));
+    } catch {
+      alert('Failed to delete project');
+    }
   };
 
   return (

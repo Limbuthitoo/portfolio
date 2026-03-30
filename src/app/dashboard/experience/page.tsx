@@ -13,12 +13,20 @@ export default function ExperienceListPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this experience?')) return;
-    await fetch('/api/experience', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id }),
-    });
-    setItems((prev) => prev.filter((e) => e.id !== id));
+    try {
+      const res = await fetch('/api/experience', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (!res.ok) {
+        alert('Failed to delete experience');
+        return;
+      }
+      setItems((prev) => prev.filter((e) => e.id !== id));
+    } catch {
+      alert('Failed to delete experience');
+    }
   };
 
   return (

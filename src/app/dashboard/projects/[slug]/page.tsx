@@ -18,12 +18,23 @@ export default function EditProjectPage() {
 
   const handleSave = async (updated: Project) => {
     setSaving(true);
-    await fetch(`/api/projects/${slug}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updated),
-    });
-    router.push('/dashboard/projects');
+    try {
+      const res = await fetch(`/api/projects/${slug}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updated),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'Failed to update project');
+        return;
+      }
+      router.push('/dashboard/projects');
+    } catch {
+      alert('Failed to update project');
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (!project) return <p className="text-white/30 text-sm">Loading...</p>;

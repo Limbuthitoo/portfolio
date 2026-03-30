@@ -18,12 +18,23 @@ export default function EditExperiencePage() {
 
   const handleSave = async (updated: Experience) => {
     setSaving(true);
-    await fetch(`/api/experience/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updated),
-    });
-    router.push('/dashboard/experience');
+    try {
+      const res = await fetch(`/api/experience/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updated),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'Failed to update experience');
+        return;
+      }
+      router.push('/dashboard/experience');
+    } catch {
+      alert('Failed to update experience');
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (!exp) return <p className="text-white/30 text-sm">Loading...</p>;

@@ -5,10 +5,11 @@ import { projects as seedProjects } from '@/data/projects';
 import { experiences as seedExperiences } from '@/data/experience';
 import { siteConfig as seedConfig } from '@/data/siteConfig';
 
-const CONTENT_DIR = path.join(process.cwd(), 'content');
+const BUNDLED_DIR = path.join(process.cwd(), 'content');
+const WRITABLE_DIR = process.env.VERCEL ? '/tmp/content' : BUNDLED_DIR;
 
 function ensureDir() {
-  if (!fs.existsSync(CONTENT_DIR)) fs.mkdirSync(CONTENT_DIR, { recursive: true });
+  if (!fs.existsSync(WRITABLE_DIR)) fs.mkdirSync(WRITABLE_DIR, { recursive: true });
 }
 
 function isNonEmptyString(val: unknown): val is string {
@@ -24,6 +25,7 @@ export function validateProject(data: unknown): data is Project {
   const p = data as Record<string, unknown>;
   return (
     isNonEmptyString(p.slug) &&
+    /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.slug) &&
     isNonEmptyString(p.title) &&
     isNonEmptyString(p.category) &&
     (p.type === 'uiux' || p.type === 'frontend' || p.type === 'other') &&
@@ -47,6 +49,7 @@ export function validateExperience(data: unknown): data is Experience {
   const e = data as Record<string, unknown>;
   return (
     isNonEmptyString(e.id) &&
+    /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(e.id) &&
     isNonEmptyString(e.role) &&
     isNonEmptyString(e.company) &&
     typeof e.period === 'string' &&
@@ -73,14 +76,24 @@ export function validateSiteConfig(data: unknown): data is SiteConfig {
 }
 
 function readJSON<T>(file: string, fallback: T): T {
-  const p = path.join(CONTENT_DIR, file);
-  if (!fs.existsSync(p)) return fallback;
-  return JSON.parse(fs.readFileSync(p, 'utf-8'));
+  try {
+    const writablePath = path.join(WRITABLE_DIR, file);
+    if (fs.existsSync(writablePath)) {
+      return JSON.parse(fs.readFileSync(writablePath, 'utf-8'));
+    }
+    const bundledPath = path.join(BUNDLED_DIR, file);
+    if (fs.existsSync(bundledPath)) {
+      return JSON.parse(fs.readFileSync(bundledPath, 'utf-8'));
+    }
+  } catch {
+    // Fall through on parse errors
+  }
+  return fallback;
 }
 
 function writeJSON(file: string, data: unknown) {
   ensureDir();
-  fs.writeFileSync(path.join(CONTENT_DIR, file), JSON.stringify(data, null, 2));
+  fs.writeFileSync(path.join(WRITABLE_DIR, file), JSON.stringify(data, null, 2));
 }
 
 // --- Projects ---
@@ -155,13 +168,15 @@ export function seedIfEmpty() {
   if (seeded) return;
   seeded = true;
   ensureDir();
-  if (!fs.existsSync(path.join(CONTENT_DIR, 'projects.json'))) {
+  const hasFile = (f: string) =>
+    fs.existsSync(path.join(WRITABLE_DIR, f)) || fs.existsSync(path.join(BUNDLED_DIR, f));
+  if (!hasFile('projects.json')) {
     writeJSON('projects.json', seedProjects);
   }
-  if (!fs.existsSync(path.join(CONTENT_DIR, 'experience.json'))) {
+  if (!hasFile('experience.json')) {
     writeJSON('experience.json', seedExperiences);
   }
-  if (!fs.existsSync(path.join(CONTENT_DIR, 'config.json'))) {
+  if (!hasFile('config.json')) {
     writeJSON('config.json', seedConfig);
   }
 }
