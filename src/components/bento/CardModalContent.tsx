@@ -251,7 +251,7 @@ export function QuickLinksExpanded({ siteConfig }: { siteConfig?: SiteConfig }) 
   ];
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       {LINKS.map((l) => {
         const inner = (
           <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 hover:border-[var(--border-hover)] hover:bg-[var(--surface-hover)] transition-all group/link">
