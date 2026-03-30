@@ -188,7 +188,7 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
                 {lastName.split("").map((char, i) => (
                   <motion.span
                     key={i}
-                    className="inline-block bg-clip-text text-transparent"
+                    className={`inline-block bg-clip-text text-transparent${char === " " ? " w-[0.25em]" : ""}`}
                     style={{
                       backgroundImage:
                         "linear-gradient(135deg, var(--violet) 0%, var(--cyan) 100%)",
@@ -201,7 +201,7 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
                       ease: [0.16, 1, 0.3, 1],
                     }}
                   >
-                    {char}
+                    {char === " " ? "\u00A0" : char}
                   </motion.span>
                 ))}
               </span>
