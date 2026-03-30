@@ -29,7 +29,7 @@ export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) 
         </span>
       </div>
 
-      <div className="relative z-10 flex-1 flex flex-col gap-2.5 overflow-hidden">
+      <div className="relative z-10 flex-1 flex flex-col gap-2.5 overflow-y-auto bento-scroll">
         {groups.map((group, gi) => (
           <div key={group.label}>
             <div className="flex items-center gap-1.5 mb-1.5">

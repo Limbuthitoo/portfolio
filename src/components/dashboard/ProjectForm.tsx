@@ -48,9 +48,7 @@ export default function ProjectForm({ project, onSave, saving }: Props) {
   const sectionCls = 'pt-6 mt-6 border-t border-white/[0.04]';
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col h-full">
-    <div className="flex-1 overflow-y-auto pb-20">
-    <div className="max-w-2xl space-y-4">
+    <form onSubmit={handleSubmit} className="max-w-2xl space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className={labelCls}>Title</label>
@@ -221,11 +219,7 @@ export default function ProjectForm({ project, onSave, saving }: Props) {
         </div>
       )}
 
-    </div>
-    </div>
-
-      {/* Sticky footer */}
-      <div className="sticky bottom-0 z-20 bg-[#060606] border-t border-white/[0.06] px-5 py-3 flex items-center justify-end -mx-5 -mb-5">
+      <div className="pt-4 pb-4">
         <button type="submit" disabled={saving}
           className="bg-white/[0.06] hover:bg-white/10 disabled:opacity-50 text-white text-[9px] uppercase tracking-[0.3em] px-6 py-2.5 rounded-lg transition-colors">
           {saving ? 'Saving...' : project ? 'Update Project' : 'Create Project'}
