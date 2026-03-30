@@ -110,4 +110,11 @@ export interface SiteConfig {
   techStack?: string[];
   skills?: SkillGroup[];
   capabilities?: Capability[];
+  currently?: CurrentlyItem[];
+}
+
+export interface CurrentlyItem {
+  emoji: string;
+  label: string;
+  value: string;
 }

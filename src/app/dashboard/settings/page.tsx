@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { SiteConfig, Highlight, SkillGroup, Capability } from '@/types';
+import { SiteConfig, Highlight, SkillGroup, Capability, CurrentlyItem } from '@/types';
 
 const inputCls = 'w-full bg-white/[0.03] border border-white/[0.06] focus:border-white/15 text-white text-sm px-3 py-2.5 rounded-lg outline-none transition-colors';
 const labelCls = 'text-white/25 text-[9px] uppercase tracking-[0.25em] block mb-1.5';
@@ -207,6 +207,16 @@ export default function SettingsPage() {
           />
         </div>
 
+        {/* ── Currently (Homepage Card) ── */}
+        <div className={sectionCls}>
+          <SectionTitle>Currently (Homepage Card)</SectionTitle>
+          <p className="text-white/15 text-[10px] mb-3">What you&apos;re working on, learning, listening to — keeps the site feeling alive.</p>
+          <CurrentlyEditor
+            items={config.currently || []}
+            onChange={(currently) => set('currently', currently)}
+          />
+        </div>
+
         {/* ── Password Change ── */}
         <div className={sectionCls}>
           <SectionTitle>Change Password</SectionTitle>
@@ -352,6 +362,28 @@ function CapabilitiesEditor({ capabilities, onChange }: { capabilities: Capabili
         </div>
       ))}
       <button type="button" onClick={add} className={addBtnCls}>+ Add Capability</button>
+    </div>
+  );
+}
+
+function CurrentlyEditor({ items, onChange }: { items: CurrentlyItem[]; onChange: (v: CurrentlyItem[]) => void }) {
+  const add = () => onChange([...items, { emoji: '🔹', label: '', value: '' }]);
+  const update = (i: number, key: keyof CurrentlyItem, val: string) => {
+    const next = [...items];
+    next[i] = { ...next[i], [key]: val };
+    onChange(next);
+  };
+  return (
+    <div className="space-y-2">
+      {items.map((item, i) => (
+        <div key={i} className="flex items-center gap-2">
+          <input className={`${inputCls} w-14 text-center`} value={item.emoji} onChange={(e) => update(i, 'emoji', e.target.value)} placeholder="🛠" />
+          <input className={`${inputCls} w-28`} value={item.label} onChange={(e) => update(i, 'label', e.target.value)} placeholder="Building" />
+          <input className={inputCls} value={item.value} onChange={(e) => update(i, 'value', e.target.value)} placeholder="Portfolio v2" />
+          <button type="button" onClick={() => onChange(items.filter((_, idx) => idx !== i))} className={removeBtnCls}>✕</button>
+        </div>
+      ))}
+      <button type="button" onClick={add} className={addBtnCls}>+ Add Item</button>
     </div>
   );
 }

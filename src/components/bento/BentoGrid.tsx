@@ -10,6 +10,7 @@ import ExperienceTimeline from "./cards/ExperienceTimeline";
 import AvailabilityCard from "./cards/AvailabilityCard";
 import TechStack from "./cards/TechStack";
 import QuickLinks from "./cards/QuickLinks";
+import CurrentlyCard from "./cards/CurrentlyCard";
 
 interface Props {
   projects: Project[];
@@ -74,6 +75,10 @@ export default function BentoGrid({ projects, experiences, siteConfig }: Props) 
 
         <motion.div variants={item} className="col-span-2 sm:col-span-4 md:col-span-8 lg:col-span-4 row-span-1">
           <QuickLinks siteConfig={siteConfig} />
+        </motion.div>
+
+        <motion.div variants={item} className="col-span-2 sm:col-span-4 md:col-span-8 lg:col-span-4 row-span-1">
+          <CurrentlyCard siteConfig={siteConfig} />
         </motion.div>
 
         {/* Row 4-5+: Featured projects */}

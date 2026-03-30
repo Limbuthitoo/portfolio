@@ -37,4 +37,9 @@ export const siteConfig: SiteConfig = {
     { category: 'Development', skills: ['React / Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Three.js', 'Node.js', 'HTML / CSS'] },
     { category: 'Tools', skills: ['Figma', 'After Effects', 'Adobe Suite', 'Blender', 'VS Code', 'Git', 'Vercel'] },
   ],
+  currently: [
+    { emoji: '🛠', label: 'Building', value: 'Portfolio v2' },
+    { emoji: '📚', label: 'Learning', value: 'Three.js & WebGL' },
+    { emoji: '🎧', label: 'Listening', value: 'Lo-fi beats' },
+  ],
 };
