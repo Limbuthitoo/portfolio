@@ -20,10 +20,10 @@ export default function LocationCard() {
       />
 
       <div className="relative z-10 flex items-center justify-between">
-        <span className="text-[9px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
+        <span className="text-[11px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
           Based in
         </span>
-        <span className="w-6 h-6 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] flex items-center justify-center text-[10px] text-[var(--fg-3)] group-hover:text-[var(--violet)] group-hover:border-[var(--violet)]/30 transition-colors">
+        <span className="w-6 h-6 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] flex items-center justify-center text-[12px] text-[var(--fg-3)] group-hover:text-[var(--violet)] group-hover:border-[var(--violet)]/30 transition-colors">
           ↗
         </span>
       </div>
@@ -31,9 +31,9 @@ export default function LocationCard() {
       <div className="relative z-10">
         <div className="flex items-center gap-1.5 mb-0.5">
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--emerald)] animate-pulse" />
-          <span className="text-[13px] font-semibold">Kathmandu, Nepal</span>
+          <span className="text-[14px] font-semibold">Kathmandu, Nepal</span>
         </div>
-        <span className="text-[9px] font-mono text-[var(--fg-3)]">
+        <span className="text-[11px] font-mono text-[var(--fg-3)]">
           27.72°N, 85.32°E
         </span>
       </div>

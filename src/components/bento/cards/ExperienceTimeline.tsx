@@ -18,10 +18,10 @@ export default function ExperienceTimeline({
       />
 
       <div className="relative z-10 flex items-center justify-between mb-3">
-        <span className="text-[9px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
+        <span className="text-[11px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
           Experience
         </span>
-        <span className="w-6 h-6 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] flex items-center justify-center text-[10px] text-[var(--fg-3)] group-hover:text-[var(--violet)] group-hover:border-[var(--violet)]/30 transition-colors">
+        <span className="w-6 h-6 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] flex items-center justify-center text-[12px] text-[var(--fg-3)] group-hover:text-[var(--violet)] group-hover:border-[var(--violet)]/30 transition-colors">
           ↗
         </span>
       </div>
@@ -43,13 +43,13 @@ export default function ExperienceTimeline({
 
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-0.5">
               <div className="flex-1 min-w-0">
-                <h4 className="text-[13px] font-semibold group-hover:text-[var(--cyan)] transition-colors leading-tight">
+                <h4 className="text-[14px] font-semibold group-hover:text-[var(--cyan)] transition-colors leading-tight">
                   {exp.role}
                 </h4>
-                <p className="text-[10px] text-[var(--fg-3)] font-mono">
+                <p className="text-[12px] text-[var(--fg-3)] font-mono">
                   {exp.company}
                 </p>
-                <p className="text-[10px] text-[var(--fg-2)] mt-1 leading-relaxed line-clamp-2">
+                <p className="text-[12px] text-[var(--fg-2)] mt-1 leading-relaxed line-clamp-2">
                   {exp.description}
                 </p>
                 {exp.highlights.length > 0 && (
@@ -57,7 +57,7 @@ export default function ExperienceTimeline({
                     {exp.highlights.slice(0, 2).map((h) => (
                       <span
                         key={h}
-                        className="text-[8px] font-mono px-1.5 py-0.5 rounded-md border border-[var(--border)] text-[var(--fg-3)] bg-[var(--surface-hover)]"
+                        className="text-[10px] font-mono px-1.5 py-0.5 rounded-md border border-[var(--border)] text-[var(--fg-3)] bg-[var(--surface-hover)]"
                       >
                         {h}
                       </span>
@@ -65,7 +65,7 @@ export default function ExperienceTimeline({
                   </div>
                 )}
               </div>
-              <span className="text-[9px] font-mono text-[var(--fg-3)] shrink-0 sm:ml-3 sm:mt-0.5"
+              <span className="text-[11px] font-mono text-[var(--fg-3)] shrink-0 sm:ml-3 sm:mt-0.5"
                 style={{ color: NODE_COLORS[i % NODE_COLORS.length] }}
               >
                 {exp.period}

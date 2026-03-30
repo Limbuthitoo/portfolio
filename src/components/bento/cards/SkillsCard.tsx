@@ -28,10 +28,10 @@ export default function SkillsCard() {
       />
 
       <div className="relative z-10 flex items-center justify-between mb-3">
-        <span className="text-[9px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
+        <span className="text-[11px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
           Skills
         </span>
-        <span className="w-6 h-6 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] flex items-center justify-center text-[10px] text-[var(--fg-3)] group-hover:text-[var(--violet)] group-hover:border-[var(--violet)]/30 transition-colors">
+        <span className="w-6 h-6 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] flex items-center justify-center text-[12px] text-[var(--fg-3)] group-hover:text-[var(--violet)] group-hover:border-[var(--violet)]/30 transition-colors">
           ↗
         </span>
       </div>
@@ -45,7 +45,7 @@ export default function SkillsCard() {
                 style={{ background: group.color }}
               />
               <span
-                className="text-[9px] font-mono tracking-[0.1em] uppercase"
+                className="text-[11px] font-mono tracking-[0.1em] uppercase"
                 style={{ color: group.color }}
               >
                 {group.label}
@@ -55,7 +55,7 @@ export default function SkillsCard() {
               {group.skills.map((skill) => (
                 <span
                   key={skill}
-                  className="text-[9px] font-mono px-2 py-0.5 rounded-md bg-[var(--surface-hover)] border border-[var(--border)] text-[var(--fg-2)] hover:border-[var(--violet)]/30 hover:text-[var(--fg)] transition-colors"
+                  className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-[var(--surface-hover)] border border-[var(--border)] text-[var(--fg-2)] hover:border-[var(--violet)]/30 hover:text-[var(--fg)] transition-colors"
                 >
                   {skill}
                 </span>

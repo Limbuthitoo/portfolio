@@ -130,7 +130,7 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
               transition={{ delay: 0.1 }}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--emerald)] animate-pulse" />
-              <span className="text-[10px] font-medium text-[var(--fg-2)] tracking-wide">
+              <span className="text-[12px] font-medium text-[var(--fg-2)] tracking-wide">
                 {availability}
               </span>
             </motion.div>

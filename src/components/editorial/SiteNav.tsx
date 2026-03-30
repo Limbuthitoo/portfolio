@@ -18,7 +18,7 @@ export default function SiteNav() {
       <nav className="flex items-center justify-between px-6 md:px-10 py-5">
         {/* Logo / Name */}
         <Link href="/" className="group" data-cursor="Home">
-          <span className="text-[13px] font-medium tracking-[0.08em] uppercase text-white">
+          <span className="text-[14px] font-medium tracking-[0.08em] uppercase text-white">
             Bijay Subbalimbu
           </span>
         </Link>
@@ -35,7 +35,7 @@ export default function SiteNav() {
                 data-cursor={item.label}
               >
                 <span
-                  className={`text-[12px] tracking-[0.1em] uppercase transition-colors duration-300 ${
+                  className={`text-[13px] tracking-[0.1em] uppercase transition-colors duration-300 ${
                     isActive ? "text-white" : "text-white/40 hover:text-white/80"
                   }`}
                 >
@@ -55,7 +55,7 @@ export default function SiteNav() {
           {/* Command palette trigger */}
           <button
             onClick={() => window.dispatchEvent(new CustomEvent("toggle-command-palette"))}
-            className="text-[12px] tracking-[0.1em] text-white/30 hover:text-white/60 transition-colors hidden md:block"
+            className="text-[13px] tracking-[0.1em] text-white/30 hover:text-white/60 transition-colors hidden md:block"
             data-cursor="Search"
           >
             ⌘K

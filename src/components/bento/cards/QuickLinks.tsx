@@ -23,10 +23,10 @@ export default function QuickLinks({ siteConfig }: { siteConfig?: SiteConfig }) 
       />
 
       <div className="relative z-10 flex items-center justify-between mb-2">
-        <span className="text-[9px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
+        <span className="text-[11px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
           Find me on
         </span>
-        <span className="w-6 h-6 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] flex items-center justify-center text-[10px] text-[var(--fg-3)] group-hover:text-[var(--violet)] group-hover:border-[var(--violet)]/30 transition-colors">
+        <span className="w-6 h-6 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] flex items-center justify-center text-[12px] text-[var(--fg-3)] group-hover:text-[var(--violet)] group-hover:border-[var(--violet)]/30 transition-colors">
           ↗
         </span>
       </div>
@@ -34,7 +34,7 @@ export default function QuickLinks({ siteConfig }: { siteConfig?: SiteConfig }) 
       <div className="relative z-10 flex flex-wrap gap-1.5 flex-1 content-start">
         {LINKS.map((l) => {
           const cls =
-            "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] text-[11px] font-medium text-[var(--fg-2)] hover:text-[var(--violet)] hover:border-[var(--violet)]/20 transition-all";
+            "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] text-[13px] font-medium text-[var(--fg-2)] hover:text-[var(--violet)] hover:border-[var(--violet)]/20 transition-all";
           return l.ext ? (
             <a
               key={l.label}
@@ -44,12 +44,12 @@ export default function QuickLinks({ siteConfig }: { siteConfig?: SiteConfig }) 
               className={cls}
               data-cursor={l.label}
             >
-              <span className="text-[10px] opacity-50">{l.icon}</span>
+              <span className="text-[12px] opacity-50">{l.icon}</span>
               {l.label}
             </a>
           ) : (
             <Link key={l.label} href={l.href} className={cls} data-cursor={l.label}>
-              <span className="text-[10px] opacity-50">{l.icon}</span>
+              <span className="text-[12px] opacity-50">{l.icon}</span>
               {l.label}
             </Link>
           );

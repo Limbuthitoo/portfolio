@@ -55,7 +55,7 @@ export default function AboutPageClient({
             transition={{ delay: 0.1 }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)] animate-pulse" />
-            <span className="text-[10px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">About</span>
+            <span className="text-[12px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">About</span>
           </motion.div>
 
           <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-12 mb-8">
@@ -175,7 +175,7 @@ function SectionLabel({ text, color }: { text: string; color: string }) {
       transition={{ duration: 0.4 }}
     >
       <div className="w-1.5 h-1.5 rounded-full" style={{ background: color, boxShadow: `0 0 6px ${color}` }} />
-      <span className="text-[10px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">{text}</span>
+      <span className="text-[12px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">{text}</span>
       <div className="flex-1 h-px bg-[var(--border)]" />
     </motion.div>
   );
@@ -200,7 +200,7 @@ function StatCard({ stat, index }: { stat: typeof STATS[number]; index: number }
       >
         {stat.value}
       </span>
-      <span className="text-[10px] font-mono text-[var(--fg-3)] tracking-[0.12em] uppercase">
+      <span className="text-[12px] font-mono text-[var(--fg-3)] tracking-[0.12em] uppercase">
         {stat.label}
       </span>
     </motion.div>
@@ -230,7 +230,7 @@ function CapabilityCard({ cap, index }: { cap: typeof CAPABILITIES[number]; inde
         {cap.skills.map((skill) => (
           <span
             key={skill}
-            className="px-2.5 py-1 rounded-lg text-[11px] text-[var(--fg-2)] bg-[var(--bg)] border border-[var(--border)] hover:border-[var(--border-hover)] hover:text-[var(--fg)] transition-colors cursor-default"
+            className="px-2.5 py-1 rounded-lg text-[13px] text-[var(--fg-2)] bg-[var(--bg)] border border-[var(--border)] hover:border-[var(--border-hover)] hover:text-[var(--fg)] transition-colors cursor-default"
           >
             {skill}
           </span>
@@ -263,7 +263,7 @@ function ExpCard({ experience, index }: { experience: Experience; index: number 
 
       <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 md:p-5 hover:border-[var(--border-hover)] transition-colors">
         <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-4 mb-2">
-          <span className="text-[10px] font-mono text-[var(--fg-3)] tracking-wider shrink-0 sm:w-24 sm:pt-0.5">
+          <span className="text-[12px] font-mono text-[var(--fg-3)] tracking-wider shrink-0 sm:w-24 sm:pt-0.5">
             {experience.period}
           </span>
           <div className="flex-1">
@@ -273,12 +273,12 @@ function ExpCard({ experience, index }: { experience: Experience; index: number 
             >
               {experience.role}
             </h4>
-            <p className="text-[11px] font-mono text-[var(--fg-3)] mt-0.5">
+            <p className="text-[13px] font-mono text-[var(--fg-3)] mt-0.5">
               {experience.company}
             </p>
           </div>
         </div>
-        <p className="text-[12px] md:text-[13px] text-[var(--fg-2)] leading-relaxed sm:pl-28">
+        <p className="text-[13px] md:text-[14px] text-[var(--fg-2)] leading-relaxed sm:pl-28">
           {experience.description}
         </p>
       </div>

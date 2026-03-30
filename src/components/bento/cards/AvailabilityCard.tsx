@@ -13,10 +13,10 @@ export default function AvailabilityCard() {
         />
 
         <div className="relative z-10 flex items-center justify-between">
-          <span className="text-[9px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
+          <span className="text-[11px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
             Availability
           </span>
-          <span className="w-6 h-6 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] flex items-center justify-center text-[10px] text-[var(--fg-3)] group-hover:text-[var(--violet)] group-hover:border-[var(--violet)]/30 transition-colors">
+          <span className="w-6 h-6 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] flex items-center justify-center text-[12px] text-[var(--fg-3)] group-hover:text-[var(--violet)] group-hover:border-[var(--violet)]/30 transition-colors">
             ↗
           </span>
         </div>
@@ -27,11 +27,11 @@ export default function AvailabilityCard() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--emerald)] opacity-30" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--emerald)]" />
             </span>
-            <p className="text-[13px] font-semibold text-[var(--emerald)]">
+            <p className="text-[14px] font-semibold text-[var(--emerald)]">
               Open to Work
             </p>
           </div>
-          <p className="text-[10px] text-[var(--fg-3)]">
+          <p className="text-[12px] text-[var(--fg-3)]">
             Freelance &amp; contract
           </p>
         </div>

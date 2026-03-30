@@ -44,7 +44,7 @@ export default function ProjectForm({ project, onSave, saving }: Props) {
   };
 
   const inputCls = 'w-full bg-white/[0.03] border border-white/[0.06] focus:border-white/15 text-white text-sm px-3 py-2.5 rounded-lg outline-none transition-colors';
-  const labelCls = 'text-white/25 text-[9px] uppercase tracking-[0.25em] block mb-1.5';
+  const labelCls = 'text-white/25 text-[11px] uppercase tracking-[0.25em] block mb-1.5';
   const sectionCls = 'pt-6 mt-6 border-t border-white/[0.04]';
 
   return (
@@ -137,7 +137,7 @@ export default function ProjectForm({ project, onSave, saving }: Props) {
       {/* ── UI/UX Specific Fields ── */}
       {form.type === 'uiux' && (
         <div className={sectionCls}>
-          <h3 className="text-white/40 text-[10px] uppercase tracking-[0.3em] mb-4">UI/UX Case Study Fields</h3>
+          <h3 className="text-white/40 text-[12px] uppercase tracking-[0.3em] mb-4">UI/UX Case Study Fields</h3>
 
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -221,7 +221,7 @@ export default function ProjectForm({ project, onSave, saving }: Props) {
 
       <div className="pt-4">
         <button type="submit" disabled={saving}
-          className="bg-white/[0.06] hover:bg-white/10 disabled:opacity-50 text-white text-[9px] uppercase tracking-[0.3em] px-6 py-2.5 rounded-lg transition-colors">
+          className="bg-white/[0.06] hover:bg-white/10 disabled:opacity-50 text-white text-[11px] uppercase tracking-[0.3em] px-6 py-2.5 rounded-lg transition-colors">
           {saving ? 'Saving...' : project ? 'Update Project' : 'Create Project'}
         </button>
       </div>
@@ -249,10 +249,10 @@ function QuotesEditor({ quotes, onChange, inputCls, labelCls }: { quotes: Resear
             <input className={inputCls} value={q.source} onChange={(e) => update(i, 'source', e.target.value)} placeholder="Source (e.g. Plumber)" />
             <input className={inputCls} value={q.insight} onChange={(e) => update(i, 'insight', e.target.value)} placeholder="Key insight" />
           </div>
-          <button type="button" onClick={() => remove(i)} className="text-red-400/60 text-[10px] hover:text-red-400">Remove</button>
+          <button type="button" onClick={() => remove(i)} className="text-red-400/60 text-[12px] hover:text-red-400">Remove</button>
         </div>
       ))}
-      <button type="button" onClick={add} className="text-[10px] text-white/30 hover:text-white/60 border border-dashed border-white/[0.06] rounded-lg px-3 py-2 w-full">+ Add Quote</button>
+      <button type="button" onClick={add} className="text-[12px] text-white/30 hover:text-white/60 border border-dashed border-white/[0.06] rounded-lg px-3 py-2 w-full">+ Add Quote</button>
     </div>
   );
 }
@@ -273,10 +273,10 @@ function PersonasEditor({ personas, onChange, inputCls }: { personas: Persona[];
           <input className={inputCls} value={p.name} onChange={(e) => update(i, 'name', e.target.value)} placeholder="Name (e.g. Homeowner)" />
           <input className={inputCls} value={p.type} onChange={(e) => update(i, 'type', e.target.value)} placeholder="Type (e.g. Primary)" />
           <input className={inputCls} value={p.needs} onChange={(e) => update(i, 'needs', e.target.value)} placeholder="Needs" />
-          <button type="button" onClick={() => remove(i)} className="text-red-400/60 text-[10px] hover:text-red-400 col-span-3">Remove</button>
+          <button type="button" onClick={() => remove(i)} className="text-red-400/60 text-[12px] hover:text-red-400 col-span-3">Remove</button>
         </div>
       ))}
-      <button type="button" onClick={add} className="text-[10px] text-white/30 hover:text-white/60 border border-dashed border-white/[0.06] rounded-lg px-3 py-2 w-full">+ Add Persona</button>
+      <button type="button" onClick={add} className="text-[12px] text-white/30 hover:text-white/60 border border-dashed border-white/[0.06] rounded-lg px-3 py-2 w-full">+ Add Persona</button>
     </div>
   );
 }
@@ -296,10 +296,10 @@ function DecisionsEditor({ decisions, onChange, inputCls }: { decisions: DesignD
         <div key={i} className="p-3 rounded-lg border border-white/[0.04] space-y-2">
           <input className={inputCls} value={d.question} onChange={(e) => update(i, 'question', e.target.value)} placeholder="Question (e.g. Why acoustic-only?)" />
           <textarea className={`${inputCls} resize-none`} rows={2} value={d.answer} onChange={(e) => update(i, 'answer', e.target.value)} placeholder="Answer / rationale" />
-          <button type="button" onClick={() => remove(i)} className="text-red-400/60 text-[10px] hover:text-red-400">Remove</button>
+          <button type="button" onClick={() => remove(i)} className="text-red-400/60 text-[12px] hover:text-red-400">Remove</button>
         </div>
       ))}
-      <button type="button" onClick={add} className="text-[10px] text-white/30 hover:text-white/60 border border-dashed border-white/[0.06] rounded-lg px-3 py-2 w-full">+ Add Decision</button>
+      <button type="button" onClick={add} className="text-[12px] text-white/30 hover:text-white/60 border border-dashed border-white/[0.06] rounded-lg px-3 py-2 w-full">+ Add Decision</button>
     </div>
   );
 }
@@ -324,10 +324,10 @@ function ScreensEditor({ screens, onChange, inputCls }: { screens: KeyScreen[]; 
           <textarea className={`${inputCls} resize-none`} rows={2} value={s.description} onChange={(e) => update(i, 'description', e.target.value)} placeholder="Screen description" />
           <input className={inputCls} value={s.image} onChange={(e) => update(i, 'image', e.target.value)} placeholder="Image path" />
           <input className={inputCls} value={s.decisions.join(', ')} onChange={(e) => update(i, 'decisions', e.target.value.split(',').map((d: string) => d.trim()).filter(Boolean))} placeholder="Key decisions (comma-separated)" />
-          <button type="button" onClick={() => remove(i)} className="text-red-400/60 text-[10px] hover:text-red-400">Remove</button>
+          <button type="button" onClick={() => remove(i)} className="text-red-400/60 text-[12px] hover:text-red-400">Remove</button>
         </div>
       ))}
-      <button type="button" onClick={add} className="text-[10px] text-white/30 hover:text-white/60 border border-dashed border-white/[0.06] rounded-lg px-3 py-2 w-full">+ Add Screen</button>
+      <button type="button" onClick={add} className="text-[12px] text-white/30 hover:text-white/60 border border-dashed border-white/[0.06] rounded-lg px-3 py-2 w-full">+ Add Screen</button>
     </div>
   );
 }
