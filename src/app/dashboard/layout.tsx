@@ -25,7 +25,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   };
 
   return (
-    <div className="min-h-screen bg-[#060606] flex" style={{ cursor: 'auto' }}>
+    <div className="dashboard-layout min-h-screen bg-[#060606] flex">
       <aside className={`fixed inset-y-0 left-0 z-50 w-60 bg-[#0a0a0a] border-r border-white/[0.04] transform transition-transform lg:relative lg:translate-x-0 ${open ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col h-full">
           <div className="px-5 py-5 border-b border-white/[0.04]">

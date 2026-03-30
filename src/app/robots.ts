@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/dashboard/', '/api/'],
     },
-    sitemap: 'https://bijaysubbalimbu.com/sitemap.xml',
+    sitemap: 'https://bijaysubbalimbu.com.np/sitemap.xml',
   };
 }

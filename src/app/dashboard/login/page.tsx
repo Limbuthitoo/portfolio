@@ -33,7 +33,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#060606] flex items-center justify-center px-6" style={{ cursor: 'auto' }}>
+    <div className="dashboard-layout min-h-screen bg-[#060606] flex items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <h1 className="text-white text-lg font-light tracking-wider mb-2">Dashboard</h1>

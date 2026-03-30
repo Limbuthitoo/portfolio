@@ -3,7 +3,7 @@ import { getProjects, seedIfEmpty } from '@/lib/db';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   seedIfEmpty();
-  const baseUrl = 'https://bijaysubbalimbu.com';
+  const baseUrl = 'https://bijaysubbalimbu.com.np';
 
   const projects = getProjects();
   const projectUrls = projects.map((p) => ({
