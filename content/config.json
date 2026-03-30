@@ -20,18 +20,106 @@
     "Creative Technologist"
   ],
   "highlights": [
-    { "value": "12+", "label": "Years Exp" },
-    { "value": "50+", "label": "Projects" }
+    {
+      "value": "12+",
+      "label": "Years Exp"
+    },
+    {
+      "value": "50+",
+      "label": "Projects"
+    }
   ],
-  "techStack": ["React", "Next.js", "TypeScript", "Tailwind", "Framer", "Figma", "Node", "Three.js"],
+  "techStack": [
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Tailwind",
+    "Framer",
+    "Figma",
+    "Node",
+    "Three.js"
+  ],
   "skills": [
-    { "label": "Frontend", "skills": ["React", "Next.js", "TypeScript", "Tailwind"] },
-    { "label": "Design", "skills": ["Figma", "Motion", "UI/UX", "Prototyping"] },
-    { "label": "Backend", "skills": ["Node.js", "PostgreSQL", "REST", "Git"] }
+    {
+      "label": "Frontend",
+      "skills": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Tailwind"
+      ]
+    },
+    {
+      "label": "Design",
+      "skills": [
+        "Figma",
+        "Motion",
+        "UI/UX",
+        "Prototyping"
+      ]
+    },
+    {
+      "label": "Backend",
+      "skills": [
+        "Node.js",
+        "PostgreSQL",
+        "REST",
+        "Git"
+      ]
+    }
   ],
   "capabilities": [
-    { "category": "Design", "skills": ["UI/UX Design", "Graphic Design", "Motion Graphics", "Prototyping", "Design Systems", "Typography", "Brand Identity"] },
-    { "category": "Development", "skills": ["React / Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Three.js", "Node.js", "HTML / CSS"] },
-    { "category": "Tools", "skills": ["Figma", "After Effects", "Adobe Suite", "Blender", "VS Code", "Git", "Vercel"] }
+    {
+      "category": "Design",
+      "skills": [
+        "UI/UX Design",
+        "Graphic Design",
+        "Motion Graphics",
+        "Prototyping",
+        "Design Systems",
+        "Typography",
+        "Brand Identity"
+      ]
+    },
+    {
+      "category": "Development",
+      "skills": [
+        "React / Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Framer Motion",
+        "Three.js",
+        "Node.js",
+        "HTML / CSS"
+      ]
+    },
+    {
+      "category": "Tools",
+      "skills": [
+        "Figma",
+        "After Effects",
+        "Adobe Suite",
+        "Blender",
+        "VS Code",
+        "Git",
+        "Vercel"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Tribhuvan University",
+      "degree": "Bachelor's Degree",
+      "field": "Computer Science & Information Technology",
+      "period": "2018 — 2022",
+      "description": "Studied computer science with focus on software engineering, web technologies, and human-computer interaction."
+    },
+    {
+      "institution": "SOS Hermann Gmeiner Higher Secondary School",
+      "degree": "Higher Secondary (+2)",
+      "field": "Science",
+      "period": "2016 — 2018",
+      "description": "Completed higher secondary education with a focus on science and mathematics."
+    }
   ]
 }
