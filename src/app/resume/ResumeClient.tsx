@@ -28,26 +28,42 @@ export default function ResumeClient({ siteConfig, experiences }: Props) {
     <>
       <style jsx global>{`
         @media print {
-          /* hide all shell chrome */
-          body, html { margin: 0 !important; padding: 0 !important; background: #fff !important; overflow: visible !important; height: auto !important; }
+          /* reset everything */
+          body, html {
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #fff !important;
+            overflow: visible !important;
+            height: auto !important;
+          }
           .no-print { display: none !important; }
 
           /* Break out of SystemShell constraints */
           body > div,
           body > div > div,
-          body > div > div > div {
+          body > div > div > div,
+          body > div > div > div > div {
             overflow: visible !important;
             height: auto !important;
             min-height: 0 !important;
             position: static !important;
+            padding: 0 !important;
           }
 
-          /* Hide nav, dock, background, overlays etc. */
-          nav, header[class*="StatusBar"],
-          [class*="Dock"], [class*="MeshBackground"],
-          [class*="GrainOverlay"], [class*="ScrollProgress"],
-          [class*="CommandPalette"], [class*="CustomCursor"],
-          [class*="statusbar"], [class*="dock"] {
+          /* Hide EVERYTHING except .resume-paper — fixed/absolute positioned elements */
+          div[class*="fixed"], div.fixed,
+          nav, canvas, svg[class*="grain"],
+          button[aria-label] {
+            display: none !important;
+          }
+
+          /* Hide all fixed-positioned shell chrome (StatusBar, Dock, etc.) */
+          body > div > div > div:first-child > div:not(.resume-page) {
+            display: none !important;
+          }
+
+          /* Nuclear: hide all fixed elements */
+          *[style*="position: fixed"], *[style*="position:fixed"] {
             display: none !important;
           }
 
@@ -58,6 +74,14 @@ export default function ResumeClient({ siteConfig, experiences }: Props) {
             height: auto !important;
             min-height: 0 !important;
             transform: none !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+          }
+
+          /* Remove the main padding that reserves space for StatusBar/Dock */
+          main {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
           }
 
           .resume-page {
@@ -70,7 +94,7 @@ export default function ResumeClient({ siteConfig, experiences }: Props) {
             box-shadow: none !important;
             border: none !important;
             border-radius: 0 !important;
-            padding: 40px 48px !important;
+            padding: 0 !important;
           }
 
           /* Allow natural page breaks */
@@ -78,7 +102,8 @@ export default function ResumeClient({ siteConfig, experiences }: Props) {
           .resume-paper > section { page-break-inside: auto; break-inside: auto; }
           .resume-paper > section > div > div { page-break-inside: avoid; break-inside: avoid; }
 
-          @page { margin: 0.4in 0.5in; size: A4; }
+          /* No browser header/footer */
+          @page { margin: 0.5in 0.6in; size: A4; }
           * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
       `}</style>

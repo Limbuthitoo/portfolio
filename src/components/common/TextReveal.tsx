@@ -12,7 +12,7 @@ export default function TextReveal({ text, className = '' }: TextRevealProps) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ['start 0.95', 'start 0.15'],
+    offset: ['start end', 'start 0.5'],
   });
 
   const words = text.split(' ');
@@ -21,7 +21,7 @@ export default function TextReveal({ text, className = '' }: TextRevealProps) {
     <p ref={ref} className={`${className} flex flex-wrap`}>
       {words.map((word, i) => {
         const start = i / words.length;
-        const end = (i + 1) / words.length;
+        const end = Math.min((i + 1) / words.length + 0.1, 1);
         return (
           <Word key={i} range={[start, end]} progress={scrollYProgress}>
             {word}
