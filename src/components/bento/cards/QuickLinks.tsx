@@ -43,12 +43,13 @@ export default function QuickLinks({ siteConfig }: { siteConfig?: SiteConfig }) 
               rel="noopener noreferrer"
               className={cls}
               data-cursor={l.label}
+              onClick={(e) => e.stopPropagation()}
             >
               <span className="text-[12px] opacity-50">{l.icon}</span>
               {l.label}
             </a>
           ) : (
-            <Link key={l.label} href={l.href} className={cls} data-cursor={l.label}>
+            <Link key={l.label} href={l.href} className={cls} data-cursor={l.label} onClick={(e) => e.stopPropagation()}>
               <span className="text-[12px] opacity-50">{l.icon}</span>
               {l.label}
             </Link>

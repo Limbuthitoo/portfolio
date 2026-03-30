@@ -1,12 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { SiteConfig } from "@/types";
 
 export default function AvailabilityCard({ siteConfig }: { siteConfig?: SiteConfig }) {
   const availability = siteConfig?.availability || "Available for freelance";
   return (
-    <Link href="/contact" data-cursor="Go" className="block h-full">
+    <div data-cursor="Open" className="block h-full">
       <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 flex flex-col justify-between overflow-hidden relative group hover:border-[var(--violet)]/30 transition-all duration-300">
         {/* Purple gradient bg */}
         <div
@@ -38,6 +37,6 @@ export default function AvailabilityCard({ siteConfig }: { siteConfig?: SiteConf
           </p>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
