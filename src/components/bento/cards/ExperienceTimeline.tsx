@@ -1,43 +1,14 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef, useState, useEffect } from "react";
+import { motion, useMotionValue, useAnimationFrame } from "framer-motion";
 import { Experience } from "@/types";
 
 const NODE_COLORS = ["var(--cyan)", "var(--violet)", "var(--rose)", "var(--amber)"];
 
-function useAutoScroll(speed = 0.3, delay = 1000) {
-  const ref = useRef<HTMLDivElement>(null);
-  const paused = useRef(false);
-
-  useEffect(() => {
-    let raf: number;
-    let started = false;
-
-    const timer = setTimeout(() => { started = true; }, delay);
-
-    const step = () => {
-      const el = ref.current;
-      if (started && el && !paused.current) {
-        const half = el.scrollHeight / 2;
-        if (half > 0 && el.scrollHeight > el.clientHeight) {
-          el.scrollTop += speed;
-          if (el.scrollTop >= half) {
-            el.scrollTop -= half;
-          }
-        }
-      }
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => { cancelAnimationFrame(raf); clearTimeout(timer); };
-  }, [speed, delay]);
-
-  return { ref, pause: () => { paused.current = true; }, resume: () => { paused.current = false; } };
-}
-
 function ExperienceContent({ experiences }: { experiences: Experience[] }) {
   return (
-    <>
+    <div className="pb-4">
       {experiences.slice(0, 4).map((exp, i) => (
         <div key={exp.id} className="relative pl-6 py-2.5 group">
           <div
@@ -79,7 +50,7 @@ function ExperienceContent({ experiences }: { experiences: Experience[] }) {
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 }
 
@@ -88,10 +59,34 @@ export default function ExperienceTimeline({
 }: {
   experiences: Experience[];
 }) {
-  const { ref, pause, resume } = useAutoScroll(0.3, 1200);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const hovered = useRef(false);
+  const [contentH, setContentH] = useState(0);
+  const y = useMotionValue(0);
+
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const measure = () => {
+      const h = el.scrollHeight / 2;
+      if (h > 0) setContentH(h);
+    };
+    const timer = setTimeout(measure, 600);
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => { clearTimeout(timer); ro.disconnect(); };
+  }, []);
+
+  useAnimationFrame((_, delta) => {
+    if (hovered.current || contentH <= 0) return;
+    const speed = 12;
+    let next = y.get() - (speed * delta) / 1000;
+    if (next <= -contentH) next += contentH;
+    y.set(next);
+  });
+
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 md:p-5 flex flex-col overflow-hidden hover:border-[var(--violet)]/30 transition-colors duration-300 relative group">
-      {/* Purple gradient bg */}
       <div
         className="absolute inset-0 opacity-60 pointer-events-none"
         style={{ background: "radial-gradient(ellipse at 80% 50%, rgba(139,92,246,0.08) 0%, transparent 70%)" }}
@@ -107,15 +102,21 @@ export default function ExperienceTimeline({
       </div>
 
       <div
-        ref={ref}
-        onMouseEnter={pause}
-        onMouseLeave={resume}
-        className="relative z-10 flex-1 min-h-0 overflow-y-auto bento-scroll relative"
-        style={{ scrollbarWidth: 'none' }}
+        className="relative z-10 flex-1 min-h-0 overflow-hidden"
+        onMouseEnter={() => { hovered.current = true; }}
+        onMouseLeave={() => { hovered.current = false; }}
+        onWheel={(e) => {
+          if (contentH <= 0) return;
+          let next = y.get() - e.deltaY * 0.5;
+          next = Math.max(-contentH, Math.min(0, next));
+          y.set(next);
+        }}
       >
         <div className="absolute left-[5px] top-1 bottom-1 w-px bg-gradient-to-b from-[var(--violet)] via-[var(--cyan)] to-[var(--border)] opacity-30 z-10" />
-        <ExperienceContent experiences={experiences} />
-        <ExperienceContent experiences={experiences} />
+        <motion.div ref={wrapperRef} style={{ y }}>
+          <ExperienceContent experiences={experiences} />
+          <ExperienceContent experiences={experiences} />
+        </motion.div>
       </div>
     </div>
   );

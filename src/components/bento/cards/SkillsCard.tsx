@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef, useState, useEffect } from "react";
+import { motion, useMotionValue, useAnimationFrame } from "framer-motion";
 import { SiteConfig } from "@/types";
 
 const COLORS = ["var(--cyan)", "var(--violet)", "var(--emerald)", "var(--rose)", "var(--amber)"];
@@ -44,42 +45,36 @@ function SkillContent({ groups }: { groups: { label: string; skills: string[] }[
   );
 }
 
-function useAutoScroll(speed = 0.4, delay = 1000) {
-  const ref = useRef<HTMLDivElement>(null);
-  const paused = useRef(false);
-
-  useEffect(() => {
-    let raf: number;
-    let started = false;
-
-    const timer = setTimeout(() => { started = true; }, delay);
-
-    const step = () => {
-      const el = ref.current;
-      if (started && el && !paused.current) {
-        const half = el.scrollHeight / 2;
-        if (half > 0 && el.scrollHeight > el.clientHeight) {
-          el.scrollTop += speed;
-          if (el.scrollTop >= half) {
-            el.scrollTop -= half;
-          }
-        }
-      }
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => { cancelAnimationFrame(raf); clearTimeout(timer); };
-  }, [speed, delay]);
-
-  return { ref, pause: () => { paused.current = true; }, resume: () => { paused.current = false; } };
-}
-
 export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) {
   const groups = siteConfig?.skills?.length ? siteConfig.skills : DEFAULT_GROUPS;
-  const { ref, pause, resume } = useAutoScroll(0.4, 1200);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const hovered = useRef(false);
+  const [contentH, setContentH] = useState(0);
+  const y = useMotionValue(0);
+
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const measure = () => {
+      const h = el.scrollHeight / 2;
+      if (h > 0) setContentH(h);
+    };
+    const timer = setTimeout(measure, 600);
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => { clearTimeout(timer); ro.disconnect(); };
+  }, []);
+
+  useAnimationFrame((_, delta) => {
+    if (hovered.current || contentH <= 0) return;
+    const speed = 15;
+    let next = y.get() - (speed * delta) / 1000;
+    if (next <= -contentH) next += contentH;
+    y.set(next);
+  });
+
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 overflow-hidden relative flex flex-col hover:border-[var(--violet)]/30 transition-colors duration-300 group">
-      {/* Purple gradient bg */}
       <div
         className="absolute inset-0 opacity-60 pointer-events-none"
         style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(139,92,246,0.1) 0%, transparent 70%)" }}
@@ -95,14 +90,20 @@ export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) 
       </div>
 
       <div
-        ref={ref}
-        onMouseEnter={pause}
-        onMouseLeave={resume}
-        className="relative z-10 flex-1 min-h-0 overflow-y-auto bento-scroll"
-        style={{ scrollbarWidth: 'none' }}
+        className="relative z-10 flex-1 min-h-0 overflow-hidden"
+        onMouseEnter={() => { hovered.current = true; }}
+        onMouseLeave={() => { hovered.current = false; }}
+        onWheel={(e) => {
+          if (contentH <= 0) return;
+          let next = y.get() - e.deltaY * 0.5;
+          next = Math.max(-contentH, Math.min(0, next));
+          y.set(next);
+        }}
       >
-        <SkillContent groups={groups} />
-        <SkillContent groups={groups} />
+        <motion.div ref={wrapperRef} style={{ y }}>
+          <SkillContent groups={groups} />
+          <SkillContent groups={groups} />
+        </motion.div>
       </div>
     </div>
   );
