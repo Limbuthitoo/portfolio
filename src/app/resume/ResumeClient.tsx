@@ -28,21 +28,57 @@ export default function ResumeClient({ siteConfig, experiences }: Props) {
     <>
       <style jsx global>{`
         @media print {
-          /* hide chrome */
-          body, html { margin: 0 !important; padding: 0 !important; background: #fff !important; }
+          /* hide all shell chrome */
+          body, html { margin: 0 !important; padding: 0 !important; background: #fff !important; overflow: visible !important; height: auto !important; }
           .no-print { display: none !important; }
+
+          /* Break out of SystemShell constraints */
+          body > div,
+          body > div > div,
+          body > div > div > div {
+            overflow: visible !important;
+            height: auto !important;
+            min-height: 0 !important;
+            position: static !important;
+          }
+
+          /* Hide nav, dock, background, overlays etc. */
+          nav, header[class*="StatusBar"],
+          [class*="Dock"], [class*="MeshBackground"],
+          [class*="GrainOverlay"], [class*="ScrollProgress"],
+          [class*="CommandPalette"], [class*="CustomCursor"],
+          [class*="statusbar"], [class*="dock"] {
+            display: none !important;
+          }
+
+          /* SmoothScroll / Lenis wrapper must not clip */
+          [data-lenis-prevent], .lenis, .lenis-wrapper, .lenis-content,
+          main, [class*="SmoothScroll"] {
+            overflow: visible !important;
+            height: auto !important;
+            min-height: 0 !important;
+            transform: none !important;
+          }
+
           .resume-page {
             max-width: 100% !important;
             padding: 0 !important;
             margin: 0 !important;
+            min-height: 0 !important;
           }
           .resume-paper {
             box-shadow: none !important;
             border: none !important;
             border-radius: 0 !important;
-            padding: 48px 56px !important;
+            padding: 40px 48px !important;
           }
-          @page { margin: 0.5in; size: A4; }
+
+          /* Allow natural page breaks */
+          section { page-break-inside: avoid; break-inside: avoid; }
+          .resume-paper > section { page-break-inside: auto; break-inside: auto; }
+          .resume-paper > section > div > div { page-break-inside: avoid; break-inside: avoid; }
+
+          @page { margin: 0.4in 0.5in; size: A4; }
           * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
       `}</style>
@@ -155,22 +191,9 @@ export default function ResumeClient({ siteConfig, experiences }: Props) {
                     </p>
 
                     {/* Highlights */}
-                    {exp.highlights.length > 0 && idx === 0 && (
+                    {exp.highlights.length > 0 && (
                       <ul className="mt-2 space-y-[4px]">
-                        {exp.highlights.slice(0, 5).map((h, i) => (
-                          <li
-                            key={i}
-                            className="text-[12px] leading-[1.65] text-[#333] pl-5 relative"
-                          >
-                            <span className="absolute left-0 top-0 text-[8px] text-[#555]">•</span>
-                            {h}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    {exp.highlights.length > 0 && idx > 0 && (
-                      <ul className="mt-2 space-y-[4px]">
-                        {exp.highlights.slice(0, 3).map((h, i) => (
+                        {exp.highlights.map((h, i) => (
                           <li
                             key={i}
                             className="text-[12px] leading-[1.65] text-[#333] pl-5 relative"

@@ -12,7 +12,7 @@ export default function TextReveal({ text, className = '' }: TextRevealProps) {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ['start 0.9', 'start 0.3'],
+    offset: ['start 0.95', 'start 0.15'],
   });
 
   const words = text.split(' ');
