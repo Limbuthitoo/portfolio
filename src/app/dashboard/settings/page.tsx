@@ -92,13 +92,9 @@ export default function SettingsPage() {
   const set = (key: keyof SiteConfig, value: unknown) => setConfig({ ...config, [key]: value });
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-white text-lg font-light">Settings</h1>
-        <button onClick={handleSave} disabled={saving} className={btnCls}>
-          {saved ? 'Saved ✓' : saving ? 'Saving...' : 'Save Changes'}
-        </button>
-      </div>
+    <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-y-auto pb-20">
+        <h1 className="text-white text-lg font-light mb-6">Settings</h1>
 
       <div className="max-w-2xl space-y-4">
         {/* ── General ── */}
@@ -207,13 +203,6 @@ export default function SettingsPage() {
           />
         </div>
 
-        {/* ── Save ── */}
-        <div className="pt-4">
-          <button onClick={handleSave} disabled={saving} className={btnCls}>
-            {saved ? 'Saved ✓' : saving ? 'Saving...' : 'Save Changes'}
-          </button>
-        </div>
-
         {/* ── Password Change ── */}
         <div className={sectionCls}>
           <SectionTitle>Change Password</SectionTitle>
@@ -242,6 +231,15 @@ export default function SettingsPage() {
             </div>
           </div>
         </div>
+      </div>
+      </div>
+
+      {/* Sticky footer */}
+      <div className="sticky bottom-0 z-20 bg-[#060606] border-t border-white/[0.06] px-5 py-3 flex items-center justify-end gap-3 -mx-5 -mb-5">
+        {saved && <span className="text-green-400/70 text-[10px] tracking-wide">Saved ✓</span>}
+        <button onClick={handleSave} disabled={saving} className={btnCls}>
+          {saving ? 'Saving...' : 'Save Changes'}
+        </button>
       </div>
     </div>
   );

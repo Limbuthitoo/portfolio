@@ -58,8 +58,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {open && <div className="fixed inset-0 bg-black/60 z-40 lg:hidden" onClick={() => setOpen(false)} />}
 
-      <div className="flex-1 flex flex-col min-h-screen">
-        <header className="sticky top-0 z-30 bg-[#060606]/80 backdrop-blur-xl border-b border-white/[0.04] px-5 py-3.5 flex items-center justify-between">
+      <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
+        <header className="shrink-0 z-30 bg-[#060606]/80 backdrop-blur-xl border-b border-white/[0.04] px-5 py-3.5 flex items-center justify-between">
           <button className="lg:hidden text-white/40 hover:text-white" onClick={() => setOpen(true)}>
             <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor"><rect y="3" width="20" height="1.5" rx="0.75" /><rect y="9" width="20" height="1.5" rx="0.75" /><rect y="15" width="20" height="1.5" rx="0.75" /></svg>
           </button>
@@ -68,7 +68,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <div className="text-white/10 text-[9px] font-mono">{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</div>
         </header>
-        <main className="flex-1 p-5">{children}</main>
+        <main className="flex-1 overflow-y-auto p-5">{children}</main>
       </div>
     </div>
   );
