@@ -24,12 +24,19 @@ export default function GamesPage() {
           Mini games built for fun. Take a break and play!
         </p>
 
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <div className="text-6xl mb-6">♟</div>
-          <h2 className="text-2xl font-bold text-[var(--fg)] mb-3">Coming Soon</h2>
-          <p className="text-[var(--fg-3)] text-sm max-w-md">
-            New games are being crafted. Check back soon for fun mini-games you can play right in your browser.
-          </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Link
+            href="/games/tetris"
+            className="group rounded-xl bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--violet)]/30 p-6 transition-colors"
+          >
+            <div className="text-4xl mb-4">🧱</div>
+            <h2 className="text-lg font-bold text-[var(--fg)] group-hover:text-[var(--violet)] transition-colors mb-1">
+              Ultra Tetris
+            </h2>
+            <p className="text-[var(--fg-3)] text-sm">
+              Classic block-stacking with levels, ghost pieces, and a global top 3 leaderboard.
+            </p>
+          </Link>
         </div>
       </div>
     </div>
