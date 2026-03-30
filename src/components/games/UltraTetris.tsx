@@ -323,12 +323,12 @@ export default function UltraTetris() {
     const calc = () => {
       const isMobile = window.innerWidth < 640;
       if (isMobile) {
-        // Reserve: 60px top bar, 120px bottom controls, 40px stats row, some padding
-        const availH = window.innerHeight - 230;
-        const availW = window.innerWidth - 32;
+        // No dock bar — just top bar (56px) + controls (76px) + padding (24px)
+        const availH = window.innerHeight - 156;
+        const availW = window.innerWidth - 24;
         const byH = Math.floor(availH / ROWS);
         const byW = Math.floor(availW / COLS);
-        setCellSize(Math.max(12, Math.min(byH, byW)));
+        setCellSize(Math.max(14, Math.min(byH, byW)));
       } else {
         setCellSize(28);
       }
@@ -468,12 +468,12 @@ export default function UltraTetris() {
         </div>
 
         {/* Mobile controls */}
-        <div className="shrink-0 flex justify-center gap-3 px-4 py-4 pb-6">
-          <button onClick={moveLeft} className="w-14 h-14 rounded-2xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-xl flex items-center justify-center">←</button>
-          <button onClick={moveDown} className="w-14 h-14 rounded-2xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-xl flex items-center justify-center">↓</button>
-          <button onClick={rotatePiece} className="w-14 h-14 rounded-2xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-xl flex items-center justify-center">↻</button>
-          <button onClick={moveRight} className="w-14 h-14 rounded-2xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-xl flex items-center justify-center">→</button>
-          <button onClick={hardDrop} className="w-14 h-14 rounded-2xl bg-[#a855f7]/20 active:bg-[#a855f7]/40 text-[#a855f7] text-xl flex items-center justify-center">⤓</button>
+        <div className="shrink-0 flex justify-center gap-3 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <button onClick={moveLeft} className="w-12 h-12 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">←</button>
+          <button onClick={moveDown} className="w-12 h-12 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">↓</button>
+          <button onClick={rotatePiece} className="w-12 h-12 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">↻</button>
+          <button onClick={moveRight} className="w-12 h-12 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">→</button>
+          <button onClick={hardDrop} className="w-12 h-12 rounded-xl bg-[#a855f7]/20 active:bg-[#a855f7]/40 text-[#a855f7] text-lg flex items-center justify-center">⤓</button>
         </div>
       </div>
 

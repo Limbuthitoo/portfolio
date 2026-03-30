@@ -16,10 +16,11 @@ export default function Dock() {
   const pathname = usePathname();
 
   if (pathname.startsWith("/dashboard")) return null;
+  if (pathname.startsWith("/games/")) return null;
 
   return (
-    <div className="fixed bottom-0 sm:bottom-4 left-1/2 -translate-x-1/2 z-50 w-full sm:w-auto sm:max-w-[calc(100vw-2rem)]">
-      <div className="relative flex items-end justify-center gap-3 sm:gap-2 px-4 sm:px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:py-2 sm:pb-2 rounded-t-2xl sm:rounded-2xl bg-[var(--dock-bg)] backdrop-blur-2xl border border-[var(--border)] sm:border gradient-border">
+    <div className="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-50 w-auto max-w-[calc(100vw-2rem)]">
+      <div className="relative flex items-end justify-center gap-2 sm:gap-2 px-3 sm:px-3 py-2 sm:py-2 rounded-2xl bg-[var(--dock-bg)] backdrop-blur-2xl border border-[var(--border)] gradient-border">
         {DOCK_ITEMS.map((item) => {
           const isActive = pathname === item.href;
           return (

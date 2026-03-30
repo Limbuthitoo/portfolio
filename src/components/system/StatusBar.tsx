@@ -1,11 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { useTheme } from "./ThemeProvider";
 
 export default function StatusBar() {
   const [time, setTime] = useState("");
   const { theme, toggle } = useTheme();
+  const pathname = usePathname();
 
   useEffect(() => {
     const update = () => {
@@ -22,6 +24,8 @@ export default function StatusBar() {
     const id = setInterval(update, 30000);
     return () => clearInterval(id);
   }, []);
+
+  if (pathname.startsWith("/games/")) return null;
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-3 sm:px-5 h-10 text-[10px] sm:text-[11px] font-mono border-b border-[var(--border)] overflow-hidden">
