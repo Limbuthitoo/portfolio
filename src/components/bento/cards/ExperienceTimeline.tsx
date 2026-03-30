@@ -110,7 +110,7 @@ export default function ExperienceTimeline({
         ref={ref}
         onMouseEnter={pause}
         onMouseLeave={resume}
-        className="relative z-10 flex-1 overflow-y-auto bento-scroll relative"
+        className="relative z-10 flex-1 min-h-0 overflow-y-auto bento-scroll relative"
         style={{ scrollbarWidth: 'none' }}
       >
         <div className="absolute left-[5px] top-1 bottom-1 w-px bg-gradient-to-b from-[var(--violet)] via-[var(--cyan)] to-[var(--border)] opacity-30 z-10" />
