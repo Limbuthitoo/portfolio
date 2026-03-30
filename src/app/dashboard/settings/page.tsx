@@ -89,7 +89,7 @@ export default function SettingsPage() {
 
   if (!config) return <p className="text-white/30 text-sm">Loading...</p>;
 
-  const set = (key: keyof SiteConfig, value: unknown) => setConfig({ ...config, [key]: value });
+  const set = (key: keyof SiteConfig, value: unknown) => setConfig((prev) => prev ? { ...prev, [key]: value } : prev);
 
   return (
     <div className="flex flex-col h-full -m-5">
@@ -395,12 +395,12 @@ function CurrentlyEditor({ items, onChange }: { items: CurrentlyItem[]; onChange
         <div key={i} className="flex items-center gap-2">
           <span className="w-10 text-center text-[18px] shrink-0">{item.emoji}</span>
           <select
-            className={`${inputCls} w-32`}
+            className={`${inputCls} w-36`}
             value={labels.includes(item.label) ? item.label : ''}
             onChange={(e) => updateLabel(i, e.target.value)}
           >
             {!labels.includes(item.label) && <option value="">{item.label || 'Select...'}</option>}
-            {labels.map((l) => <option key={l} value={l}>{l}</option>)}
+            {labels.map((l) => <option key={l} value={l}>{LABEL_EMOJI[l]} {l}</option>)}
           </select>
           <input className={inputCls} value={item.value} onChange={(e) => updateValue(i, e.target.value)} placeholder="e.g. Portfolio v2" />
           <button type="button" onClick={() => onChange(items.filter((_, idx) => idx !== i))} className={removeBtnCls}>✕</button>
