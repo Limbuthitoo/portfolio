@@ -22,7 +22,7 @@ function ExperienceContent({ experiences }: { experiences: Experience[] }) {
               <h4 className="text-[14px] font-semibold group-hover:text-[var(--cyan)] transition-colors leading-tight">
                 {exp.role}
               </h4>
-              <p className="text-[12px] text-[var(--fg-3)] font-mono">
+              <p className="text-[12px] text-[var(--fg-2)] font-medium">
                 {exp.company}
               </p>
               <p className="text-[12px] text-[var(--fg-2)] mt-1 leading-relaxed line-clamp-2">
