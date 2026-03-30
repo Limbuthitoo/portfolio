@@ -2,11 +2,22 @@
 
 import { SiteConfig, CurrentlyItem } from "@/types";
 
+const LABEL_EMOJI: Record<string, string> = {
+  Building: "🛠️", Creating: "✨", Learning: "📚", Reading: "📖",
+  Listening: "🎧", Watching: "📺", Playing: "🎮", Exploring: "🧭",
+  Designing: "🎨", Writing: "✍️", Cooking: "🍳", Traveling: "✈️",
+  Thinking: "💭", Shipping: "🚀",
+};
+
 const DEFAULT_ITEMS: CurrentlyItem[] = [
-  { emoji: "🛠", label: "Building", value: "Portfolio v2" },
+  { emoji: "🛠️", label: "Building", value: "Portfolio v2" },
   { emoji: "📚", label: "Learning", value: "Three.js & WebGL" },
   { emoji: "🎧", label: "Listening", value: "Lo-fi beats" },
 ];
+
+function getEmoji(item: CurrentlyItem): string {
+  return LABEL_EMOJI[item.label] || item.emoji;
+}
 
 export default function CurrentlyCard({ siteConfig }: { siteConfig?: SiteConfig }) {
   const items = siteConfig?.currently?.length ? siteConfig.currently : DEFAULT_ITEMS;
@@ -30,7 +41,7 @@ export default function CurrentlyCard({ siteConfig }: { siteConfig?: SiteConfig 
       <div className="relative z-10 flex-1 grid grid-cols-3 gap-3 items-center">
         {items.slice(0, 3).map((item, i) => (
           <div key={i} className="flex flex-col items-center text-center gap-1">
-            <span className="text-[18px] leading-none">{item.emoji}</span>
+            <span className="text-[18px] leading-none">{getEmoji(item)}</span>
             <span className="text-[9px] font-mono text-[var(--fg-3)] uppercase tracking-[0.12em]">
               {item.label}
             </span>

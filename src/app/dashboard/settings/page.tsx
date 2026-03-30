@@ -393,7 +393,7 @@ function CurrentlyEditor({ items, onChange }: { items: CurrentlyItem[]; onChange
     <div className="space-y-2">
       {items.map((item, i) => (
         <div key={i} className="flex items-center gap-2">
-          <span className="w-10 text-center text-[18px] shrink-0">{item.emoji}</span>
+          <span className="w-10 text-center text-[18px] shrink-0">{LABEL_EMOJI[item.label] || item.emoji}</span>
           <select
             className={`${inputCls} w-36`}
             value={labels.includes(item.label) ? item.label : ''}
