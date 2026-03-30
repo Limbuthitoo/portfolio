@@ -62,7 +62,7 @@ export function validateSiteConfig(data: unknown): data is SiteConfig {
   if (!data || typeof data !== 'object') return false;
   const c = data as Record<string, unknown>;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return (
+  const baseValid =
     isNonEmptyString(c.name) &&
     typeof c.title === 'string' &&
     typeof c.role === 'string' &&
@@ -71,8 +71,15 @@ export function validateSiteConfig(data: unknown): data is SiteConfig {
     emailRegex.test(c.email) &&
     typeof c.social === 'object' && c.social !== null &&
     typeof c.availability === 'string' &&
-    typeof c.location === 'string'
-  );
+    typeof c.location === 'string';
+  if (!baseValid) return false;
+  // Optional array fields
+  if (c.roles !== undefined && !isStringArray(c.roles)) return false;
+  if (c.techStack !== undefined && !isStringArray(c.techStack)) return false;
+  if (c.highlights !== undefined && (!Array.isArray(c.highlights) || !c.highlights.every((h: unknown) => h && typeof h === 'object' && typeof (h as Record<string, unknown>).value === 'string' && typeof (h as Record<string, unknown>).label === 'string'))) return false;
+  if (c.skills !== undefined && (!Array.isArray(c.skills) || !c.skills.every((s: unknown) => s && typeof s === 'object' && typeof (s as Record<string, unknown>).label === 'string' && isStringArray((s as Record<string, unknown>).skills)))) return false;
+  if (c.capabilities !== undefined && (!Array.isArray(c.capabilities) || !c.capabilities.every((cap: unknown) => cap && typeof cap === 'object' && typeof (cap as Record<string, unknown>).category === 'string' && isStringArray((cap as Record<string, unknown>).skills)))) return false;
+  return true;
 }
 
 function readJSON<T>(file: string, fallback: T): T {

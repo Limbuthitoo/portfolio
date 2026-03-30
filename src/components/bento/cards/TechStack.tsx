@@ -1,17 +1,12 @@
 "use client";
 
-const TECH = [
-  { name: "React", color: "var(--cyan)" },
-  { name: "Next.js", color: "var(--fg)" },
-  { name: "TypeScript", color: "#3178C6" },
-  { name: "Tailwind", color: "#06B6D4" },
-  { name: "Framer", color: "var(--violet)" },
-  { name: "Figma", color: "var(--rose)" },
-  { name: "Node", color: "var(--emerald)" },
-  { name: "Three.js", color: "var(--amber)" },
-];
+import { SiteConfig } from "@/types";
 
-export default function TechStack() {
+const DEFAULT_TECH = ["React", "Next.js", "TypeScript", "Tailwind", "Framer", "Figma", "Node", "Three.js"];
+const COLORS = ["var(--cyan)", "var(--fg)", "#3178C6", "#06B6D4", "var(--violet)", "var(--rose)", "var(--emerald)", "var(--amber)"];
+
+export default function TechStack({ siteConfig }: { siteConfig?: SiteConfig }) {
+  const tech = siteConfig?.techStack?.length ? siteConfig.techStack : DEFAULT_TECH;
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 flex flex-col hover:border-[var(--violet)]/30 transition-colors duration-300 overflow-hidden relative group">
       {/* Purple gradient bg */}
@@ -30,13 +25,13 @@ export default function TechStack() {
       </div>
 
       <div className="relative z-10 flex flex-wrap gap-1 flex-1 content-start">
-        {TECH.map((t) => (
+        {tech.map((name, i) => (
           <span
-            key={t.name}
+            key={name}
             className="px-2 py-0.5 rounded-md text-[11px] font-mono border border-[var(--border)] hover:border-[var(--border-hover)] transition-colors"
-            style={{ color: t.color }}
+            style={{ color: COLORS[i % COLORS.length] }}
           >
-            {t.name}
+            {name}
           </span>
         ))}
       </div>

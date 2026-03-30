@@ -52,7 +52,7 @@ export default function BentoGrid({ projects, experiences, siteConfig }: Props) 
         </motion.div>
 
         <motion.div variants={item} className="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-3 row-span-1">
-          <HighlightsCard />
+          <HighlightsCard siteConfig={siteConfig} />
         </motion.div>
 
         <motion.div variants={item} className="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-3 row-span-1">
@@ -60,12 +60,12 @@ export default function BentoGrid({ projects, experiences, siteConfig }: Props) 
         </motion.div>
 
         <motion.div variants={item} className="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-3 row-span-1">
-          <TechStack />
+          <TechStack siteConfig={siteConfig} />
         </motion.div>
 
         {/* Row 2-3: Skills + Experience + QuickLinks */}
         <motion.div variants={item} className="col-span-2 sm:col-span-4 md:col-span-3 lg:col-span-3 row-span-2">
-          <SkillsCard />
+          <SkillsCard siteConfig={siteConfig} />
         </motion.div>
 
         <motion.div variants={item} className="col-span-2 sm:col-span-4 md:col-span-5 lg:col-span-5 row-span-2">

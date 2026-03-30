@@ -75,6 +75,21 @@ export interface Skill {
   category: 'design' | 'development' | 'tools';
 }
 
+export interface SkillGroup {
+  label: string;
+  skills: string[];
+}
+
+export interface Capability {
+  category: string;
+  skills: string[];
+}
+
+export interface Highlight {
+  value: string;
+  label: string;
+}
+
 export interface SiteConfig {
   name: string;
   title: string;
@@ -90,4 +105,9 @@ export interface SiteConfig {
   };
   availability: string;
   location: string;
+  roles?: string[];
+  highlights?: Highlight[];
+  techStack?: string[];
+  skills?: SkillGroup[];
+  capabilities?: Capability[];
 }

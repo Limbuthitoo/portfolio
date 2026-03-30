@@ -1,6 +1,14 @@
 "use client";
 
-export default function HighlightsCard() {
+import { SiteConfig } from "@/types";
+
+const DEFAULT_HIGHLIGHTS = [
+  { value: "12+", label: "Years Exp" },
+  { value: "50+", label: "Projects" },
+];
+
+export default function HighlightsCard({ siteConfig }: { siteConfig?: SiteConfig }) {
+  const highlights = siteConfig?.highlights?.length ? siteConfig.highlights : DEFAULT_HIGHLIGHTS;
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 flex flex-col justify-between hover:border-[var(--violet)]/30 transition-colors overflow-hidden relative group">
       {/* Purple gradient bg */}
@@ -19,15 +27,15 @@ export default function HighlightsCard() {
       </div>
 
       <div className="relative z-10 flex items-center gap-4">
-        <div>
-          <p className="text-xl font-bold leading-none" style={{ color: "var(--violet)" }}>12+</p>
-          <p className="text-[9px] text-[var(--fg-3)] mt-0.5">Years Exp</p>
-        </div>
-        <div className="w-px h-6 bg-[var(--border)]" />
-        <div>
-          <p className="text-xl font-bold leading-none" style={{ color: "var(--cyan)" }}>50+</p>
-          <p className="text-[9px] text-[var(--fg-3)] mt-0.5">Projects</p>
-        </div>
+        {highlights.map((h, i) => (
+          <div key={i} className="flex items-center gap-4">
+            {i > 0 && <div className="w-px h-6 bg-[var(--border)]" />}
+            <div>
+              <p className="text-xl font-bold leading-none" style={{ color: i === 0 ? "var(--violet)" : "var(--cyan)" }}>{h.value}</p>
+              <p className="text-[9px] text-[var(--fg-3)] mt-0.5">{h.label}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

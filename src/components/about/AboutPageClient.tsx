@@ -4,35 +4,32 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { SiteConfig, Experience } from "@/types";
 
-const CAPABILITIES = [
-  {
-    category: "Design",
-    icon: "◆",
-    color: "var(--rose)",
-    rgb: "244,63,94",
-    skills: ["UI/UX Design", "Graphic Design", "Motion Graphics", "Prototyping", "Design Systems", "Typography", "Brand Identity"],
-  },
-  {
-    category: "Development",
-    icon: "⟨/⟩",
-    color: "var(--cyan)",
-    rgb: "0,240,255",
-    skills: ["React / Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Three.js", "Node.js", "HTML / CSS"],
-  },
-  {
-    category: "Tools",
-    icon: "⚙",
-    color: "var(--amber)",
-    rgb: "245,158,11",
-    skills: ["Figma", "After Effects", "Adobe Suite", "Blender", "VS Code", "Git", "Vercel"],
-  },
+const CAP_META = [
+  { icon: "◆", color: "var(--rose)", rgb: "244,63,94" },
+  { icon: "⟨/⟩", color: "var(--cyan)", rgb: "0,240,255" },
+  { icon: "⚙", color: "var(--amber)", rgb: "245,158,11" },
+  { icon: "◇", color: "var(--violet)", rgb: "139,92,246" },
+  { icon: "△", color: "var(--emerald)", rgb: "16,185,129" },
 ];
 
-const STATS = [
-  { value: "12+", label: "Years Experience", color: "var(--cyan)", rgb: "0,240,255" },
-  { value: "50+", label: "Projects Built", color: "var(--violet)", rgb: "139,92,246" },
-  { value: "4", label: "Disciplines", color: "var(--rose)", rgb: "244,63,94" },
-  { value: "∞", label: "Curiosity", color: "var(--amber)", rgb: "245,158,11" },
+const STAT_META = [
+  { color: "var(--cyan)", rgb: "0,240,255" },
+  { color: "var(--violet)", rgb: "139,92,246" },
+  { color: "var(--rose)", rgb: "244,63,94" },
+  { color: "var(--amber)", rgb: "245,158,11" },
+];
+
+const DEFAULT_CAPABILITIES = [
+  { category: "Design", skills: ["UI/UX Design", "Graphic Design", "Motion Graphics", "Prototyping", "Design Systems", "Typography", "Brand Identity"] },
+  { category: "Development", skills: ["React / Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Three.js", "Node.js", "HTML / CSS"] },
+  { category: "Tools", skills: ["Figma", "After Effects", "Adobe Suite", "Blender", "VS Code", "Git", "Vercel"] },
+];
+
+const DEFAULT_STATS = [
+  { value: "12+", label: "Years Experience" },
+  { value: "50+", label: "Projects Built" },
+  { value: "4", label: "Disciplines" },
+  { value: "∞", label: "Curiosity" },
 ];
 
 export default function AboutPageClient({
@@ -42,6 +39,15 @@ export default function AboutPageClient({
   siteConfig: SiteConfig;
   experiences: Experience[];
 }) {
+  const capabilities = (siteConfig.capabilities?.length ? siteConfig.capabilities : DEFAULT_CAPABILITIES).map((c, i) => ({
+    ...c,
+    ...CAP_META[i % CAP_META.length],
+  }));
+  const stats = (siteConfig.highlights?.length ? siteConfig.highlights : DEFAULT_STATS).map((s, i) => ({
+    ...s,
+    ...STAT_META[i % STAT_META.length],
+  }));
+
   return (
     <div className="px-4 md:px-6 lg:px-8 py-8 md:py-12">
       <div className="max-w-[1200px] mx-auto">
@@ -109,7 +115,7 @@ export default function AboutPageClient({
         {/* ── Stats ── */}
         <section className="mb-16 md:mb-24">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-            {STATS.map((stat, i) => (
+            {stats.map((stat, i) => (
               <StatCard key={stat.label} stat={stat} index={i} />
             ))}
           </div>
@@ -119,7 +125,7 @@ export default function AboutPageClient({
         <section className="mb-16 md:mb-24">
           <SectionLabel text="Capabilities" color="var(--violet)" />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {CAPABILITIES.map((cap, i) => (
+            {capabilities.map((cap, i) => (
               <CapabilityCard key={cap.category} cap={cap} index={i} />
             ))}
           </div>
@@ -164,7 +170,7 @@ function SectionLabel({ text, color }: { text: string; color: string }) {
 }
 
 /* ── Stat Card ── */
-function StatCard({ stat, index }: { stat: typeof STATS[number]; index: number }) {
+function StatCard({ stat, index }: { stat: { value: string; label: string; color: string; rgb: string }; index: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
 
@@ -190,7 +196,7 @@ function StatCard({ stat, index }: { stat: typeof STATS[number]; index: number }
 }
 
 /* ── Capability Card ── */
-function CapabilityCard({ cap, index }: { cap: typeof CAPABILITIES[number]; index: number }) {
+function CapabilityCard({ cap, index }: { cap: { category: string; skills: string[]; icon: string; color: string; rgb: string }; index: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 

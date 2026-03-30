@@ -16,4 +16,25 @@ export const siteConfig: SiteConfig = {
   },
   availability: 'Available for freelance',
   location: 'Kathmandu, Nepal',
+  roles: [
+    'Design Engineer',
+    'Frontend Developer',
+    'UI/UX Designer',
+    'Creative Technologist',
+  ],
+  highlights: [
+    { value: '12+', label: 'Years Exp' },
+    { value: '50+', label: 'Projects' },
+  ],
+  techStack: ['React', 'Next.js', 'TypeScript', 'Tailwind', 'Framer', 'Figma', 'Node', 'Three.js'],
+  skills: [
+    { label: 'Frontend', skills: ['React', 'Next.js', 'TypeScript', 'Tailwind'] },
+    { label: 'Design', skills: ['Figma', 'Motion', 'UI/UX', 'Prototyping'] },
+    { label: 'Backend', skills: ['Node.js', 'PostgreSQL', 'REST', 'Git'] },
+  ],
+  capabilities: [
+    { category: 'Design', skills: ['UI/UX Design', 'Graphic Design', 'Motion Graphics', 'Prototyping', 'Design Systems', 'Typography', 'Brand Identity'] },
+    { category: 'Development', skills: ['React / Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Three.js', 'Node.js', 'HTML / CSS'] },
+    { category: 'Tools', skills: ['Figma', 'After Effects', 'Adobe Suite', 'Blender', 'VS Code', 'Git', 'Vercel'] },
+  ],
 };

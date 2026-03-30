@@ -6,7 +6,7 @@ import Link from "next/link";
 import { SiteConfig } from "@/types";
 import { useRotatingText } from "@/lib/hooks";
 
-const ROLES = [
+const DEFAULT_ROLES = [
   "Design Engineer",
   "Frontend Developer",
   "UI/UX Designer",
@@ -14,7 +14,8 @@ const ROLES = [
 ];
 
 export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig }) {
-  const { index: roleIdx } = useRotatingText(ROLES);
+  const roles = siteConfig?.roles?.length ? siteConfig.roles : DEFAULT_ROLES;
+  const { index: roleIdx } = useRotatingText(roles);
   const displayName = siteConfig?.name || "Bijay Subbalimbu";
   const [firstName, ...rest] = displayName.split(" ");
   const lastName = rest.join(" ");
@@ -187,7 +188,7 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
                   transition={{ duration: 0.3 }}
                 >
                   <span className="w-3 h-px bg-[var(--violet)]" />
-                  {ROLES[roleIdx]}
+                  {roles[roleIdx]}
                 </motion.span>
               </AnimatePresence>
             </motion.div>

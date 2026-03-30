@@ -1,24 +1,17 @@
 "use client";
 
-const SKILL_GROUPS = [
-  {
-    label: "Frontend",
-    color: "var(--cyan)",
-    skills: ["React", "Next.js", "TypeScript", "Tailwind"],
-  },
-  {
-    label: "Design",
-    color: "var(--violet)",
-    skills: ["Figma", "Motion", "UI/UX", "Prototyping"],
-  },
-  {
-    label: "Backend",
-    color: "var(--emerald)",
-    skills: ["Node.js", "PostgreSQL", "REST", "Git"],
-  },
+import { SiteConfig } from "@/types";
+
+const COLORS = ["var(--cyan)", "var(--violet)", "var(--emerald)", "var(--rose)", "var(--amber)"];
+
+const DEFAULT_GROUPS = [
+  { label: "Frontend", skills: ["React", "Next.js", "TypeScript", "Tailwind"] },
+  { label: "Design", skills: ["Figma", "Motion", "UI/UX", "Prototyping"] },
+  { label: "Backend", skills: ["Node.js", "PostgreSQL", "REST", "Git"] },
 ];
 
-export default function SkillsCard() {
+export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) {
+  const groups = siteConfig?.skills?.length ? siteConfig.skills : DEFAULT_GROUPS;
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 overflow-hidden relative flex flex-col hover:border-[var(--violet)]/30 transition-colors duration-300 group">
       {/* Purple gradient bg */}
@@ -37,16 +30,16 @@ export default function SkillsCard() {
       </div>
 
       <div className="relative z-10 flex-1 flex flex-col gap-2.5 overflow-hidden">
-        {SKILL_GROUPS.map((group) => (
+        {groups.map((group, gi) => (
           <div key={group.label}>
             <div className="flex items-center gap-1.5 mb-1.5">
               <div
                 className="w-1.5 h-1.5 rounded-full"
-                style={{ background: group.color }}
+                style={{ background: COLORS[gi % COLORS.length] }}
               />
               <span
                 className="text-[11px] font-mono tracking-[0.1em] uppercase"
-                style={{ color: group.color }}
+                style={{ color: COLORS[gi % COLORS.length] }}
               >
                 {group.label}
               </span>
