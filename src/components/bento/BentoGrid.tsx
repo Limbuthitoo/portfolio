@@ -45,7 +45,8 @@ export default function BentoGrid({ projects, experiences, siteConfig }: Props) 
         className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-2 sm:gap-3 auto-rows-[120px] sm:auto-rows-[130px] md:auto-rows-[140px] max-w-[1440px] mx-auto"
         variants={container}
         initial="hidden"
-        animate="show"
+        whileInView="show"
+        viewport={{ once: true, margin: "-80px" }}
       >
         {/* Row 1: Info cards — Availability, Highlights, Location, Tech */}
         <motion.div variants={item} className="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-3 row-span-1">

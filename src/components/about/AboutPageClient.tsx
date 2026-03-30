@@ -3,6 +3,8 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { SiteConfig, Experience } from "@/types";
+import TextReveal from "@/components/common/TextReveal";
+import AnimatedText from "@/components/common/AnimatedText";
 
 const CAP_META = [
   { icon: "◆", color: "var(--rose)", rgb: "244,63,94" },
@@ -71,23 +73,17 @@ export default function AboutPageClient({
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             >
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05] mb-4">
-                Crafting at the
-                <br />
-                <span
-                  className="bg-clip-text text-transparent"
-                  style={{ backgroundImage: "linear-gradient(135deg, var(--violet) 0%, var(--cyan) 100%)" }}
-                >
-                  intersection
-                </span>
-                {" "}of
-                <br />
-                design & code.
-              </h1>
+              <AnimatedText
+                text="Crafting at the intersection of design & code."
+                as="h1"
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05] mb-4"
+                splitBy="word"
+              />
 
-              <p className="text-sm md:text-base text-[var(--fg-2)] leading-relaxed max-w-2xl">
-                {siteConfig.description}
-              </p>
+              <TextReveal
+                text={siteConfig.description}
+                className="text-sm md:text-base text-[var(--fg-2)] leading-relaxed max-w-2xl"
+              />
 
               {/* Role + Location */}
               <div className="flex items-center gap-4 mt-4 flex-wrap">

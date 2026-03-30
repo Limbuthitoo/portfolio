@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { SiteConfig } from "@/types";
+import AnimatedText from "@/components/common/AnimatedText";
+import MagneticButton from "@/components/common/MagneticButton";
 
 export default function ContactPageClient({ siteConfig }: { siteConfig: SiteConfig }) {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
@@ -43,7 +45,7 @@ export default function ContactPageClient({ siteConfig }: { siteConfig: SiteConf
               <div className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)]" style={{ boxShadow: "0 0 6px var(--cyan)" }} />
               <span className="text-[9px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">Contact</span>
             </div>
-            <h1 className="text-2xl md:text-4xl font-bold tracking-tight mb-2">Let&apos;s talk</h1>
+            <AnimatedText text="Let's talk" as="h1" splitBy="word" className="text-2xl md:text-4xl font-bold tracking-tight mb-2" />
             <p className="text-[13px] text-[var(--fg-2)] max-w-lg leading-relaxed">
               Have a project in mind? I&apos;m available for freelance work and
               always interested in hearing about new opportunities.
@@ -66,17 +68,19 @@ export default function ContactPageClient({ siteConfig }: { siteConfig: SiteConf
                 <Field label="Subject" type="text" value={form.subject} onChange={(v) => setForm((s) => ({ ...s, subject: v }))} />
                 <Field label="Message" type="textarea" value={form.message} onChange={(v) => setForm((s) => ({ ...s, message: v }))} />
 
-                <button
-                  type="submit"
-                  className={`text-[11px] font-mono tracking-wider uppercase px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 ${
-                    sent
-                      ? "bg-[var(--emerald)] text-[var(--bg)]"
-                      : "bg-[var(--cyan)] text-[var(--bg)] hover:shadow-[0_0_20px_rgba(0,240,255,0.3)]"
-                  }`}
-                  data-cursor="Send"
-                >
-                  {sent ? "Message Sent ✓" : "Send Message →"}
-                </button>
+                <MagneticButton strength={0.3}>
+                  <button
+                    type="submit"
+                    className={`text-[11px] font-mono tracking-wider uppercase px-6 py-2.5 rounded-lg font-semibold transition-all duration-300 ${
+                      sent
+                        ? "bg-[var(--emerald)] text-[var(--bg)]"
+                        : "bg-[var(--cyan)] text-[var(--bg)] hover:shadow-[0_0_20px_rgba(0,240,255,0.3)]"
+                    }`}
+                    data-cursor="Send"
+                  >
+                    {sent ? "Message Sent ✓" : "Send Message →"}
+                  </button>
+                </MagneticButton>
               </form>
             </motion.div>
 

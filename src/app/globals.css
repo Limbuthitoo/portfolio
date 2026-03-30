@@ -256,3 +256,74 @@ body {
   60% { clip-path: inset(10% 0 70% 0); transform: translateX(-1px); }
   80% { clip-path: inset(80% 0 5% 0); transform: translateX(1px); }
 }
+
+/* ─── Glassmorphism surfaces ─── */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+[data-theme="light"] .glass {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+/* ─── Card glow on hover ─── */
+.card-glow {
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(139, 92, 246, 0.08),
+              0 0 0 1px rgba(139, 92, 246, 0.1);
+}
+[data-theme="light"] .card-glow:hover {
+  box-shadow: 0 8px 40px rgba(124, 58, 237, 0.06),
+              0 0 0 1px rgba(124, 58, 237, 0.08);
+}
+
+/* ─── Interactive tilt depth ─── */
+.depth-hover {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+
+/* ─── Stagger fade children ─── */
+@keyframes stagger-fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.stagger-children > * {
+  animation: stagger-fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.3s; }
+
+/* ─── Subtle border glow ─── */
+.border-glow {
+  position: relative;
+}
+.border-glow::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(0,240,255,0.15));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  padding: 1px;
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+.border-glow:hover::after {
+  opacity: 1;
+}

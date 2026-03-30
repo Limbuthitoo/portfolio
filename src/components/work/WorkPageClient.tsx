@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Project } from "@/types";
+import AnimatedText from "@/components/common/AnimatedText";
 
 const ACCENT_MAP: Record<string, { color: string; rgb: string }> = {
   "Web Development": { color: "var(--cyan)", rgb: "0,240,255" },
@@ -57,7 +58,7 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
                 <div className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)]" style={{ boxShadow: "0 0 6px var(--cyan)" }} />
                 <span className="text-[9px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">Archive</span>
               </div>
-              <h1 className="text-2xl md:text-4xl font-bold tracking-tight">Selected Work</h1>
+              <AnimatedText text="Selected Work" as="h1" splitBy="word" className="text-2xl md:text-4xl font-bold tracking-tight" />
             </div>
             <span className="text-[10px] font-mono text-[var(--fg-3)]">
               {filtered.length}/{projects.length}

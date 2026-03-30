@@ -5,6 +5,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from
 import Link from "next/link";
 import { SiteConfig } from "@/types";
 import { useRotatingText } from "@/lib/hooks";
+import MagneticButton from "@/components/common/MagneticButton";
 
 const DEFAULT_ROLES = [
   "Design Engineer",
@@ -200,20 +201,24 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <Link
-                href="/work"
-                className="px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-[var(--violet)] text-white text-sm font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300"
-                data-cursor="Go"
-              >
-                Explore
-              </Link>
-              <Link
-                href="/contact"
-                className="px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] text-sm font-medium text-[var(--fg)] hover:border-[var(--border-hover)] transition-colors"
-                data-cursor="Go"
-              >
-                Contact
-              </Link>
+              <MagneticButton strength={0.4}>
+                <Link
+                  href="/work"
+                  className="px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-[var(--violet)] text-white text-sm font-semibold hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] transition-all duration-300"
+                  data-cursor="Go"
+                >
+                  Explore
+                </Link>
+              </MagneticButton>
+              <MagneticButton strength={0.4}>
+                <Link
+                  href="/contact"
+                  className="px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] text-sm font-medium text-[var(--fg)] hover:border-[var(--border-hover)] transition-colors"
+                  data-cursor="Go"
+                >
+                  Contact
+                </Link>
+              </MagneticButton>
             </motion.div>
           </div>
 
