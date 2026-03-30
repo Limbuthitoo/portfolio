@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useState } from "react";
 import { SiteConfig } from "@/types";
 
 const COLORS = ["var(--cyan)", "var(--violet)", "var(--emerald)", "var(--rose)", "var(--amber)"];
@@ -13,9 +13,9 @@ const DEFAULT_GROUPS = [
 
 function SkillContent({ groups }: { groups: { label: string; skills: string[] }[] }) {
   return (
-    <>
+    <div className="flex flex-col gap-2.5 pb-4">
       {groups.map((group, gi) => (
-        <div key={group.label} className="pb-2.5">
+        <div key={group.label}>
           <div className="flex items-center gap-1.5 mb-1.5">
             <div
               className="w-1.5 h-1.5 rounded-full"
@@ -40,42 +40,13 @@ function SkillContent({ groups }: { groups: { label: string; skills: string[] }[
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 }
 
 export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) {
   const groups = siteConfig?.skills?.length ? siteConfig.skills : DEFAULT_GROUPS;
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const pausedRef = useRef(false);
-  const userScrollTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
-
-  const handleUserScroll = useCallback(() => {
-    pausedRef.current = true;
-    clearTimeout(userScrollTimer.current);
-    userScrollTimer.current = setTimeout(() => { pausedRef.current = false; }, 2000);
-  }, []);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    let raf: number;
-    const speed = 0.4;
-
-    const step = () => {
-      if (!pausedRef.current && el.scrollHeight > el.clientHeight) {
-        el.scrollTop += speed;
-        // When we've scrolled past the first copy, jump back
-        const half = el.scrollHeight / 2;
-        if (el.scrollTop >= half) {
-          el.scrollTop -= half;
-        }
-      }
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => { cancelAnimationFrame(raf); clearTimeout(userScrollTimer.current); };
-  }, []);
+  const [hovered, setHovered] = useState(false);
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 overflow-hidden relative flex flex-col hover:border-[var(--violet)]/30 transition-colors duration-300 group">
       {/* Purple gradient bg */}
@@ -93,21 +64,25 @@ export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) 
         </span>
       </div>
 
-      <div
-        ref={scrollRef}
-        onWheel={handleUserScroll}
-        onTouchMove={handleUserScroll}
-        onMouseEnter={() => (pausedRef.current = true)}
-        onMouseLeave={() => (pausedRef.current = false)}
-        className="relative z-10 flex-1 overflow-y-auto bento-scroll"
-      >
-        <div className="flex flex-col gap-2.5">
+      {hovered ? (
+        <div
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          className="relative z-10 flex-1 overflow-y-auto bento-scroll"
+        >
           <SkillContent groups={groups} />
         </div>
-        <div className="flex flex-col gap-2.5 mt-2.5" aria-hidden>
-          <SkillContent groups={groups} />
+      ) : (
+        <div
+          onMouseEnter={() => setHovered(true)}
+          className="relative z-10 flex-1 overflow-hidden"
+        >
+          <div className="card-marquee" style={{ animationDuration: '18s' }}>
+            <SkillContent groups={groups} />
+            <SkillContent groups={groups} />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

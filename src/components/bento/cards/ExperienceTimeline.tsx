@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useState } from "react";
 import { Experience } from "@/types";
 
 const NODE_COLORS = ["var(--cyan)", "var(--violet)", "var(--rose)", "var(--amber)"];
@@ -58,35 +58,7 @@ export default function ExperienceTimeline({
 }: {
   experiences: Experience[];
 }) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const pausedRef = useRef(false);
-  const userScrollTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
-
-  const handleUserScroll = useCallback(() => {
-    pausedRef.current = true;
-    clearTimeout(userScrollTimer.current);
-    userScrollTimer.current = setTimeout(() => { pausedRef.current = false; }, 2000);
-  }, []);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    let raf: number;
-    const speed = 0.3;
-
-    const step = () => {
-      if (!pausedRef.current && el.scrollHeight > el.clientHeight) {
-        el.scrollTop += speed;
-        const half = el.scrollHeight / 2;
-        if (el.scrollTop >= half) {
-          el.scrollTop -= half;
-        }
-      }
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => { cancelAnimationFrame(raf); clearTimeout(userScrollTimer.current); };
-  }, []);
+  const [hovered, setHovered] = useState(false);
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 md:p-5 flex flex-col overflow-hidden hover:border-[var(--violet)]/30 transition-colors duration-300 relative group">
       {/* Purple gradient bg */}
@@ -104,22 +76,27 @@ export default function ExperienceTimeline({
         </span>
       </div>
 
-      <div
-        ref={scrollRef}
-        onWheel={handleUserScroll}
-        onTouchMove={handleUserScroll}
-        onMouseEnter={() => (pausedRef.current = true)}
-        onMouseLeave={() => (pausedRef.current = false)}
-        className="relative z-10 flex-1 overflow-y-auto bento-scroll relative"
-      >
-        {/* Vertical line */}
-        <div className="absolute left-[5px] top-1 bottom-1 w-px bg-gradient-to-b from-[var(--violet)] via-[var(--cyan)] to-[var(--border)] opacity-30 z-10" />
-
-        <ExperienceContent experiences={experiences} />
-        <div aria-hidden>
+      {hovered ? (
+        <div
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          className="relative z-10 flex-1 overflow-y-auto bento-scroll relative"
+        >
+          <div className="absolute left-[5px] top-1 bottom-1 w-px bg-gradient-to-b from-[var(--violet)] via-[var(--cyan)] to-[var(--border)] opacity-30 z-10" />
           <ExperienceContent experiences={experiences} />
         </div>
-      </div>
+      ) : (
+        <div
+          onMouseEnter={() => setHovered(true)}
+          className="relative z-10 flex-1 overflow-hidden relative"
+        >
+          <div className="absolute left-[5px] top-1 bottom-1 w-px bg-gradient-to-b from-[var(--violet)] via-[var(--cyan)] to-[var(--border)] opacity-30 z-10" />
+          <div className="card-marquee" style={{ animationDuration: '25s' }}>
+            <ExperienceContent experiences={experiences} />
+            <ExperienceContent experiences={experiences} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
