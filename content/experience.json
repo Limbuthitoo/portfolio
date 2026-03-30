@@ -1,0 +1,54 @@
+[
+  {
+    "id": "frontend-lead",
+    "role": "Senior Frontend Developer",
+    "company": "Freelance / Contract",
+    "period": "2020 — Present",
+    "description": "Leading frontend architecture for high-profile clients. Specializing in performant, accessible, and visually rich web experiences.",
+    "highlights": [
+      "Built 20+ production web applications",
+      "Led frontend teams of 3-8 developers",
+      "Established component libraries and design systems",
+      "Performance optimization reducing LCP by 40% avg"
+    ]
+  },
+  {
+    "id": "ui-ux-designer",
+    "role": "UI/UX Designer",
+    "company": "Design Studio",
+    "period": "2017 — 2020",
+    "description": "Designed user interfaces and experiences for startups and enterprises, translating complex requirements into intuitive interactions.",
+    "highlights": [
+      "Designed 50+ mobile and web interfaces",
+      "Conducted user research and usability testing",
+      "Created interactive prototypes in Figma",
+      "Increased client conversion rates by 25% avg"
+    ]
+  },
+  {
+    "id": "motion-designer",
+    "role": "Motion Graphics Designer",
+    "company": "Creative Agency",
+    "period": "2015 — 2017",
+    "description": "Created motion graphics, animations, and visual effects for brands, commercials, and digital campaigns.",
+    "highlights": [
+      "Produced 100+ motion pieces for major brands",
+      "Directed animation for TV commercials",
+      "Built animation pipelines in After Effects",
+      "Won regional creative awards"
+    ]
+  },
+  {
+    "id": "graphic-designer",
+    "role": "Graphic Designer",
+    "company": "Freelance",
+    "period": "2012 — 2015",
+    "description": "Started career in graphic design, building brand identities, print materials, and digital assets for local and international clients.",
+    "highlights": [
+      "Designed 30+ brand identities",
+      "Created print and digital marketing materials",
+      "Built client relationships from ground up",
+      "Self-taught transition into digital design"
+    ]
+  }
+]

@@ -94,6 +94,14 @@ function readJSON<T>(file: string, fallback: T): T {
 function writeJSON(file: string, data: unknown) {
   ensureDir();
   fs.writeFileSync(path.join(WRITABLE_DIR, file), JSON.stringify(data, null, 2));
+  // On Vercel, also try to write to the bundled dir so it survives within the same deployment
+  if (WRITABLE_DIR !== BUNDLED_DIR) {
+    try {
+      fs.writeFileSync(path.join(BUNDLED_DIR, file), JSON.stringify(data, null, 2));
+    } catch {
+      // Bundled dir may be read-only on some platforms
+    }
+  }
 }
 
 // --- Projects ---
