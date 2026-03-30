@@ -19,7 +19,7 @@ export default function Dock() {
 
   return (
     <div className="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100vw-1.5rem)] sm:w-auto sm:max-w-[calc(100vw-2rem)]">
-      <div className="relative flex items-end justify-center gap-2 sm:gap-2 px-2.5 sm:px-3 py-2.5 sm:py-2 rounded-2xl bg-[var(--dock-bg)] backdrop-blur-2xl border border-[var(--border)] gradient-border">
+      <div className="relative flex items-end justify-center gap-1.5 xs:gap-2 sm:gap-2 px-2 sm:px-3 py-2 sm:py-2 rounded-2xl bg-[var(--dock-bg)] backdrop-blur-2xl border border-[var(--border)] gradient-border">
         {DOCK_ITEMS.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -31,7 +31,7 @@ export default function Dock() {
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
               >
                 <div
-                  className="w-12 h-12 sm:w-12 sm:h-12 rounded-[14px] flex items-center justify-center text-lg sm:text-lg transition-all duration-300"
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-[12px] sm:rounded-[14px] flex items-center justify-center text-base sm:text-lg transition-all duration-300"
                   style={{
                     background: isActive
                       ? `rgba(${item.rgb},0.12)`
