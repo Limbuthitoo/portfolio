@@ -31,7 +31,7 @@ export default function SystemShell({ children }: { children: React.ReactNode })
         <ScrollProgress />
         <StatusBar />
         <SmoothScroll>
-          <main className="relative z-10 h-full pb-20 sm:pb-24 pt-10 page-enter">
+          <main className="relative z-10 min-h-full pb-20 sm:pb-24 pt-10 page-enter">
             <PageTransition>
               {children}
             </PageTransition>
