@@ -97,14 +97,8 @@ export default function AboutPageClient({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35 }}
           >
-            <p className="text-sm md:text-base text-[var(--fg-2)] leading-relaxed mb-4">
-              I&apos;m a multidisciplinary creative with 12+ years at the intersection
-              of design and technology. My journey began with graphic design, evolved through
-              motion graphics and UI/UX, and now focuses on crafting exceptional frontend experiences.
-            </p>
             <p className="text-sm md:text-base text-[var(--fg-2)] leading-relaxed">
-              Every pixel I push and every line of code I write is in service of creating
-              experiences that feel natural, intuitive, and inevitable.
+              {siteConfig.description}
             </p>
           </motion.div>
 

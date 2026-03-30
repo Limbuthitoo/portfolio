@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { SiteConfig } from "@/types";
 import { useRotatingText } from "@/lib/hooks";
 
 const ROLES = [
@@ -11,8 +12,10 @@ const ROLES = [
   "Creative Technologist",
 ];
 
-export default function IdentityCard() {
+export default function IdentityCard({ siteConfig }: { siteConfig?: SiteConfig }) {
   const { index: roleIdx } = useRotatingText(ROLES);
+  const displayName = siteConfig?.name || "Bijay Subbalimbu";
+  const initials = displayName.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
 
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] overflow-hidden relative group hover:border-[var(--border-hover)] transition-colors card-shimmer">
@@ -46,11 +49,11 @@ export default function IdentityCard() {
           {/* Avatar + name */}
           <div className="flex items-start gap-4 mb-5">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--cyan)] to-[var(--violet)] flex items-center justify-center text-white text-xl font-bold shrink-0 shadow-[0_0_24px_rgba(0,240,255,0.15)]">
-              B
+              {initials}
             </div>
             <div>
               <h1 className="text-xl md:text-2xl font-bold tracking-tight leading-tight">
-                Bijay Subbalimbu
+                {displayName}
               </h1>
               <div className="h-5 overflow-hidden mt-1">
                 <AnimatePresence mode="wait">

@@ -18,7 +18,7 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
   const displayName = siteConfig?.name || "Bijay Subbalimbu";
   const [firstName, ...rest] = displayName.split(" ");
   const lastName = rest.join(" ");
-  const description = siteConfig?.description || "12+ years crafting at the intersection of design & code — from pixels to motion to interfaces that feel inevitable.";
+  const tagline = siteConfig?.title || "Creative Frontend Developer";
   const availability = siteConfig?.availability || "Available for work";
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -166,7 +166,7 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35 }}
             >
-              {description}
+              {tagline}
             </motion.p>
 
             {/* Rotating role */}

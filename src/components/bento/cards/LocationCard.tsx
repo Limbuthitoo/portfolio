@@ -1,6 +1,9 @@
 "use client";
 
-export default function LocationCard() {
+import { SiteConfig } from "@/types";
+
+export default function LocationCard({ siteConfig }: { siteConfig?: SiteConfig }) {
+  const location = siteConfig?.location || "Kathmandu, Nepal";
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 flex flex-col justify-between overflow-hidden relative group hover:border-[var(--violet)]/30 transition-colors duration-300">
       {/* Purple gradient bg */}
@@ -31,7 +34,7 @@ export default function LocationCard() {
       <div className="relative z-10">
         <div className="flex items-center gap-1.5 mb-0.5">
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--emerald)] animate-pulse" />
-          <span className="text-[14px] font-semibold">Kathmandu, Nepal</span>
+          <span className="text-[14px] font-semibold">{location}</span>
         </div>
         <span className="text-[11px] font-mono text-[var(--fg-3)]">
           27.72°N, 85.32°E

@@ -48,7 +48,7 @@ export default function BentoGrid({ projects, experiences, siteConfig }: Props) 
       >
         {/* Row 1: Info cards — Availability, Highlights, Location, Tech */}
         <motion.div variants={item} className="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-3 row-span-1">
-          <AvailabilityCard />
+          <AvailabilityCard siteConfig={siteConfig} />
         </motion.div>
 
         <motion.div variants={item} className="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-3 row-span-1">
@@ -56,7 +56,7 @@ export default function BentoGrid({ projects, experiences, siteConfig }: Props) 
         </motion.div>
 
         <motion.div variants={item} className="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-3 row-span-1">
-          <LocationCard />
+          <LocationCard siteConfig={siteConfig} />
         </motion.div>
 
         <motion.div variants={item} className="col-span-1 sm:col-span-2 md:col-span-2 lg:col-span-3 row-span-1">
