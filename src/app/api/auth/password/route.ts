@@ -37,7 +37,7 @@ export async function PUT(req: NextRequest) {
     }
 
     // Verify current password
-    const storedHash = getStoredPasswordHash();
+    const storedHash = await getStoredPasswordHash();
     if (storedHash) {
       const valid = await bcrypt.compare(currentPassword, storedHash);
       if (!valid) {
@@ -60,7 +60,7 @@ export async function PUT(req: NextRequest) {
 
     // Hash and save new password
     const hash = await bcrypt.hash(newPassword, 12);
-    savePasswordHash(hash);
+    await savePasswordHash(hash);
 
     return NextResponse.json({ success: true });
   } catch (error) {

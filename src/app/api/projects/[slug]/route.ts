@@ -5,7 +5,7 @@ import { isAuthenticated, unauthorizedResponse } from '@/lib/auth';
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getProjectBySlug(slug);
   if (!project) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   return NextResponse.json(project);
 }
@@ -16,7 +16,7 @@ export async function PUT(req: NextRequest) {
   if (!validateProject(project)) {
     return NextResponse.json({ error: 'Invalid project data' }, { status: 400 });
   }
-  saveProject(project);
+  await saveProject(project);
   revalidatePath('/');
   revalidatePath('/work');
   return NextResponse.json({ success: true });

@@ -6,15 +6,15 @@ import { getProjects, getProjectBySlug, seedIfEmpty } from '@/lib/db';
 
 export const revalidate = 60;
 
-export function generateStaticParams() {
-  seedIfEmpty();
-  return getProjects().map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  await seedIfEmpty();
+  return (await getProjects()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  seedIfEmpty();
-  const project = getProjectBySlug(slug);
+  await seedIfEmpty();
+  const project = await getProjectBySlug(slug);
   if (!project) return {};
   return {
     title: `${project.title} — Bijay Subbalimbu`,
@@ -23,12 +23,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
-  seedIfEmpty();
+  await seedIfEmpty();
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
+  const project = await getProjectBySlug(slug);
   if (!project) notFound();
 
-  const projects = getProjects();
+  const projects = await getProjects();
   const currentIndex = projects.findIndex((p) => p.slug === slug);
   const nextProject = projects[(currentIndex + 1) % projects.length];
 

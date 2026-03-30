@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check stored hashed password first
-    const storedHash = getStoredPasswordHash();
+    const storedHash = await getStoredPasswordHash();
     if (storedHash) {
       const valid = await bcrypt.compare(password, storedHash);
       if (!valid) {

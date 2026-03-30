@@ -5,7 +5,7 @@ import { isAuthenticated, unauthorizedResponse } from '@/lib/auth';
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const exp = getExperienceById(id);
+  const exp = await getExperienceById(id);
   if (!exp) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   return NextResponse.json(exp);
 }
@@ -16,7 +16,7 @@ export async function PUT(req: NextRequest) {
   if (!validateExperience(exp)) {
     return NextResponse.json({ error: 'Invalid experience data' }, { status: 400 });
   }
-  saveExperience(exp);
+  await saveExperience(exp);
   revalidatePath('/');
   revalidatePath('/about');
   return NextResponse.json({ success: true });

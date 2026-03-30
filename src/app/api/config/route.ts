@@ -3,8 +3,8 @@ import { revalidatePath } from 'next/cache';
 import { getSiteConfig, saveSiteConfig, validateSiteConfig } from '@/lib/db';
 import { isAuthenticated, unauthorizedResponse } from '@/lib/auth';
 
-export function GET() {
-  return NextResponse.json(getSiteConfig());
+export async function GET() {
+  return NextResponse.json(await getSiteConfig());
 }
 
 export async function PUT(req: NextRequest) {
@@ -13,7 +13,7 @@ export async function PUT(req: NextRequest) {
   if (!validateSiteConfig(config)) {
     return NextResponse.json({ error: 'Invalid config data' }, { status: 400 });
   }
-  saveSiteConfig(config);
+  await saveSiteConfig(config);
   revalidatePath('/');
   revalidatePath('/about');
   revalidatePath('/contact');

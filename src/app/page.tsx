@@ -4,11 +4,11 @@ import { getProjects, getExperiences, getSiteConfig, seedIfEmpty } from "@/lib/d
 
 export const revalidate = 60;
 
-export default function Home() {
-  seedIfEmpty();
-  const projects = getProjects();
-  const experiences = getExperiences();
-  const siteConfig = getSiteConfig();
+export default async function Home() {
+  await seedIfEmpty();
+  const projects = await getProjects();
+  const experiences = await getExperiences();
+  const siteConfig = await getSiteConfig();
 
   return (
     <>
