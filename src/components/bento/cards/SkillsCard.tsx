@@ -48,6 +48,7 @@ function SkillContent({ groups }: { groups: { label: string; skills: string[] }[
 export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) {
   const groups = siteConfig?.skills?.length ? siteConfig.skills : DEFAULT_GROUPS;
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const hovered = useRef(false);
   const [contentH, setContentH] = useState(0);
   const y = useMotionValue(0);
@@ -73,6 +74,22 @@ export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) 
     y.set(next);
   });
 
+  // Native wheel listener with { passive: false } so preventDefault works
+  useEffect(() => {
+    const el = scrollAreaRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (contentH <= 0) return;
+      e.preventDefault();
+      e.stopPropagation();
+      let next = y.get() - e.deltaY * 0.5;
+      next = Math.max(-contentH, Math.min(0, next));
+      y.set(next);
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [contentH, y]);
+
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 overflow-hidden relative flex flex-col hover:border-[var(--violet)]/30 transition-colors duration-300 group">
       <div
@@ -90,15 +107,10 @@ export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) 
       </div>
 
       <div
+        ref={scrollAreaRef}
         className="relative z-10 flex-1 min-h-0 overflow-hidden"
         onMouseEnter={() => { hovered.current = true; }}
         onMouseLeave={() => { hovered.current = false; }}
-        onWheel={(e) => {
-          if (contentH <= 0) return;
-          let next = y.get() - e.deltaY * 0.5;
-          next = Math.max(-contentH, Math.min(0, next));
-          y.set(next);
-        }}
       >
         <motion.div ref={wrapperRef} style={{ y }}>
           <SkillContent groups={groups} />

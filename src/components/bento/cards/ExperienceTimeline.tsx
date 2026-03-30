@@ -60,6 +60,7 @@ export default function ExperienceTimeline({
   experiences: Experience[];
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const hovered = useRef(false);
   const [contentH, setContentH] = useState(0);
   const y = useMotionValue(0);
@@ -85,6 +86,22 @@ export default function ExperienceTimeline({
     y.set(next);
   });
 
+  // Native wheel listener with { passive: false } so preventDefault works
+  useEffect(() => {
+    const el = scrollAreaRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (contentH <= 0) return;
+      e.preventDefault();
+      e.stopPropagation();
+      let next = y.get() - e.deltaY * 0.5;
+      next = Math.max(-contentH, Math.min(0, next));
+      y.set(next);
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [contentH, y]);
+
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 md:p-5 flex flex-col overflow-hidden hover:border-[var(--violet)]/30 transition-colors duration-300 relative group">
       <div
@@ -102,15 +119,10 @@ export default function ExperienceTimeline({
       </div>
 
       <div
+        ref={scrollAreaRef}
         className="relative z-10 flex-1 min-h-0 overflow-hidden"
         onMouseEnter={() => { hovered.current = true; }}
         onMouseLeave={() => { hovered.current = false; }}
-        onWheel={(e) => {
-          if (contentH <= 0) return;
-          let next = y.get() - e.deltaY * 0.5;
-          next = Math.max(-contentH, Math.min(0, next));
-          y.set(next);
-        }}
       >
         <div className="absolute left-[5px] top-1 bottom-1 w-px bg-gradient-to-b from-[var(--violet)] via-[var(--cyan)] to-[var(--border)] opacity-30 z-10" />
         <motion.div ref={wrapperRef} style={{ y }}>
