@@ -129,6 +129,19 @@ export default function ContactPageClient({ siteConfig }: { siteConfig: SiteConf
                   </a>
                 </InfoBlock>
 
+                {siteConfig.phone && (
+                  <InfoBlock label="Phone">
+                    <a
+                      href={`tel:${siteConfig.phone.replace(/\s/g, '')}`}
+                      className="text-base md:text-lg font-medium text-[var(--fg)] hover:text-[var(--cyan)] transition-colors duration-300 group/phone"
+                      data-cursor="Call"
+                    >
+                      {siteConfig.phone}
+                      <span className="inline-block ml-2 opacity-0 -translate-x-1 group-hover/phone:opacity-100 group-hover/phone:translate-x-0 transition-all duration-300 text-[var(--cyan)]">↗</span>
+                    </a>
+                  </InfoBlock>
+                )}
+
                 <InfoBlock label="Location">
                   <p className="text-base md:text-lg font-medium text-[var(--fg)]">{siteConfig.location}</p>
                 </InfoBlock>

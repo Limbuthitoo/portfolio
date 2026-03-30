@@ -111,6 +111,12 @@ export default function SettingsPage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
+            <label className={labelCls}>Phone / Mobile</label>
+            <input className={inputCls} value={config.phone || ''} onChange={(e) => set('phone', e.target.value)} placeholder="+977 98XXXXXXXX" />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
             <label className={labelCls}>Title (shown below name on homepage)</label>
             <input className={inputCls} value={config.title} onChange={(e) => set('title', e.target.value)} />
           </div>

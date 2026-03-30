@@ -96,6 +96,7 @@ export interface SiteConfig {
   role: string;
   description: string;
   email: string;
+  phone?: string;
   social: {
     github?: string;
     linkedin?: string;

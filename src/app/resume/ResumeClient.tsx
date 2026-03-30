@@ -84,6 +84,7 @@ export default function ResumeClient({ siteConfig, experiences }: Props) {
             <p className="text-[11.5px] text-[#555] mt-2 tracking-wide">
               {[
                 siteConfig.location,
+                siteConfig.phone || null,
                 siteConfig.email,
                 siteConfig.social?.linkedin
                   ? siteConfig.social.linkedin.replace("https://", "")
