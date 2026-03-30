@@ -16,7 +16,7 @@ export default function TechStack({ siteConfig }: { siteConfig?: SiteConfig }) {
       />
 
       <div className="relative z-10 flex items-center justify-between mb-2">
-        <span className="text-[11px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
+        <span className="text-[9px] sm:text-[11px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
           Tech Stack
         </span>
         <span className="w-6 h-6 rounded-lg bg-[var(--surface-hover)] border border-[var(--border)] flex items-center justify-center text-[12px] text-[var(--fg-3)] group-hover:text-[var(--violet)] group-hover:border-[var(--violet)]/30 transition-colors">

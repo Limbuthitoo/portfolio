@@ -26,13 +26,13 @@ export default function HighlightsCard({ siteConfig }: { siteConfig?: SiteConfig
         </span>
       </div>
 
-      <div className="relative z-10 flex items-center gap-4">
+      <div className="relative z-10 flex items-center gap-2 sm:gap-4 overflow-hidden">
         {highlights.map((h, i) => (
-          <div key={i} className="flex items-center gap-4">
-            {i > 0 && <div className="w-px h-6 bg-[var(--border)]" />}
-            <div>
-              <p className="text-xl font-bold leading-none" style={{ color: i === 0 ? "var(--violet)" : "var(--cyan)" }}>{h.value}</p>
-              <p className="text-[9px] text-[var(--fg-3)] mt-0.5">{h.label}</p>
+          <div key={i} className="flex items-center gap-2 sm:gap-4 min-w-0">
+            {i > 0 && <div className="w-px h-5 sm:h-6 bg-[var(--border)] shrink-0" />}
+            <div className="min-w-0">
+              <p className="text-base sm:text-xl font-bold leading-none truncate" style={{ color: i === 0 ? "var(--violet)" : "var(--cyan)" }}>{h.value}</p>
+              <p className="text-[8px] sm:text-[9px] text-[var(--fg-3)] mt-0.5 truncate">{h.label}</p>
             </div>
           </div>
         ))}
