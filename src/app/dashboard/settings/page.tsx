@@ -92,15 +92,11 @@ export default function SettingsPage() {
   const set = (key: keyof SiteConfig, value: unknown) => setConfig({ ...config, [key]: value });
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-white text-lg font-light">Settings</h1>
-        <button onClick={handleSave} disabled={saving} className={btnCls}>
-          {saved ? 'Saved ✓' : saving ? 'Saving...' : 'Save Changes'}
-        </button>
-      </div>
+    <div className="flex flex-col h-full -m-5">
+      <div className="flex-1 overflow-y-auto p-5">
+        <h1 className="text-white text-lg font-light mb-6">Settings</h1>
 
-      <div className="max-w-2xl space-y-4">
+        <div className="max-w-2xl space-y-4">
         {/* ── General ── */}
         <SectionTitle>General</SectionTitle>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -245,6 +241,13 @@ export default function SettingsPage() {
             </div>
           </div>
         </div>
+      </div>
+      </div>
+
+      <div className="shrink-0 border-t border-white/[0.06] bg-[#060606] px-5 py-3 flex justify-end">
+        <button onClick={handleSave} disabled={saving} className={btnCls}>
+          {saved ? 'Saved ✓' : saving ? 'Saving...' : 'Save Changes'}
+        </button>
       </div>
     </div>
   );
