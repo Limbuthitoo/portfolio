@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { SiteConfig } from "@/types";
+import "./auto-scroll.css";
 
 const COLORS = ["var(--cyan)", "var(--violet)", "var(--emerald)", "var(--rose)", "var(--amber)"];
 
@@ -11,30 +11,41 @@ const DEFAULT_GROUPS = [
   { label: "Backend", skills: ["Node.js", "PostgreSQL", "REST", "Git"] },
 ];
 
+function SkillContent({ groups }: { groups: { label: string; skills: string[] }[] }) {
+  return (
+    <>
+      {groups.map((group, gi) => (
+        <div key={group.label} className="pb-2.5">
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <div
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ background: COLORS[gi % COLORS.length] }}
+            />
+            <span
+              className="text-[11px] font-mono tracking-[0.1em] uppercase"
+              style={{ color: COLORS[gi % COLORS.length] }}
+            >
+              {group.label}
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-1">
+            {group.skills.map((skill) => (
+              <span
+                key={skill}
+                className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-[var(--surface-hover)] border border-[var(--border)] text-[var(--fg-2)] hover:border-[var(--violet)]/30 hover:text-[var(--fg)] transition-colors"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </>
+  );
+}
+
 export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) {
   const groups = siteConfig?.skills?.length ? siteConfig.skills : DEFAULT_GROUPS;
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const pausedRef = useRef(false);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    let raf: number;
-    const speed = 0.3; // px per frame
-
-    const step = () => {
-      if (!pausedRef.current && el.scrollHeight > el.clientHeight) {
-        el.scrollTop += speed;
-        if (el.scrollTop >= el.scrollHeight - el.clientHeight) {
-          el.scrollTop = 0;
-        }
-      }
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
   return (
     <div className="h-full rounded-[var(--card-radius)] bg-[var(--surface)] border border-[var(--border)] p-4 overflow-hidden relative flex flex-col hover:border-[var(--violet)]/30 transition-colors duration-300 group">
       {/* Purple gradient bg */}
@@ -52,38 +63,15 @@ export default function SkillsCard({ siteConfig }: { siteConfig?: SiteConfig }) 
         </span>
       </div>
 
-      <div
-        ref={scrollRef}
-        onMouseEnter={() => (pausedRef.current = true)}
-        onMouseLeave={() => (pausedRef.current = false)}
-        className="relative z-10 flex-1 flex flex-col gap-2.5 overflow-y-auto bento-scroll"
-      >
-        {groups.map((group, gi) => (
-          <div key={group.label}>
-            <div className="flex items-center gap-1.5 mb-1.5">
-              <div
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ background: COLORS[gi % COLORS.length] }}
-              />
-              <span
-                className="text-[11px] font-mono tracking-[0.1em] uppercase"
-                style={{ color: COLORS[gi % COLORS.length] }}
-              >
-                {group.label}
-              </span>
-            </div>
-            <div className="flex flex-wrap gap-1">
-              {group.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-[var(--surface-hover)] border border-[var(--border)] text-[var(--fg-2)] hover:border-[var(--violet)]/30 hover:text-[var(--fg)] transition-colors"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
+      <div className="relative z-10 flex-1 overflow-hidden">
+        <div className="auto-scroll-wrapper">
+          <div className="auto-scroll-content">
+            <SkillContent groups={groups} />
           </div>
-        ))}
+          <div className="auto-scroll-content" aria-hidden>
+            <SkillContent groups={groups} />
+          </div>
+        </div>
       </div>
     </div>
   );
