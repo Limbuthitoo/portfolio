@@ -27,18 +27,16 @@ export default function CurrentlyCard({ siteConfig }: { siteConfig?: SiteConfig 
         </span>
       </div>
 
-      <div className="relative z-10 flex-1 flex flex-col justify-center gap-2">
-        {items.map((item, i) => (
-          <div key={i} className="flex items-center gap-2.5">
-            <span className="text-[16px] leading-none shrink-0">{item.emoji}</span>
-            <div className="min-w-0">
-              <span className="text-[10px] font-mono text-[var(--fg-3)] uppercase tracking-[0.1em]">
-                {item.label}
-              </span>
-              <p className="text-[13px] text-[var(--fg)] font-medium truncate leading-tight">
-                {item.value}
-              </p>
-            </div>
+      <div className="relative z-10 flex-1 grid grid-cols-3 gap-3 items-center">
+        {items.slice(0, 3).map((item, i) => (
+          <div key={i} className="flex flex-col items-center text-center gap-1">
+            <span className="text-[18px] leading-none">{item.emoji}</span>
+            <span className="text-[9px] font-mono text-[var(--fg-3)] uppercase tracking-[0.12em]">
+              {item.label}
+            </span>
+            <p className="text-[12px] text-[var(--fg)] font-medium leading-tight truncate w-full">
+              {item.value}
+            </p>
           </div>
         ))}
       </div>
