@@ -89,17 +89,17 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25 }}
+              exit={{ opacity: 0, y: -8, filter: "blur(4px)" }}
+              transition={{ duration: 0.3 }}
             >
               {filtered.map((project, i) => {
                 const accent = getAccent(project, i);
                 return (
                   <motion.div
                     key={project.slug}
-                    initial={{ opacity: 0, y: 16, filter: "blur(4px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{ duration: 0.4, delay: i * 0.05 }}
+                    initial={{ opacity: 0, y: 40, scale: 0.95, filter: "blur(6px)" }}
+                    animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                    transition={{ duration: 0.6, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] as const }}
                   >
                     <Link href={`/work/${project.slug}`} data-cursor="View" className="block group">
                       <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden relative hover:border-[var(--border-hover)] transition-all duration-300 card-shimmer">

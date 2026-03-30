@@ -56,9 +56,9 @@ export default function ContactPageClient({ siteConfig }: { siteConfig: SiteConf
             {/* Form */}
             <motion.div
               className="lg:col-span-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 card-shimmer relative"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
+              initial={{ opacity: 0, y: 40, filter: "blur(6px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ delay: 0.15, duration: 0.7, ease: [0.16, 1, 0.3, 1] as const }}
             >
               <form onSubmit={handleSubmit} className="space-y-3">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -87,9 +87,9 @@ export default function ContactPageClient({ siteConfig }: { siteConfig: SiteConf
             {/* Info sidebar */}
             <motion.div
               className="lg:col-span-2 space-y-2"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+              initial={{ opacity: 0, y: 40, filter: "blur(6px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ delay: 0.25, duration: 0.7, ease: [0.16, 1, 0.3, 1] as const }}
             >
               <InfoCard icon="✉" label="Email" color="var(--cyan)">
                 <a

@@ -154,9 +154,9 @@ function SectionLabel({ text, color }: { text: string; color: string }) {
     <motion.div
       ref={ref}
       className="flex items-center gap-3 mb-6"
-      initial={{ opacity: 0 }}
-      animate={inView ? { opacity: 1 } : {}}
-      transition={{ duration: 0.4 }}
+      initial={{ opacity: 0, x: -20 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
     >
       <div className="w-1.5 h-1.5 rounded-full" style={{ background: color, boxShadow: `0 0 6px ${color}` }} />
       <span className="text-[12px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">{text}</span>
@@ -174,9 +174,9 @@ function StatCard({ stat, index }: { stat: { value: string; label: string; color
     <motion.div
       ref={ref}
       className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 text-center hover:border-[var(--border-hover)] transition-colors"
-      initial={{ opacity: 0, y: 16 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.4, delay: index * 0.08 }}
+      initial={{ opacity: 0, y: 40, scale: 0.9, filter: "blur(6px)" }}
+      animate={inView ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : {}}
+      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] as const }}
     >
       <span
         className="text-2xl md:text-3xl font-bold block mb-1"
@@ -200,9 +200,9 @@ function CapabilityCard({ cap, index }: { cap: { category: string; skills: strin
     <motion.div
       ref={ref}
       className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 hover:border-[var(--border-hover)] transition-colors group"
-      initial={{ opacity: 0, y: 24 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      initial={{ opacity: 0, y: 50, filter: "blur(6px)" }}
+      animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+      transition={{ duration: 0.8, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] as const }}
     >
       <div className="flex items-center gap-2.5 mb-4">
         <span className="text-sm" style={{ color: cap.color }}>{cap.icon}</span>
@@ -235,9 +235,9 @@ function ExpCard({ experience, index }: { experience: Experience; index: number 
     <motion.div
       ref={ref}
       className="group relative md:pl-8"
-      initial={{ opacity: 0, y: 16 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.4, delay: index * 0.06 }}
+      initial={{ opacity: 0, y: 40, filter: "blur(4px)" }}
+      animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+      transition={{ duration: 0.7, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] as const }}
     >
       {/* Timeline dot */}
       <div
