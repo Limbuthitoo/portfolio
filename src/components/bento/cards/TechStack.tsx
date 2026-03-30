@@ -24,11 +24,11 @@ export default function TechStack({ siteConfig }: { siteConfig?: SiteConfig }) {
         </span>
       </div>
 
-      <div className="relative z-10 flex flex-wrap gap-1 flex-1 content-start">
+      <div className="relative z-10 flex flex-wrap gap-1 flex-1 content-start overflow-hidden">
         {tech.map((name, i) => (
           <span
             key={name}
-            className="px-2 py-0.5 rounded-md text-[11px] font-mono border border-[var(--border)] hover:border-[var(--border-hover)] transition-colors"
+            className="px-1.5 sm:px-2 py-0.5 rounded-md text-[9px] sm:text-[11px] font-mono border border-[var(--border)] hover:border-[var(--border-hover)] transition-colors leading-tight"
             style={{ color: COLORS[i % COLORS.length] }}
           >
             {name}
