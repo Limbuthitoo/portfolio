@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { SiteConfig, Highlight, SkillGroup, Capability, CurrentlyItem } from '@/types';
+import { SiteConfig, Highlight, SkillGroup, Capability, CurrentlyItem, Education } from '@/types';
 
 const inputCls = 'w-full bg-white/[0.03] border border-white/[0.06] focus:border-white/15 text-white text-sm px-3 py-2.5 rounded-lg outline-none transition-colors';
 const labelCls = 'text-white/25 text-[9px] uppercase tracking-[0.25em] block mb-1.5';
@@ -213,6 +213,16 @@ export default function SettingsPage() {
           />
         </div>
 
+        {/* ── Education (About Page + Resume) ── */}
+        <div className={sectionCls}>
+          <SectionTitle>Education</SectionTitle>
+          <p className="text-white/15 text-[10px] mb-3">Shown on the about page and included in your downloadable resume.</p>
+          <EducationEditor
+            items={config.education || []}
+            onChange={(education) => set('education', education)}
+          />
+        </div>
+
         {/* ── Password Change ── */}
         <div className={sectionCls}>
           <SectionTitle>Change Password</SectionTitle>
@@ -407,6 +417,37 @@ function CurrentlyEditor({ items, onChange }: { items: CurrentlyItem[]; onChange
         </div>
       ))}
       <button type="button" onClick={add} className={addBtnCls}>+ Add Item</button>
+    </div>
+  );
+}
+
+function EducationEditor({ items, onChange }: { items: Education[]; onChange: (v: Education[]) => void }) {
+  const add = () => onChange([...items, { institution: '', degree: '', field: '', period: '', description: '' }]);
+  const update = (i: number, key: keyof Education, val: string) => {
+    const next = [...items];
+    next[i] = { ...next[i], [key]: val };
+    onChange(next);
+  };
+  return (
+    <div className="space-y-3">
+      {items.map((edu, i) => (
+        <div key={i} className="p-3 rounded-lg border border-white/[0.04] space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="text-white/30 text-[10px] w-4">🎓</span>
+            <input className={inputCls} value={edu.institution} onChange={(e) => update(i, 'institution', e.target.value)} placeholder="University name" />
+            <button type="button" onClick={() => onChange(items.filter((_, idx) => idx !== i))} className={removeBtnCls}>Remove</button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <input className={inputCls} value={edu.degree} onChange={(e) => update(i, 'degree', e.target.value)} placeholder="Bachelor's Degree" />
+            <input className={inputCls} value={edu.field} onChange={(e) => update(i, 'field', e.target.value)} placeholder="Computer Science" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <input className={inputCls} value={edu.period} onChange={(e) => update(i, 'period', e.target.value)} placeholder="2018 — 2022" />
+            <input className={inputCls} value={edu.description || ''} onChange={(e) => update(i, 'description', e.target.value)} placeholder="Description (optional)" />
+          </div>
+        </div>
+      ))}
+      <button type="button" onClick={add} className={addBtnCls}>+ Add Education</button>
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { SiteConfig, Experience } from "@/types";
+import { SiteConfig, Experience, Education } from "@/types";
 import TextReveal from "@/components/common/TextReveal";
 import AnimatedText from "@/components/common/AnimatedText";
 
@@ -126,6 +126,18 @@ export default function AboutPageClient({
             ))}
           </div>
         </section>
+
+        {/* ── Education ── */}
+        {siteConfig.education && siteConfig.education.length > 0 && (
+          <section className="mb-16 md:mb-24">
+            <SectionLabel text="Education" color="var(--amber)" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {siteConfig.education.map((edu, i) => (
+                <EduCard key={i} education={edu} index={i} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* ── Experience ── */}
         <section>
@@ -266,6 +278,37 @@ function ExpCard({ experience, index }: { experience: Experience; index: number 
           {experience.description}
         </p>
       </div>
+    </motion.div>
+  );
+}
+
+/* ── Education Card ── */
+function EduCard({ education, index }: { education: Education; index: number }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const colors = ["var(--amber)", "var(--violet)", "var(--cyan)", "var(--rose)"];
+  const accent = colors[index % colors.length];
+
+  return (
+    <motion.div
+      ref={ref}
+      className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 hover:border-[var(--border-hover)] transition-colors"
+      initial={{ opacity: 0, y: 40, filter: "blur(4px)" }}
+      animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
+      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] as const }}
+    >
+      <div className="flex items-center gap-2 mb-1">
+        <span className="text-sm" style={{ color: accent }}>🎓</span>
+        <span className="text-[11px] font-mono tracking-[0.15em] uppercase" style={{ color: accent }}>
+          {education.period}
+        </span>
+      </div>
+      <h4 className="text-[15px] font-semibold text-[var(--fg)] mb-0.5">{education.degree}</h4>
+      <p className="text-[13px] text-[var(--fg-2)]">{education.field}</p>
+      <p className="text-[12px] font-mono text-[var(--fg-3)] mt-1">{education.institution}</p>
+      {education.description && (
+        <p className="text-[13px] text-[var(--fg-2)] leading-relaxed mt-2">{education.description}</p>
+      )}
     </motion.div>
   );
 }

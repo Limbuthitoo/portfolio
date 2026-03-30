@@ -42,4 +42,13 @@ export const siteConfig: SiteConfig = {
     { emoji: '📚', label: 'Learning', value: 'Three.js & WebGL' },
     { emoji: '🎧', label: 'Listening', value: 'Lo-fi beats' },
   ],
+  education: [
+    {
+      institution: 'Your University',
+      degree: 'Bachelor\'s Degree',
+      field: 'Computer Science',
+      period: '2018 — 2022',
+      description: 'Studied computer science with a focus on web technologies and user interface design.',
+    },
+  ],
 };

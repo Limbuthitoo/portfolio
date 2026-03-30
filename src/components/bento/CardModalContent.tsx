@@ -246,7 +246,7 @@ export function QuickLinksExpanded({ siteConfig }: { siteConfig?: SiteConfig }) 
     ...(social?.linkedin ? [{ label: "LinkedIn", href: social.linkedin, ext: true, desc: "Professional network and updates" }] : []),
     ...(social?.dribbble ? [{ label: "Dribbble", href: social.dribbble, ext: true, desc: "Design shots and visual work" }] : []),
     ...(social?.behance ? [{ label: "Behance", href: social.behance, ext: true, desc: "Design case studies and projects" }] : []),
-    { label: "Resume", href: "/about", ext: false, desc: "Full background and experience" },
+    { label: "Resume", href: "/resume", ext: false, desc: "Download CV / Resume" },
     { label: "Email", href: `mailto:${email}`, ext: true, desc: email },
   ];
 

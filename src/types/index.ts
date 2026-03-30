@@ -111,6 +111,15 @@ export interface SiteConfig {
   skills?: SkillGroup[];
   capabilities?: Capability[];
   currently?: CurrentlyItem[];
+  education?: Education[];
+}
+
+export interface Education {
+  institution: string;
+  degree: string;
+  field: string;
+  period: string;
+  description?: string;
 }
 
 export interface CurrentlyItem {

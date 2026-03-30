@@ -11,7 +11,7 @@ export default function QuickLinks({ siteConfig }: { siteConfig?: SiteConfig }) 
     ...(social?.github ? [{ label: "GitHub", href: social.github, ext: true, icon: "↗" }] : []),
     ...(social?.linkedin ? [{ label: "LinkedIn", href: social.linkedin, ext: true, icon: "↗" }] : []),
     ...(social?.dribbble ? [{ label: "Dribbble", href: social.dribbble, ext: true, icon: "↗" }] : []),
-    { label: "Resume", href: "/about", ext: false, icon: "→" },
+    { label: "Resume", href: "/resume", ext: false, icon: "→" },
     { label: "Email", href: `mailto:${email}`, ext: true, icon: "↗" },
   ];
   return (
