@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -14,6 +15,18 @@ const DOCK_ITEMS = [
 
 export default function Dock() {
   const pathname = usePathname();
+  const [tappedLabel, setTappedLabel] = useState<string | null>(null);
+
+  // Auto-hide tapped label after 1.5s
+  useEffect(() => {
+    if (!tappedLabel) return;
+    const t = setTimeout(() => setTappedLabel(null), 1500);
+    return () => clearTimeout(t);
+  }, [tappedLabel]);
+
+  const handleTap = useCallback((label: string) => {
+    setTappedLabel((prev) => (prev === label ? null : label));
+  }, []);
 
   if (pathname.startsWith("/dashboard")) return null;
   if (pathname.startsWith("/games/")) return null;
@@ -24,7 +37,7 @@ export default function Dock() {
         {DOCK_ITEMS.map((item) => {
           const isActive = pathname === item.href;
           return (
-            <Link key={item.href} href={item.href} data-cursor={item.label}>
+            <Link key={item.href} href={item.href} data-cursor={item.label} onClick={() => handleTap(item.label)}>
               <motion.div
                 className="relative flex flex-col items-center group"
                 whileHover={{ y: -8, scale: 1.15 }}
@@ -67,8 +80,12 @@ export default function Dock() {
                   />
                 )}
 
-                {/* Tooltip */}
-                <div className="absolute -top-8 px-2.5 py-1 rounded-lg bg-[var(--dock-bg)] backdrop-blur-xl border border-[var(--border)] text-[10px] font-medium text-[var(--fg)] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                {/* Tooltip — hover on desktop, tap-to-show on mobile (auto-hides) */}
+                <div
+                  className={`absolute -top-8 px-2.5 py-1 rounded-lg bg-[var(--dock-bg)] backdrop-blur-xl border border-[var(--border)] text-[10px] font-medium text-[var(--fg)] transition-opacity pointer-events-none whitespace-nowrap ${
+                    tappedLabel === item.label ? "opacity-100" : "opacity-0 sm:group-hover:opacity-100"
+                  }`}
+                >
                   {item.label}
                 </div>
               </motion.div>
