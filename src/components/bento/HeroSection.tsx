@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion";
 import Link from "next/link";
 import { SiteConfig } from "@/types";
@@ -14,6 +14,21 @@ const DEFAULT_ROLES = [
   "Creative Technologist",
 ];
 
+/* ─── Cinematic stagger sequence ─── */
+const heroSequence = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12, delayChildren: 0.1 } },
+};
+const heroChild = (delay = 0) => ({
+  hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] as const },
+  },
+});
+
 export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig }) {
   const roles = siteConfig?.roles?.length ? siteConfig.roles : DEFAULT_ROLES;
   const { index: roleIdx } = useRotatingText(roles);
@@ -22,6 +37,13 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
   const lastName = rest.join(" ");
   const tagline = siteConfig?.title || "Creative Frontend Developer";
   const availability = siteConfig?.availability || "Available for work";
+
+  /* Reveal curtain */
+  const [revealed, setRevealed] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setRevealed(true), 100);
+    return () => clearTimeout(t);
+  }, []);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
@@ -120,16 +142,19 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
         </div>
 
         {/* Main layout — left text + right image */}
-        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-stretch">
+        <motion.div
+          className="relative z-10 flex flex-col md:flex-row items-start md:items-stretch"
+          variants={heroSequence}
+          initial="hidden"
+          animate={revealed ? "show" : "hidden"}
+        >
 
           {/* Left content */}
           <div className="flex-1 px-5 sm:px-8 md:px-12 lg:px-16 py-8 sm:py-14 md:py-20 lg:py-24 w-full md:max-w-2xl">
             {/* Status badge */}
             <motion.div
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--violet)]/20 bg-[var(--violet)]/5 mb-8"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
+              variants={heroChild(0)}
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--emerald)] animate-pulse" />
               <span className="text-[12px] font-medium text-[var(--fg-2)] tracking-wide">
@@ -137,36 +162,55 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
               </span>
             </motion.div>
 
-            {/* Name */}
+            {/* Name — split letter reveal */}
             <motion.h1
-              className="text-3xl sm:text-4xl md:text-6xl lg:text-[5.5rem] font-extrabold tracking-tight leading-[0.95] mb-4 sm:mb-6"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.2,
-                duration: 0.7,
-                ease: [0.16, 1, 0.3, 1],
-              }}
+              className="text-3xl sm:text-4xl md:text-6xl lg:text-[5.5rem] font-extrabold tracking-tight leading-[0.95] mb-4 sm:mb-6 overflow-hidden"
+              variants={heroChild(0)}
             >
-              {firstName}
-              <br />
-              <span
-                className="bg-clip-text text-transparent"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(135deg, var(--violet) 0%, var(--cyan) 100%)",
-                }}
-              >
-                {lastName}
+              <span className="block overflow-hidden">
+                {firstName.split("").map((char, i) => (
+                  <motion.span
+                    key={i}
+                    className="inline-block"
+                    initial={{ y: "120%", rotateX: -40 }}
+                    animate={revealed ? { y: "0%", rotateX: 0 } : {}}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.2 + i * 0.04,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
+              </span>
+              <span className="block overflow-hidden">
+                {lastName.split("").map((char, i) => (
+                  <motion.span
+                    key={i}
+                    className="inline-block bg-clip-text text-transparent"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(135deg, var(--violet) 0%, var(--cyan) 100%)",
+                    }}
+                    initial={{ y: "120%", rotateX: -40 }}
+                    animate={revealed ? { y: "0%", rotateX: 0 } : {}}
+                    transition={{
+                      duration: 0.8,
+                      delay: 0.35 + i * 0.04,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                  >
+                    {char}
+                  </motion.span>
+                ))}
               </span>
             </motion.h1>
 
-            {/* Description */}
+            {/* Description — line reveal */}
             <motion.p
               className="text-sm md:text-base text-[var(--fg-2)] max-w-md leading-relaxed mb-8"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.35 }}
+              variants={heroChild(0.15)}
             >
               {tagline}
             </motion.p>
@@ -174,9 +218,7 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
             {/* Rotating role */}
             <motion.div
               className="h-6 mb-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
+              variants={heroChild(0.2)}
             >
               <AnimatePresence mode="wait">
                 <motion.span
@@ -188,7 +230,12 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
                   exit={{ y: -12, opacity: 0, filter: "blur(4px)" }}
                   transition={{ duration: 0.3 }}
                 >
-                  <span className="w-3 h-px bg-[var(--violet)]" />
+                  <motion.span
+                    className="w-3 h-px bg-[var(--violet)]"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 0.4, delay: 0.1 }}
+                  />
                   {roles[roleIdx]}
                 </motion.span>
               </AnimatePresence>
@@ -197,9 +244,7 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
             {/* CTAs */}
             <motion.div
               className="flex items-center gap-3 mb-8 sm:mb-14"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
+              variants={heroChild(0.3)}
             >
               <MagneticButton strength={0.4}>
                 <Link
@@ -232,9 +277,9 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
                 rotateY: imgRotateY,
                 rotateX: imgRotateX,
               }}
-              initial={{ opacity: 0, scale: 0.85, x: 40 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              transition={{ delay: 0.3, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, scale: 0.7, x: 60, filter: "blur(12px)" }}
+              animate={revealed ? { opacity: 1, scale: 1, x: 0, filter: "blur(0px)" } : {}}
+              transition={{ delay: 0.5, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             >
               {/* Glow behind */}
               <div
@@ -253,7 +298,7 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
               </motion.div>
             </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
