@@ -47,7 +47,7 @@ export default function AboutPageClient({
       <div className="max-w-[1200px] mx-auto">
 
         {/* ── Hero Section ── */}
-        <section className="mb-16 md:mb-24">
+        <section className="mb-12 md:mb-16">
           <motion.div
             className="flex items-center gap-2 mb-6"
             initial={{ opacity: 0, y: -10 }}
@@ -58,7 +58,7 @@ export default function AboutPageClient({
             <span className="text-[12px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">About</span>
           </motion.div>
 
-          <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-12 mb-8">
+          <div className="flex flex-col md:flex-row md:items-start gap-6 md:gap-12 mb-4">
             <motion.div
               className="flex-1"
               initial={{ opacity: 0, y: 30 }}
@@ -78,6 +78,20 @@ export default function AboutPageClient({
                 <br />
                 design & code.
               </h1>
+
+              <p className="text-sm md:text-base text-[var(--fg-2)] leading-relaxed max-w-2xl">
+                {siteConfig.description}
+              </p>
+
+              {/* Role + Location */}
+              <div className="flex items-center gap-4 mt-4 flex-wrap">
+                <span className="inline-flex items-center gap-2 text-xs font-mono text-[var(--violet)]">
+                  <span className="w-3 h-px bg-[var(--violet)]" />
+                  {siteConfig.role}
+                </span>
+                <span className="text-[var(--fg-3)]">·</span>
+                <span className="text-xs font-mono text-[var(--fg-3)]">{siteConfig.location}</span>
+              </div>
             </motion.div>
 
             {/* UI/UX Illustration — right side */}
@@ -90,32 +104,6 @@ export default function AboutPageClient({
               <AboutIllustration />
             </motion.div>
           </div>
-
-          <motion.div
-            className="max-w-2xl"
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35 }}
-          >
-            <p className="text-sm md:text-base text-[var(--fg-2)] leading-relaxed">
-              {siteConfig.description}
-            </p>
-          </motion.div>
-
-          {/* Role + Location */}
-          <motion.div
-            className="flex items-center gap-4 mt-6 flex-wrap"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.45 }}
-          >
-            <span className="inline-flex items-center gap-2 text-xs font-mono text-[var(--violet)]">
-              <span className="w-3 h-px bg-[var(--violet)]" />
-              {siteConfig.role}
-            </span>
-            <span className="text-[var(--fg-3)]">·</span>
-            <span className="text-xs font-mono text-[var(--fg-3)]">{siteConfig.location}</span>
-          </motion.div>
         </section>
 
         {/* ── Stats ── */}
