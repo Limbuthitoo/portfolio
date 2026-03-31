@@ -36,6 +36,31 @@ export default function MeshBackground() {
         }}
       />
 
+      {/* ── Floating micro orbs ── */}
+      {[
+        { color: "var(--cyan)", size: 4, x: "15%", y: "25%", dur: 8, del: 0 },
+        { color: "var(--violet)", size: 3, x: "75%", y: "15%", dur: 10, del: 2 },
+        { color: "var(--cyan)", size: 5, x: "85%", y: "60%", dur: 12, del: 1 },
+        { color: "var(--violet)", size: 3, x: "25%", y: "70%", dur: 9, del: 3 },
+        { color: "var(--rose)", size: 2, x: "50%", y: "45%", dur: 11, del: 4 },
+        { color: "var(--cyan)", size: 3, x: "60%", y: "80%", dur: 7, del: 2 },
+      ].map((orb, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            width: orb.size,
+            height: orb.size,
+            left: orb.x,
+            top: orb.y,
+            background: orb.color,
+            boxShadow: `0 0 ${orb.size * 4}px ${orb.color}`,
+            opacity: 0.4,
+            animation: `orb-float ${orb.dur}s ease-in-out ${orb.del}s infinite`,
+          }}
+        />
+      ))}
+
       {/* Perspective grid floor */}
       <div
         className="absolute bottom-0 left-0 right-0 h-[40vh]"
