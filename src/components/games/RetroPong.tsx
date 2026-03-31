@@ -97,10 +97,10 @@ export default function RetroPong() {
       if (s.phase === "playing") {
         // Player paddle
         const keys = keysRef.current;
-        if (keys.has("ArrowUp") || keys.has("w")) {
+        if (keys.has("arrowup") || keys.has("w")) {
           s.playerY = Math.max(PADDLE_H / 2, s.playerY - PADDLE_SPEED * dt);
         }
-        if (keys.has("ArrowDown") || keys.has("s")) {
+        if (keys.has("arrowdown") || keys.has("s")) {
           s.playerY = Math.min(CANVAS_H - PADDLE_H / 2, s.playerY + PADDLE_SPEED * dt);
         }
 
