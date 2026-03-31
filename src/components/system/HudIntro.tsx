@@ -421,7 +421,7 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
               </motion.h1>
 
               <motion.p
-                className="text-[11px] font-mono text-[var(--fg-3)] tracking-[0.15em] uppercase mb-8"
+                className="text-[11px] font-mono text-[var(--fg-3)] tracking-[0.15em] uppercase mb-5 sm:mb-8"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7, duration: 0.5 }}
@@ -431,7 +431,7 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
 
               {/* Boot progress bar */}
               <motion.div
-                className="w-full max-w-xs mb-6"
+                className="w-full max-w-xs mb-4 sm:mb-6"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
@@ -457,7 +457,7 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
 
               {/* Boot log */}
               <motion.div
-                className="w-full max-w-xs mb-8 h-28 overflow-hidden"
+                className="w-full max-w-xs mb-5 sm:mb-8 h-20 sm:h-28 overflow-hidden"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
@@ -485,7 +485,7 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
               {/* START button */}
               <motion.button
                 onClick={handleStart}
-                className="group relative px-10 py-3 cursor-pointer"
+                className="group relative px-8 sm:px-10 py-3 cursor-pointer"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: bootProgress >= 100 ? 1 : 0.3, scale: bootProgress >= 100 ? 1 : 0.95 }}
                 transition={{ delay: 0.2, duration: 0.5, type: "spring", stiffness: 200 }}
@@ -524,7 +524,7 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
                   />
                 )}
                 <span
-                  className="relative text-[11px] font-mono tracking-[0.4em] uppercase font-bold"
+                  className="relative text-[10px] sm:text-[11px] font-mono tracking-[0.3em] sm:tracking-[0.4em] uppercase font-bold"
                   style={{
                     background: bootProgress >= 100
                       ? "linear-gradient(135deg, var(--cyan), var(--violet))"

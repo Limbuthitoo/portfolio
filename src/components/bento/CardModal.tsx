@@ -22,12 +22,25 @@ export default function CardModal({ isOpen, onClose, title, children }: CardModa
     return () => document.removeEventListener("keydown", onKey);
   }, [isOpen, onClose]);
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (!isOpen) return;
+    const scrollWrapper = document.querySelector('.bento-scroll') as HTMLElement;
+    if (scrollWrapper) scrollWrapper.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    return () => {
+      if (scrollWrapper) scrollWrapper.style.overflow = '';
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
         <motion.div
           ref={overlayRef}
-          className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8"
+          className="fixed inset-0 z-[9999] overflow-y-auto"
+          style={{ isolation: 'isolate' }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -36,12 +49,14 @@ export default function CardModal({ isOpen, onClose, title, children }: CardModa
         >
           {/* Backdrop */}
           <motion.div
-            className="absolute inset-0 bg-black/60 backdrop-blur-md"
+            className="fixed inset-0 bg-black/60 backdrop-blur-md"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           />
 
+          {/* Centering container */}
+          <div className="min-h-full flex items-center justify-center p-4 md:p-8" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
           {/* Modal */}
           <motion.div
             className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-2xl border border-[var(--border)] bg-[var(--bg-elevated)] shadow-[0_0_60px_rgba(0,0,0,0.5)]"
@@ -70,6 +85,7 @@ export default function CardModal({ isOpen, onClose, title, children }: CardModa
               {children}
             </div>
           </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
