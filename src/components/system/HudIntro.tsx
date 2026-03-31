@@ -69,6 +69,9 @@ function CrosshairCorner({ position }: { position: "tl" | "tr" | "bl" | "br" }) 
   );
 }
 
+// Module-level flag: only show HUD once per full page load (survives remounts but not refresh)
+let hudShownThisLoad = false;
+
 export default function HudIntro({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -80,8 +83,11 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
   const [loadLabel, setLoadLabel] = useState("INITIALIZING CORE");
 
   useEffect(() => {
-    setShowHud(true);
-    // Prefetch home so transition is instant (no loading.tsx flash)
+    if (hudShownThisLoad) {
+      setShowHud(false);
+    } else {
+      setShowHud(true);
+    }
     router.prefetch("/");
   }, [router]);
 
@@ -141,6 +147,7 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
         frame = requestAnimationFrame(tick);
       } else {
         setTimeout(() => {
+          hudShownThisLoad = true;
           if (pathname !== "/") router.replace("/");
           setPhase("done");
         }, 600);
