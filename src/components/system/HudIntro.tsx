@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 const BOOT_LINES = [
@@ -69,6 +70,8 @@ function CrosshairCorner({ position }: { position: "tl" | "tr" | "bl" | "br" }) 
 }
 
 export default function HudIntro({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [showHud, setShowHud] = useState<boolean | null>(null);
   const [phase, setPhase] = useState<"boot" | "loading" | "done">("boot");
   const [bootProgress, setBootProgress] = useState(0);
@@ -135,7 +138,10 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
       if (current < 100) {
         frame = requestAnimationFrame(tick);
       } else {
-        setTimeout(() => setPhase("done"), 600);
+        setTimeout(() => {
+          if (pathname !== "/") router.push("/");
+          setPhase("done");
+        }, 600);
       }
     };
     frame = requestAnimationFrame(tick);
@@ -524,13 +530,9 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
                   />
                 )}
                 <span
-                  className="relative text-[10px] sm:text-[11px] font-mono tracking-[0.3em] sm:tracking-[0.4em] uppercase font-bold"
+                  className="relative text-[11px] sm:text-[12px] font-mono tracking-[0.3em] sm:tracking-[0.4em] uppercase font-bold"
                   style={{
-                    background: bootProgress >= 100
-                      ? "linear-gradient(135deg, var(--cyan), var(--violet))"
-                      : "var(--fg-3)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
+                    color: bootProgress >= 100 ? "var(--cyan)" : "var(--fg-3)",
                   }}
                 >
                   {bootProgress >= 100 ? "INITIALIZE" : "BOOTING..."}
