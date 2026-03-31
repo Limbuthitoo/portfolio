@@ -110,24 +110,24 @@ export default function TiltCard({ children, className = '', tiltStrength = 8 }:
   }, []);
 
   return (
-    <div style={{ perspective: 1200 }}>
-      <motion.div
-        ref={ref}
-        className={`${className} relative group rounded-[var(--card-radius)]`}
-        style={{
-          rotateX: springRotateX,
-          rotateY: springRotateY,
-          transformStyle: 'preserve-3d',
-        }}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={handleMouseLeave}
-        whileHover={{ scale: 1.02 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      >
-        {children}
+    <motion.div
+      ref={ref}
+      className={`${className} relative group rounded-[var(--card-radius)]`}
+      style={{
+        rotateX: springRotateX,
+        rotateY: springRotateY,
+        transformStyle: 'preserve-3d',
+        transformPerspective: 1200,
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+    >
+      {children}
 
-        {/* ── Rotating conic gradient border (same as dock) ── */}
+      {/* ── Rotating conic gradient border (same as dock) ── */}
         <div
           className="absolute -inset-px rounded-[var(--card-radius)] pointer-events-none z-10 overflow-hidden"
           style={{
@@ -177,6 +177,5 @@ export default function TiltCard({ children, className = '', tiltStrength = 8 }:
           }}
         />
       </motion.div>
-    </div>
   );
 }
