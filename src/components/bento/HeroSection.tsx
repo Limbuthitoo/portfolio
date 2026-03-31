@@ -164,7 +164,7 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
 
             {/* Name — split letter reveal */}
             <motion.h1
-              className="text-3xl sm:text-4xl md:text-6xl lg:text-[5.5rem] font-extrabold tracking-tight leading-[0.95] mb-4 sm:mb-6 overflow-hidden"
+              className="text-[clamp(2rem,8vw,5.5rem)] font-extrabold tracking-tight leading-[0.95] mb-4 sm:mb-6 overflow-hidden"
               variants={heroChild(0)}
             >
               <span className="block overflow-hidden">
@@ -184,11 +184,11 @@ export default function HeroSection({ siteConfig }: { siteConfig?: SiteConfig })
                   </motion.span>
                 ))}
               </span>
-              <span className="block overflow-hidden">
+              <span className="block overflow-hidden whitespace-nowrap">
                 {lastName.split("").map((char, i) => (
                   <motion.span
                     key={i}
-                    className={`inline-block bg-clip-text text-transparent${char === " " ? " w-[0.25em]" : ""}`}
+                    className={`inline-block bg-clip-text text-transparent${char === " " ? " w-[0.3em]" : ""}`}
                     style={{
                       backgroundImage:
                         "linear-gradient(135deg, var(--violet) 0%, var(--cyan) 100%)",
