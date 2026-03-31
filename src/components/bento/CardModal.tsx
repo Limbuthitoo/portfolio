@@ -29,15 +29,21 @@ export default function CardModal({ isOpen, onClose, title, children }: CardModa
   // Lock body scroll when modal is open
   useEffect(() => {
     if (!isOpen) return;
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
     const scrollWrapper = document.querySelector('.bento-scroll') as HTMLElement;
-    if (scrollWrapper) scrollWrapper.style.overflow = 'hidden';
+    const scrollbarWidth = scrollWrapper
+      ? scrollWrapper.offsetWidth - scrollWrapper.clientWidth
+      : window.innerWidth - document.documentElement.clientWidth;
+    if (scrollWrapper) {
+      scrollWrapper.style.overflow = 'hidden';
+      scrollWrapper.style.paddingRight = `${scrollbarWidth}px`;
+    }
     document.body.style.overflow = 'hidden';
-    document.body.style.paddingRight = `${scrollbarWidth}px`;
     return () => {
-      if (scrollWrapper) scrollWrapper.style.overflow = '';
+      if (scrollWrapper) {
+        scrollWrapper.style.overflow = '';
+        scrollWrapper.style.paddingRight = '';
+      }
       document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
     };
   }, [isOpen]);
 

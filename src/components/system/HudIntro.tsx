@@ -542,16 +542,14 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
               </motion.button>
 
               {/* Bottom hint */}
-              {bootProgress >= 100 && (
-                <motion.span
-                  className="text-[8px] font-mono text-[var(--fg-3)]/50 tracking-[0.2em] uppercase mt-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 0.5, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  Press to enter
-                </motion.span>
-              )}
+              <motion.span
+                className="text-[8px] font-mono text-[var(--fg-3)]/50 tracking-[0.2em] uppercase mt-4 h-4"
+                initial={{ opacity: 0 }}
+                animate={bootProgress >= 100 ? { opacity: [0, 0.5, 0] } : { opacity: 0 }}
+                transition={bootProgress >= 100 ? { duration: 2, repeat: Infinity } : {}}
+              >
+                Press to enter
+              </motion.span>
             </motion.div>
 
             {/* Bottom status bar */}

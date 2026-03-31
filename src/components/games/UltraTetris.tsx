@@ -346,7 +346,7 @@ export default function UltraTetris() {
       {/* ── Mobile: fullscreen overlay ── */}
       <div className="fixed inset-0 z-[100] bg-[#060606] flex flex-col sm:hidden">
         {/* Top bar */}
-        <div className="shrink-0 flex items-center justify-between px-4 py-2">
+        <div className="shrink-0 flex items-center justify-between px-3 py-1">
           <div className="flex items-center gap-4">
             <div>
               <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Score</div>
@@ -386,7 +386,7 @@ export default function UltraTetris() {
         </div>
 
         {/* Board */}
-        <div className="flex-1 flex items-center justify-center px-2">
+        <div className="flex-1 flex items-center justify-center px-1">
           <div
             className="rounded-xl border border-white/[0.08] bg-[#0a0a0a] overflow-hidden relative"
             style={{ width: boardW + 2, height: boardH + 2, padding: 1 }}
@@ -468,7 +468,7 @@ export default function UltraTetris() {
         </div>
 
         {/* Mobile controls */}
-        <div className="shrink-0 flex justify-center gap-3 px-4 py-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))]">
+        <div className="shrink-0 flex justify-center gap-2 px-3 py-1 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
           <button onClick={moveLeft} className="w-11 h-11 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">←</button>
           <button onClick={moveDown} className="w-11 h-11 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">↓</button>
           <button onClick={rotatePiece} className="w-11 h-11 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">↻</button>
