@@ -70,9 +70,11 @@ function CrosshairCorner({ position }: { position: "tl" | "tr" | "bl" | "br" }) 
 
 export default function HudIntro({ children }: { children: React.ReactNode }) {
   const [showHud, setShowHud] = useState<boolean | null>(null);
+  const [phase, setPhase] = useState<"boot" | "loading" | "done">("boot");
   const [bootProgress, setBootProgress] = useState(0);
   const [visibleLines, setVisibleLines] = useState(0);
-  const [exiting, setExiting] = useState(false);
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [loadLabel, setLoadLabel] = useState("INITIALIZING CORE");
 
   useEffect(() => {
     try {
@@ -107,30 +109,247 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
   }, [showHud]);
 
   const handleStart = useCallback(() => {
-    setExiting(true);
+    setPhase("loading");
     try {
       sessionStorage.setItem("hud-seen", "1");
     } catch {
       // ignore
     }
-    setTimeout(() => setShowHud(false), 800);
   }, []);
+
+  // Loading phase — animate percentage 0→100
+  useEffect(() => {
+    if (phase !== "loading") return;
+
+    const LABELS = [
+      { at: 0, text: "INITIALIZING CORE" },
+      { at: 15, text: "LOADING ASSETS" },
+      { at: 35, text: "RENDERING INTERFACE" },
+      { at: 55, text: "COMPILING SHADERS" },
+      { at: 75, text: "ESTABLISHING CONNECTION" },
+      { at: 90, text: "FINALIZING" },
+    ];
+
+    let frame: number;
+    let current = 0;
+    const speed = 0.8;
+
+    const tick = () => {
+      current += speed + Math.random() * 0.5;
+      if (current >= 100) current = 100;
+      setLoadProgress(Math.floor(current));
+
+      const label = LABELS.filter((l) => l.at <= current).pop();
+      if (label) setLoadLabel(label.text);
+
+      if (current < 100) {
+        frame = requestAnimationFrame(tick);
+      } else {
+        setTimeout(() => setPhase("done"), 600);
+      }
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [phase]);
 
   // Not yet determined
   if (showHud === null) return null;
 
-  // Already seen
-  if (!showHud) return <>{children}</>;
+  // Already seen or done loading
+  if (!showHud || phase === "done") return <>{children}</>;
 
   return (
     <>
-      <AnimatePresence>
-        {showHud && (
+      <AnimatePresence mode="wait">
+        {phase === "loading" ? (
+          /* ════════════════════════════════════════════
+             PHASE 2 — FULL-SCREEN PERCENTAGE LOADER
+             ════════════════════════════════════════════ */
           <motion.div
+            key="loader"
             className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden hud-intro"
             style={{ background: "var(--bg)", cursor: "default" }}
-            exit={{ opacity: 0, scale: 1.05 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 1.1, filter: "blur(20px)" }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {/* Background grid */}
+            <div
+              className="absolute inset-0 opacity-[0.03]"
+              style={{
+                backgroundImage: `
+                  linear-gradient(to right, var(--cyan) 1px, transparent 1px),
+                  linear-gradient(to bottom, var(--cyan) 1px, transparent 1px)
+                `,
+                backgroundSize: "40px 40px",
+              }}
+            />
+
+            {/* Radial vignette */}
+            <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(circle at center, transparent 20%, var(--bg) 80%)" }} />
+
+            {/* Center content */}
+            <div className="relative z-10 flex flex-col items-center">
+
+              {/* ── Circular progress ring ── */}
+              <div className="relative w-48 h-48 sm:w-64 sm:h-64 mb-8">
+                {/* Outer track */}
+                <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 200 200">
+                  <circle cx="100" cy="100" r="90" fill="none" stroke="var(--border)" strokeWidth="1" opacity="0.3" />
+                  {/* Progress arc */}
+                  <circle
+                    cx="100" cy="100" r="90"
+                    fill="none"
+                    stroke="url(#progressGrad)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeDasharray={`${2 * Math.PI * 90}`}
+                    strokeDashoffset={`${2 * Math.PI * 90 * (1 - loadProgress / 100)}`}
+                    style={{ transition: "stroke-dashoffset 0.1s ease-out" }}
+                  />
+                  {/* Inner ring */}
+                  <circle
+                    cx="100" cy="100" r="78"
+                    fill="none"
+                    stroke="var(--border)"
+                    strokeWidth="0.5"
+                    opacity="0.2"
+                    strokeDasharray="4 8"
+                  />
+                  <defs>
+                    <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="var(--cyan)" />
+                      <stop offset="100%" stopColor="var(--violet)" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+
+                {/* Rotating outer dashes */}
+                <div
+                  className="absolute inset-0"
+                  style={{ animation: "spin 8s linear infinite" }}
+                >
+                  <svg className="w-full h-full" viewBox="0 0 200 200">
+                    <circle
+                      cx="100" cy="100" r="96"
+                      fill="none"
+                      stroke="var(--cyan)"
+                      strokeWidth="0.5"
+                      opacity="0.2"
+                      strokeDasharray="2 14"
+                    />
+                  </svg>
+                </div>
+
+                {/* Orbiting dot */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    animation: "spin 3s linear infinite",
+                  }}
+                >
+                  <div
+                    className="absolute w-2 h-2 rounded-full left-1/2 -translate-x-1/2 -top-1"
+                    style={{
+                      background: "var(--cyan)",
+                      boxShadow: "0 0 12px var(--cyan), 0 0 24px var(--cyan)",
+                    }}
+                  />
+                </div>
+
+                {/* Center percentage */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <motion.span
+                    className="text-5xl sm:text-7xl font-bold font-mono tabular-nums"
+                    style={{
+                      background: "linear-gradient(135deg, var(--cyan), var(--violet))",
+                      WebkitBackgroundClip: "text",
+                      WebkitTextFillColor: "transparent",
+                      textShadow: "none",
+                    }}
+                  >
+                    {loadProgress}
+                  </motion.span>
+                  <span className="text-[10px] font-mono tracking-[0.3em] text-[var(--fg-3)] uppercase">
+                    percent
+                  </span>
+                </div>
+
+                {/* Glow behind ring */}
+                <div
+                  className="absolute inset-4 rounded-full pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle, rgba(0,240,255,${0.03 + loadProgress * 0.001}), transparent 70%)`,
+                    filter: "blur(20px)",
+                  }}
+                />
+              </div>
+
+              {/* Status label */}
+              <motion.div
+                className="flex items-center gap-2 mb-3"
+                key={loadLabel}
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <div
+                  className="w-1 h-1 rounded-full"
+                  style={{
+                    background: "var(--cyan)",
+                    boxShadow: "0 0 6px var(--cyan)",
+                    animation: "loading-pulse 1s ease-in-out infinite",
+                  }}
+                />
+                <span className="text-[9px] font-mono tracking-[0.25em] uppercase" style={{ color: "var(--cyan)" }}>
+                  {loadLabel}
+                </span>
+              </motion.div>
+
+              {/* Horizontal progress bar */}
+              <div className="w-48 sm:w-64 h-[2px] bg-[var(--border)]/30 rounded-full overflow-hidden mb-6">
+                <div
+                  className="h-full rounded-full"
+                  style={{
+                    background: "linear-gradient(90deg, var(--cyan), var(--violet))",
+                    width: `${loadProgress}%`,
+                    transition: "width 0.1s ease-out",
+                    boxShadow: "0 0 8px var(--cyan)",
+                  }}
+                />
+              </div>
+
+              {/* HEX data readout */}
+              <div className="flex items-center gap-4 opacity-30">
+                <span className="text-[7px] font-mono text-[var(--fg-3)] tracking-wider">
+                  0x{loadProgress.toString(16).toUpperCase().padStart(2, "0")}FF
+                </span>
+                <span className="text-[7px] font-mono text-[var(--fg-3)] tracking-wider">
+                  MEM: {(loadProgress * 0.48).toFixed(0)}MB
+                </span>
+                <span className="text-[7px] font-mono text-[var(--fg-3)] tracking-wider">
+                  THR: {Math.min(loadProgress, 8)}
+                </span>
+              </div>
+            </div>
+
+            {/* Corner decorations */}
+            <CrosshairCorner position="tl" />
+            <CrosshairCorner position="tr" />
+            <CrosshairCorner position="bl" />
+            <CrosshairCorner position="br" />
+          </motion.div>
+        ) : (
+          /* ════════════════════════════════════════════
+             PHASE 1 — BOOT SEQUENCE HUD
+             ════════════════════════════════════════════ */
+          <motion.div
+            key="boot"
+            className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden hud-intro"
+            style={{ background: "var(--bg)", cursor: "default" }}
+            exit={{ opacity: 0, filter: "blur(10px)" }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             {/* Background grid */}
             <div
@@ -175,8 +394,8 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
             <motion.div
               className="relative z-10 flex flex-col items-center max-w-lg w-full px-6"
               initial={{ opacity: 0 }}
-              animate={{ opacity: exiting ? 0 : 1 }}
-              transition={{ duration: exiting ? 0.4 : 0.8, delay: exiting ? 0 : 0.2 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
             >
               {/* Top label */}
               <motion.div
@@ -364,8 +583,8 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
         )}
       </AnimatePresence>
 
-      {/* Show children underneath (hidden behind HUD overlay until dismissed) */}
-      <div style={{ visibility: showHud ? "hidden" : "visible" }}>
+      {/* Children preload hidden underneath */}
+      <div style={{ visibility: "hidden", position: "fixed", inset: 0, zIndex: -1 }}>
         {children}
       </div>
     </>
