@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import { Project } from "@/types";
 import MagneticButton from "@/components/common/MagneticButton";
+import TiltCard from "@/components/common/TiltCard";
 
 const ACCENT_DATA = [
   { color: "var(--cyan)", rgb: "0,240,255" },
@@ -134,14 +135,17 @@ export default function UIUXDetailClient({ project, nextProject, currentIndex }:
               {project.responsibilities.map((r, i) => (
                 <motion.div
                   key={i}
-                  className="flex items-start gap-2.5 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 hover:border-[var(--border-hover)] transition-all duration-300"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] as const }}
                 >
+                  <TiltCard className="h-full" tiltStrength={4}>
+                  <div className="flex items-start gap-2.5 rounded-[var(--card-radius)] border border-[var(--border)] bg-[var(--surface)] p-5 hover:border-[var(--border-hover)] transition-all duration-300 h-full">
                   <div className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ background: accent.color }} />
                   <span className="text-[13px] text-[var(--fg-2)] leading-relaxed">{r}</span>
+                  </div>
+                  </TiltCard>
                 </motion.div>
               ))}
             </div>
@@ -179,12 +183,13 @@ export default function UIUXDetailClient({ project, nextProject, currentIndex }:
                 {project.research.quotes.map((q, i) => (
                   <motion.div
                     key={i}
-                    className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 hover:border-[var(--border-hover)] transition-all duration-300"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
                   >
+                    <TiltCard className="h-full" tiltStrength={4}>
+                    <div className="rounded-[var(--card-radius)] border border-[var(--border)] bg-[var(--surface)] p-6 hover:border-[var(--border-hover)] transition-all duration-300 h-full">
                     <blockquote className="text-[14px] italic leading-[1.8] text-[var(--fg-2)] mb-3">
                       &ldquo;{q.text}&rdquo;
                     </blockquote>
@@ -194,6 +199,8 @@ export default function UIUXDetailClient({ project, nextProject, currentIndex }:
                       </span>
                       <span className="text-[10px] text-[var(--fg-3)]">→ {q.insight}</span>
                     </div>
+                    </div>
+                    </TiltCard>
                   </motion.div>
                 ))}
               </div>
@@ -211,12 +218,13 @@ export default function UIUXDetailClient({ project, nextProject, currentIndex }:
               {project.personas.map((p, i) => (
                 <motion.div
                   key={i}
-                  className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 hover:border-[var(--border-hover)] transition-all duration-300"
                   initial={{ opacity: 0, y: 30, scale: 0.95 }}
                   whileInView={{ opacity: 1, y: 0, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] as const }}
                 >
+                  <TiltCard className="h-full" tiltStrength={4}>
+                  <div className="rounded-[var(--card-radius)] border border-[var(--border)] bg-[var(--surface)] p-6 hover:border-[var(--border-hover)] transition-all duration-300 h-full">
                   <div className="flex items-center gap-2.5 mb-3">
                     <div className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold" style={{ background: `rgba(${ACCENT_DATA[i % ACCENT_DATA.length].rgb},0.12)`, color: ACCENT_DATA[i % ACCENT_DATA.length].color }}>
                       {p.name.charAt(0)}
@@ -227,6 +235,8 @@ export default function UIUXDetailClient({ project, nextProject, currentIndex }:
                     </div>
                   </div>
                   <p className="text-[12px] text-[var(--fg-3)] leading-relaxed">{p.needs}</p>
+                  </div>
+                  </TiltCard>
                 </motion.div>
               ))}
             </div>
@@ -258,14 +268,17 @@ export default function UIUXDetailClient({ project, nextProject, currentIndex }:
               {project.designDecisions.map((d, i) => (
                 <motion.div
                   key={i}
-                  className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 md:p-8 hover:border-[var(--border-hover)] transition-all duration-300"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }}
                 >
+                  <TiltCard className="h-full" tiltStrength={4}>
+                  <div className="rounded-[var(--card-radius)] border border-[var(--border)] bg-[var(--surface)] p-6 md:p-8 hover:border-[var(--border-hover)] transition-all duration-300">
                   <h4 className="text-[15px] font-semibold text-[var(--fg)] mb-3">{d.question}</h4>
                   <p className="text-[14px] leading-[1.8] text-[var(--fg-2)]">{d.answer}</p>
+                  </div>
+                  </TiltCard>
                 </motion.div>
               ))}
             </div>
@@ -282,7 +295,7 @@ export default function UIUXDetailClient({ project, nextProject, currentIndex }:
           <div className="space-y-10">
             {project.keyScreens.map((screen, i) => (
               <RevealSection key={i}>
-                <div className="rounded-2xl border border-[var(--border)] overflow-hidden hover:border-[var(--border-hover)] transition-all duration-300">
+                <div className="rounded-[var(--card-radius)] border border-[var(--border)] overflow-hidden hover:border-[var(--border-hover)] transition-all duration-300">
                   {screen.image && (
                     <div className="relative aspect-[16/9] overflow-hidden group/img">
                       <motion.div
@@ -357,7 +370,7 @@ export default function UIUXDetailClient({ project, nextProject, currentIndex }:
         <div className="px-6 md:px-16 lg:px-24 py-16 md:py-24 max-w-[1400px] mx-auto">
           <SectionLabel text="Impact & Outcome" accent={accent} />
           {project.outcome ? (
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 md:p-8">
+            <div className="rounded-[var(--card-radius)] border border-[var(--border)] bg-[var(--surface)] p-6 md:p-8">
               {project.outcome.title && (
                 <h4 className="text-xl md:text-2xl font-bold mb-3" style={{ color: accent.color }}>
                   {project.outcome.title}

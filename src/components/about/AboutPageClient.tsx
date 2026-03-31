@@ -5,6 +5,7 @@ import { motion, useInView } from "framer-motion";
 import { SiteConfig, Experience, Education } from "@/types";
 import TextReveal from "@/components/common/TextReveal";
 import AnimatedText from "@/components/common/AnimatedText";
+import TiltCard from "@/components/common/TiltCard";
 
 const CAP_META = [
   { icon: "◆", color: "var(--rose)", rgb: "244,63,94" },
@@ -185,11 +186,12 @@ function StatCard({ stat, index }: { stat: { value: string; label: string; color
   return (
     <motion.div
       ref={ref}
-      className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 text-center hover:border-[var(--border-hover)] transition-colors"
       initial={{ opacity: 0, y: 40, scale: 0.9, filter: "blur(6px)" }}
       animate={inView ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : {}}
       transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] as const }}
     >
+      <TiltCard className="h-full" tiltStrength={6}>
+      <div className="rounded-[var(--card-radius)] border border-[var(--border)] bg-[var(--surface)] p-5 text-center hover:border-[var(--border-hover)] transition-colors h-full">
       <span
         className="text-2xl md:text-3xl font-bold block mb-1"
         style={{ color: stat.color, textShadow: `0 0 20px rgba(${stat.rgb},0.25)` }}
@@ -199,6 +201,8 @@ function StatCard({ stat, index }: { stat: { value: string; label: string; color
       <span className="text-[12px] font-mono text-[var(--fg-3)] tracking-[0.12em] uppercase">
         {stat.label}
       </span>
+      </div>
+      </TiltCard>
     </motion.div>
   );
 }
@@ -211,11 +215,12 @@ function CapabilityCard({ cap, index }: { cap: { category: string; skills: strin
   return (
     <motion.div
       ref={ref}
-      className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 hover:border-[var(--border-hover)] transition-colors group"
       initial={{ opacity: 0, y: 50, filter: "blur(6px)" }}
       animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
       transition={{ duration: 0.8, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] as const }}
     >
+      <TiltCard className="h-full" tiltStrength={5}>
+      <div className="rounded-[var(--card-radius)] border border-[var(--border)] bg-[var(--surface)] p-5 hover:border-[var(--border-hover)] transition-colors group h-full">
       <div className="flex items-center gap-2.5 mb-4">
         <span className="text-sm" style={{ color: cap.color }}>{cap.icon}</span>
         <h3 className="text-xs font-mono tracking-[0.15em] uppercase" style={{ color: cap.color }}>
@@ -232,6 +237,8 @@ function CapabilityCard({ cap, index }: { cap: { category: string; skills: strin
           </span>
         ))}
       </div>
+      </div>
+      </TiltCard>
     </motion.div>
   );
 }
@@ -257,7 +264,8 @@ function ExpCard({ experience, index }: { experience: Experience; index: number 
         style={{ background: accent, boxShadow: `0 0 8px ${accent}` }}
       />
 
-      <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 md:p-5 hover:border-[var(--border-hover)] transition-colors">
+      <TiltCard className="h-full" tiltStrength={4}>
+      <div className="rounded-[var(--card-radius)] border border-[var(--border)] bg-[var(--surface)] p-4 md:p-5 hover:border-[var(--border-hover)] transition-colors">
         <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-4 mb-2">
           <span className="text-[12px] font-mono text-[var(--fg-3)] tracking-wider shrink-0 sm:w-24 sm:pt-0.5">
             {experience.period}
@@ -278,6 +286,7 @@ function ExpCard({ experience, index }: { experience: Experience; index: number 
           {experience.description}
         </p>
       </div>
+      </TiltCard>
     </motion.div>
   );
 }
@@ -292,11 +301,12 @@ function EduCard({ education, index }: { education: Education; index: number }) 
   return (
     <motion.div
       ref={ref}
-      className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 hover:border-[var(--border-hover)] transition-colors"
       initial={{ opacity: 0, y: 40, filter: "blur(4px)" }}
       animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
       transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] as const }}
     >
+      <TiltCard className="h-full" tiltStrength={5}>
+      <div className="rounded-[var(--card-radius)] border border-[var(--border)] bg-[var(--surface)] p-5 hover:border-[var(--border-hover)] transition-colors h-full">
       <div className="flex items-center gap-2 mb-1">
         <span className="text-sm" style={{ color: accent }}>🎓</span>
         <span className="text-[11px] font-mono tracking-[0.15em] uppercase" style={{ color: accent }}>
@@ -309,6 +319,8 @@ function EduCard({ education, index }: { education: Education; index: number }) 
       {education.description && (
         <p className="text-[13px] text-[var(--fg-2)] leading-relaxed mt-2">{education.description}</p>
       )}
+      </div>
+      </TiltCard>
     </motion.div>
   );
 }

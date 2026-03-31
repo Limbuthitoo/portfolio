@@ -1,4 +1,5 @@
 import Link from "next/link";
+import GameCard from "./GameCard";
 
 export const metadata = {
   title: "Games — Bijay Subbalimbu",
@@ -25,18 +26,12 @@ export default function GamesPage() {
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Link
+          <GameCard
             href="/games/tetris"
-            className="group rounded-xl bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--violet)]/30 p-6 transition-colors"
-          >
-            <div className="text-4xl mb-4">🧱</div>
-            <h2 className="text-lg font-bold text-[var(--fg)] group-hover:text-[var(--violet)] transition-colors mb-1">
-              Ultra Tetris
-            </h2>
-            <p className="text-[var(--fg-3)] text-sm">
-              Classic block-stacking with levels, ghost pieces, and a global top 3 leaderboard.
-            </p>
-          </Link>
+            emoji="🧱"
+            title="Ultra Tetris"
+            description="Classic block-stacking with levels, ghost pieces, and a global top 3 leaderboard."
+          />
         </div>
       </div>
     </div>

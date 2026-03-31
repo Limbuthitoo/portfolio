@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { Project } from "@/types";
 import MagneticButton from "@/components/common/MagneticButton";
+import TiltCard from "@/components/common/TiltCard";
 
 const ACCENT_DATA = [
   { color: "var(--cyan)", rgb: "0,240,255" },
@@ -340,11 +341,12 @@ function CounterCard({ metric, index, accent }: { metric: { value: string; label
   return (
     <motion.div
       ref={ref}
-      className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 md:p-8 text-center hover:border-[var(--border-hover)] transition-all duration-300 group"
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
       animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] as const }}
     >
+      <TiltCard className="h-full" tiltStrength={6}>
+      <div className="rounded-[var(--card-radius)] border border-[var(--border)] bg-[var(--surface)] p-6 md:p-8 text-center hover:border-[var(--border-hover)] transition-all duration-300 group h-full">
       <motion.p
         className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-2"
         style={{ color: accent.color, textShadow: `0 0 30px rgba(${accent.rgb},0.2)` }}
@@ -357,6 +359,8 @@ function CounterCard({ metric, index, accent }: { metric: { value: string; label
       <p className="text-[12px] font-mono text-[var(--fg-3)] tracking-[0.15em] uppercase leading-tight">
         {metric.label}
       </p>
+      </div>
+      </TiltCard>
     </motion.div>
   );
 }
