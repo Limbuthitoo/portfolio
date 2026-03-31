@@ -17,16 +17,16 @@ export default function CustomCursor() {
     const lbl = labelRef.current;
     if (!dot || !ring) return;
 
-    // Lerp ring position toward actual cursor for smooth trailing
-    ringPos.current.x += (pos.current.x - ringPos.current.x) * 0.15;
-    ringPos.current.y += (pos.current.y - ringPos.current.y) * 0.15;
+    // Lerp ring position — fast follow, minimal lag
+    ringPos.current.x += (pos.current.x - ringPos.current.x) * 0.35;
+    ringPos.current.y += (pos.current.y - ringPos.current.y) * 0.35;
 
     const { hovering, hidden, clicking, label } = state.current;
 
-    // Dot: instant follow, no lag
+    // Dot: instant follow, tiny size
     dot.style.transform = `translate(${pos.current.x}px, ${pos.current.y}px) translate(-50%, -50%)`;
-    dot.style.opacity = hidden ? "0" : "1";
-    dot.style.width = dot.style.height = clicking ? "4px" : "8px";
+    dot.style.opacity = hidden ? "0" : hovering ? "0" : "1";
+    dot.style.width = dot.style.height = clicking ? "3px" : "5px";
 
     // Ring: smooth follow with lerp
     ring.style.transform = `translate(${ringPos.current.x}px, ${ringPos.current.y}px) translate(-50%, -50%)`;
@@ -96,17 +96,17 @@ export default function CustomCursor() {
 
   return (
     <div className="hidden md:block">
-      {/* Dot — instant position */}
+      {/* Dot — tiny, subtle */}
       <div
         ref={dotRef}
         className="fixed top-0 left-0 pointer-events-none z-[99999] rounded-full"
         style={{
-          width: 8,
-          height: 8,
-          background: "rgba(0,240,255,0.9)",
-          boxShadow: "0 0 10px rgba(0,240,255,0.4), 0 0 20px rgba(0,240,255,0.15)",
+          width: 5,
+          height: 5,
+          background: "rgba(0,240,255,0.7)",
+          boxShadow: "0 0 6px rgba(0,240,255,0.3)",
           willChange: "transform",
-          transition: "width 0.15s, height 0.15s",
+          transition: "width 0.15s, height 0.15s, opacity 0.15s",
         }}
       />
       {/* Ring — smooth trailing */}
