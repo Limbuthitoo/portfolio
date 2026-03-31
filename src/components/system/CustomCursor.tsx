@@ -3,34 +3,33 @@
 import { useEffect, useRef, useCallback } from "react";
 
 export default function CustomCursor() {
-  const ringRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
   const pos = useRef({ x: -100, y: -100 });
-  const ringPos = useRef({ x: -100, y: -100 });
-  const state = useRef({ hovering: false, hidden: false, clicking: false, label: "" });
+  const state = useRef({ hovering: false, hidden: false, label: "" });
   const rafId = useRef(0);
 
   const render = useCallback(() => {
-    const ring = ringRef.current;
+    const dot = dotRef.current;
     const lbl = labelRef.current;
-    if (!ring) return;
+    if (!dot) return;
 
-    // Lerp ring position — near-instant follow
-    ringPos.current.x += (pos.current.x - ringPos.current.x) * 0.8;
-    ringPos.current.y += (pos.current.y - ringPos.current.y) * 0.8;
+    const { hovering, hidden, label } = state.current;
+    const hasLabel = hovering && label;
 
-    const { hovering, hidden, clicking, label } = state.current;
-
-    // Ring: smooth follow with lerp
-    ring.style.transform = `translate(${ringPos.current.x}px, ${ringPos.current.y}px) translate(-50%, -50%)`;
-    ring.style.opacity = hidden ? "0" : "1";
-    ring.style.width = ring.style.height = hovering ? "56px" : "32px";
-    ring.style.borderColor = hovering ? "rgba(0,240,255,0.35)" : "rgba(0,240,255,0.15)";
-    ring.style.background = hovering ? "rgba(0,240,255,0.08)" : "rgba(255,255,255,0.03)";
+    // Direct position — no lerp, instant follow
+    dot.style.transform = `translate(${pos.current.x}px, ${pos.current.y}px) translate(-50%, -50%)`;
+    dot.style.opacity = hidden ? "0" : "1";
+    dot.style.width = dot.style.height = hasLabel ? "56px" : hovering ? "40px" : "8px";
+    dot.style.background = hovering ? "rgba(0,240,255,0.12)" : "rgba(0,240,255,0.9)";
+    dot.style.borderColor = hovering ? "rgba(0,240,255,0.4)" : "transparent";
+    dot.style.boxShadow = hovering
+      ? "0 0 16px rgba(0,240,255,0.15)"
+      : "0 0 6px rgba(0,240,255,0.4)";
 
     if (lbl) {
       lbl.textContent = label;
-      lbl.style.opacity = label ? "1" : "0";
+      lbl.style.opacity = hasLabel ? "1" : "0";
     }
 
     rafId.current = requestAnimationFrame(render);
@@ -60,16 +59,12 @@ export default function CustomCursor() {
       }
     };
 
-    const onDown = () => { state.current.clicking = true; };
-    const onUp = () => { state.current.clicking = false; };
     const onEnter = () => { state.current.hidden = false; };
     const onLeave = () => { state.current.hidden = true; };
 
     window.addEventListener("mousemove", onMove, { passive: true });
     document.addEventListener("mouseover", onOver, { passive: true });
     document.addEventListener("mouseout", onOut, { passive: true });
-    document.addEventListener("mousedown", onDown);
-    document.addEventListener("mouseup", onUp);
     document.addEventListener("mouseenter", onEnter);
     document.addEventListener("mouseleave", onLeave);
 
@@ -80,8 +75,6 @@ export default function CustomCursor() {
       window.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseover", onOver);
       document.removeEventListener("mouseout", onOut);
-      document.removeEventListener("mousedown", onDown);
-      document.removeEventListener("mouseup", onUp);
       document.removeEventListener("mouseenter", onEnter);
       document.removeEventListener("mouseleave", onLeave);
     };
@@ -89,26 +82,23 @@ export default function CustomCursor() {
 
   return (
     <div className="hidden md:block">
-      {/* Ring — near-instant follow */}
       <div
-        ref={ringRef}
+        ref={dotRef}
         className="fixed top-0 left-0 pointer-events-none z-[99999] rounded-full flex items-center justify-center"
         style={{
-          width: 32,
-          height: 32,
-          border: "1px solid rgba(0,240,255,0.15)",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-          background: "rgba(255,255,255,0.03)",
-          boxShadow: "0 0 12px rgba(0,240,255,0.08), inset 0 0 8px rgba(0,240,255,0.04)",
+          width: 8,
+          height: 8,
+          border: "1.5px solid transparent",
+          background: "rgba(0,240,255,0.9)",
+          boxShadow: "0 0 6px rgba(0,240,255,0.4)",
           willChange: "transform",
-          transition: "width 0.2s, height 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s",
+          transition: "width 0.15s, height 0.15s, background 0.15s, border-color 0.15s, box-shadow 0.15s",
         }}
       >
         <span
           ref={labelRef}
           className="text-[var(--cyan)] text-[8px] uppercase tracking-[0.2em] font-medium"
-          style={{ opacity: 0, transition: "opacity 0.15s" }}
+          style={{ opacity: 0, transition: "opacity 0.1s" }}
         />
       </div>
     </div>
