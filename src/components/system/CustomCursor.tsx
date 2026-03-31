@@ -3,7 +3,6 @@
 import { useEffect, useRef, useCallback } from "react";
 
 export default function CustomCursor() {
-  const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const labelRef = useRef<HTMLSpanElement>(null);
   const pos = useRef({ x: -100, y: -100 });
@@ -12,21 +11,15 @@ export default function CustomCursor() {
   const rafId = useRef(0);
 
   const render = useCallback(() => {
-    const dot = dotRef.current;
     const ring = ringRef.current;
     const lbl = labelRef.current;
-    if (!dot || !ring) return;
+    if (!ring) return;
 
-    // Lerp ring position — fast follow, minimal lag
-    ringPos.current.x += (pos.current.x - ringPos.current.x) * 0.35;
-    ringPos.current.y += (pos.current.y - ringPos.current.y) * 0.35;
+    // Lerp ring position — near-instant follow
+    ringPos.current.x += (pos.current.x - ringPos.current.x) * 0.8;
+    ringPos.current.y += (pos.current.y - ringPos.current.y) * 0.8;
 
     const { hovering, hidden, clicking, label } = state.current;
-
-    // Dot: instant follow, tiny size
-    dot.style.transform = `translate(${pos.current.x}px, ${pos.current.y}px) translate(-50%, -50%)`;
-    dot.style.opacity = hidden ? "0" : hovering ? "0" : "1";
-    dot.style.width = dot.style.height = clicking ? "3px" : "5px";
 
     // Ring: smooth follow with lerp
     ring.style.transform = `translate(${ringPos.current.x}px, ${ringPos.current.y}px) translate(-50%, -50%)`;
@@ -96,20 +89,7 @@ export default function CustomCursor() {
 
   return (
     <div className="hidden md:block">
-      {/* Dot — tiny, subtle */}
-      <div
-        ref={dotRef}
-        className="fixed top-0 left-0 pointer-events-none z-[99999] rounded-full"
-        style={{
-          width: 5,
-          height: 5,
-          background: "rgba(0,240,255,0.7)",
-          boxShadow: "0 0 6px rgba(0,240,255,0.3)",
-          willChange: "transform",
-          transition: "width 0.15s, height 0.15s, opacity 0.15s",
-        }}
-      />
-      {/* Ring — smooth trailing */}
+      {/* Ring — near-instant follow */}
       <div
         ref={ringRef}
         className="fixed top-0 left-0 pointer-events-none z-[99999] rounded-full flex items-center justify-center"
