@@ -77,12 +77,7 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
   const [loadLabel, setLoadLabel] = useState("INITIALIZING CORE");
 
   useEffect(() => {
-    try {
-      const seen = sessionStorage.getItem("hud-seen");
-      setShowHud(!seen);
-    } catch {
-      setShowHud(false);
-    }
+    setShowHud(true);
   }, []);
 
   // Boot sequence
@@ -110,11 +105,6 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
 
   const handleStart = useCallback(() => {
     setPhase("loading");
-    try {
-      sessionStorage.setItem("hud-seen", "1");
-    } catch {
-      // ignore
-    }
   }, []);
 
   // Loading phase — animate percentage 0→100
