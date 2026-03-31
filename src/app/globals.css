@@ -65,7 +65,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
-*:not(.dashboard-layout *) { cursor: none; }
+*:not(.dashboard-layout *, .hud-intro, .hud-intro *) { cursor: none; }
 .dashboard-layout, .dashboard-layout * { cursor: auto; }
 @media (pointer: coarse) { * { cursor: auto; } }
 

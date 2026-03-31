@@ -127,8 +127,8 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
       <AnimatePresence>
         {showHud && (
           <motion.div
-            className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
-            style={{ background: "var(--bg)" }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden hud-intro"
+            style={{ background: "var(--bg)", cursor: "default" }}
             exit={{ opacity: 0, scale: 1.05 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
