@@ -81,7 +81,9 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setShowHud(true);
-  }, []);
+    // Prefetch home so transition is instant (no loading.tsx flash)
+    router.prefetch("/");
+  }, [router]);
 
   // Boot sequence
   useEffect(() => {
@@ -139,7 +141,7 @@ export default function HudIntro({ children }: { children: React.ReactNode }) {
         frame = requestAnimationFrame(tick);
       } else {
         setTimeout(() => {
-          if (pathname !== "/") router.push("/");
+          if (pathname !== "/") router.replace("/");
           setPhase("done");
         }, 600);
       }
