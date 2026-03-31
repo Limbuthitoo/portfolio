@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Project } from "@/types";
 import AnimatedText from "@/components/common/AnimatedText";
+import TiltCard from "@/components/common/TiltCard";
 
 const ACCENT_MAP: Record<string, { color: string; rgb: string }> = {
   "Web Development": { color: "var(--cyan)", rgb: "0,240,255" },
@@ -101,8 +102,9 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
                     animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                     transition={{ duration: 0.6, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] as const }}
                   >
-                    <Link href={`/work/${project.slug}`} data-cursor="View" className="block group">
-                      <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden relative hover:border-[var(--border-hover)] transition-all duration-300 card-shimmer">
+                    <Link href={`/work/${project.slug}`} data-cursor="View" className="block group h-full">
+                      <TiltCard className="h-full" tiltStrength={5}>
+                      <div className="rounded-[var(--card-radius)] border border-[var(--border)] bg-[var(--surface)] overflow-hidden relative hover:border-[var(--border-hover)] transition-all duration-300 h-full flex flex-col">
                         {/* Thumbnail area */}
                         <div className="relative h-44 overflow-hidden">
                           <div
@@ -154,7 +156,7 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
                         </div>
 
                         {/* Content */}
-                        <div className="p-4">
+                        <div className="p-4 flex flex-col flex-1">
                           <div className="flex items-center gap-2 mb-1.5">
                             <div
                               className="w-1.5 h-1.5 rounded-full"
@@ -170,7 +172,7 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
                           <p className="text-[12px] text-[var(--fg-3)] leading-relaxed line-clamp-2">
                             {project.description}
                           </p>
-                          <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--border)]">
+                          <div className="flex items-center justify-between mt-auto pt-3 border-t border-[var(--border)]">
                             <span className="text-[10px] font-mono text-[var(--fg-3)]">{project.role}</span>
                             <span
                               className="text-[var(--fg-3)] group-hover:translate-x-1 transition-all text-xs"
@@ -181,6 +183,7 @@ export default function WorkPageClient({ projects }: { projects: Project[] }) {
                           </div>
                         </div>
                       </div>
+                      </TiltCard>
                     </Link>
                   </motion.div>
                 );
