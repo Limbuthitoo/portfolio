@@ -39,6 +39,19 @@ export default function GamesPage() {
             title="Ultra Tetris"
             description="Classic block-stacking with levels, ghost pieces, and multiplayer battles."
           />
+          <GameCard
+            href="/games/pong"
+            icon={
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="6" width="3" height="12" rx="1.5" />
+                <rect x="19" y="8" width="3" height="8" rx="1.5" />
+                <circle cx="12" cy="12" r="1.5" />
+                <path d="M12 3v3M12 18v3" opacity="0.3" />
+              </svg>
+            }
+            title="Retro Pong"
+            description="Classic paddle game — play solo against CPU or battle a friend in multiplayer."
+          />
         </div>
       </div>
     </div>
