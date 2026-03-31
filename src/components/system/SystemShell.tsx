@@ -11,6 +11,7 @@ import PageTransition from "@/components/common/PageTransition";
 import ScrollProgress from "@/components/common/ScrollProgress";
 import GrainOverlay from "@/components/common/GrainOverlay";
 import PullToRefresh from "@/components/common/PullToRefresh";
+import HudIntro from "./HudIntro";
 
 const CommandPalette = dynamic(() => import("./CommandPalette"), { ssr: false });
 const CustomCursor = dynamic(() => import("./CustomCursor"), { ssr: false });
@@ -25,6 +26,7 @@ export default function SystemShell({ children }: { children: React.ReactNode })
 
   return (
     <ThemeProvider>
+      <HudIntro>
       <div className="relative h-full w-full overflow-hidden">
         <CustomCursor />
         <MeshBackground />
@@ -42,6 +44,7 @@ export default function SystemShell({ children }: { children: React.ReactNode })
         <Dock />
         <CommandPalette />
       </div>
+      </HudIntro>
     </ThemeProvider>
   );
 }

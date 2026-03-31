@@ -1,0 +1,373 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const BOOT_LINES = [
+  { text: "SYSTEM: INITIALIZING CORE MODULES", delay: 0 },
+  { text: "NETWORK: ESTABLISHING SECURE CONNECTION", delay: 200 },
+  { text: "GRAPHICS: RENDERING ENGINE ONLINE", delay: 400 },
+  { text: "AUTH: IDENTITY VERIFIED — GUEST ACCESS GRANTED", delay: 600 },
+  { text: "UI: LOADING INTERFACE COMPONENTS", delay: 800 },
+  { text: "STATUS: ALL SYSTEMS OPERATIONAL", delay: 1000 },
+];
+
+const HEX_COORDS = [
+  { x: "15%", y: "20%", size: 40, delay: 0.2 },
+  { x: "80%", y: "15%", size: 30, delay: 0.5 },
+  { x: "10%", y: "75%", size: 35, delay: 0.3 },
+  { x: "85%", y: "70%", size: 25, delay: 0.7 },
+  { x: "50%", y: "10%", size: 20, delay: 0.4 },
+  { x: "45%", y: "85%", size: 28, delay: 0.6 },
+];
+
+function HexShape({ x, y, size, delay }: { x: string; y: string; size: number; delay: number }) {
+  return (
+    <motion.div
+      className="absolute"
+      style={{ left: x, top: y }}
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 0.15, scale: 1, rotate: [0, 60] }}
+      transition={{ delay, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <svg width={size} height={size} viewBox="0 0 100 100">
+        <polygon
+          points="50,2 95,25 95,75 50,98 5,75 5,25"
+          fill="none"
+          stroke="var(--cyan)"
+          strokeWidth="1.5"
+          opacity="0.5"
+        />
+      </svg>
+    </motion.div>
+  );
+}
+
+function CrosshairCorner({ position }: { position: "tl" | "tr" | "bl" | "br" }) {
+  const base = "absolute w-8 h-8 pointer-events-none";
+  const pos = {
+    tl: "top-6 left-6",
+    tr: "top-6 right-6",
+    bl: "bottom-6 left-6",
+    br: "bottom-6 right-6",
+  }[position];
+  const borderDir = {
+    tl: "border-t border-l",
+    tr: "border-t border-r",
+    bl: "border-b border-l",
+    br: "border-b border-r",
+  }[position];
+
+  return (
+    <motion.div
+      className={`${base} ${pos} ${borderDir} border-[var(--cyan)]/40`}
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.3, duration: 0.6 }}
+    />
+  );
+}
+
+export default function HudIntro({ children }: { children: React.ReactNode }) {
+  const [showHud, setShowHud] = useState<boolean | null>(null);
+  const [bootProgress, setBootProgress] = useState(0);
+  const [visibleLines, setVisibleLines] = useState(0);
+  const [exiting, setExiting] = useState(false);
+
+  useEffect(() => {
+    try {
+      const seen = sessionStorage.getItem("hud-seen");
+      setShowHud(!seen);
+    } catch {
+      setShowHud(false);
+    }
+  }, []);
+
+  // Boot sequence
+  useEffect(() => {
+    if (!showHud) return;
+
+    // Progress bar
+    const progressInterval = setInterval(() => {
+      setBootProgress((p) => {
+        if (p >= 100) {
+          clearInterval(progressInterval);
+          return 100;
+        }
+        return p + 2;
+      });
+    }, 30);
+
+    // Boot lines
+    BOOT_LINES.forEach((_, i) => {
+      setTimeout(() => setVisibleLines((v) => Math.max(v, i + 1)), BOOT_LINES[i].delay + 300);
+    });
+
+    return () => clearInterval(progressInterval);
+  }, [showHud]);
+
+  const handleStart = useCallback(() => {
+    setExiting(true);
+    try {
+      sessionStorage.setItem("hud-seen", "1");
+    } catch {
+      // ignore
+    }
+    setTimeout(() => setShowHud(false), 800);
+  }, []);
+
+  // Not yet determined
+  if (showHud === null) return null;
+
+  // Already seen
+  if (!showHud) return <>{children}</>;
+
+  return (
+    <>
+      <AnimatePresence>
+        {showHud && (
+          <motion.div
+            className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
+            style={{ background: "var(--bg)" }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {/* Background grid */}
+            <div
+              className="absolute inset-0 opacity-[0.04]"
+              style={{
+                backgroundImage: `
+                  linear-gradient(to right, var(--cyan) 1px, transparent 1px),
+                  linear-gradient(to bottom, var(--cyan) 1px, transparent 1px)
+                `,
+                backgroundSize: "50px 50px",
+              }}
+            />
+
+            {/* Scanline */}
+            <motion.div
+              className="absolute inset-x-0 h-px pointer-events-none"
+              style={{ background: "linear-gradient(90deg, transparent, var(--cyan), transparent)", opacity: 0.15 }}
+              animate={{ top: ["0%", "100%"] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+            />
+
+            {/* Floating hexagons */}
+            {HEX_COORDS.map((h, i) => (
+              <HexShape key={i} {...h} />
+            ))}
+
+            {/* Crosshair corners */}
+            <CrosshairCorner position="tl" />
+            <CrosshairCorner position="tr" />
+            <CrosshairCorner position="bl" />
+            <CrosshairCorner position="br" />
+
+            {/* Radial gradient overlay */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: "radial-gradient(circle at center, transparent 30%, var(--bg) 80%)",
+              }}
+            />
+
+            {/* ── Center HUD ── */}
+            <motion.div
+              className="relative z-10 flex flex-col items-center max-w-lg w-full px-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: exiting ? 0 : 1 }}
+              transition={{ duration: exiting ? 0.4 : 0.8, delay: exiting ? 0 : 0.2 }}
+            >
+              {/* Top label */}
+              <motion.div
+                className="flex items-center gap-2 mb-6"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)]" style={{ boxShadow: "0 0 8px var(--cyan)" }} />
+                <span className="text-[9px] font-mono tracking-[0.3em] uppercase text-[var(--cyan)]">
+                  BIJAY.OS v2.0
+                </span>
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--cyan)]" style={{ boxShadow: "0 0 8px var(--cyan)" }} />
+              </motion.div>
+
+              {/* Main title */}
+              <motion.h1
+                className="text-3xl sm:text-5xl font-bold tracking-tight text-center mb-2"
+                initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ delay: 0.5, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <span style={{ color: "var(--fg)" }}>SYSTEM </span>
+                <span
+                  style={{
+                    background: "linear-gradient(135deg, var(--cyan), var(--violet))",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  READY
+                </span>
+              </motion.h1>
+
+              <motion.p
+                className="text-[11px] font-mono text-[var(--fg-3)] tracking-[0.15em] uppercase mb-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7, duration: 0.5 }}
+              >
+                Creative Portfolio Interface
+              </motion.p>
+
+              {/* Boot progress bar */}
+              <motion.div
+                className="w-full max-w-xs mb-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[8px] font-mono text-[var(--fg-3)] tracking-[0.2em] uppercase">
+                    Boot Sequence
+                  </span>
+                  <span className="text-[8px] font-mono" style={{ color: "var(--cyan)" }}>
+                    {bootProgress}%
+                  </span>
+                </div>
+                <div className="h-[2px] bg-[var(--border)] rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full rounded-full"
+                    style={{
+                      background: "linear-gradient(90deg, var(--cyan), var(--violet))",
+                      width: `${bootProgress}%`,
+                    }}
+                  />
+                </div>
+              </motion.div>
+
+              {/* Boot log */}
+              <motion.div
+                className="w-full max-w-xs mb-8 h-28 overflow-hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
+                <div className="space-y-1">
+                  {BOOT_LINES.slice(0, visibleLines).map((line, i) => (
+                    <motion.div
+                      key={i}
+                      className="flex items-start gap-2"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <span className="text-[7px] font-mono shrink-0 mt-px" style={{ color: i === visibleLines - 1 ? "var(--cyan)" : "var(--emerald)" }}>
+                        {i === visibleLines - 1 && bootProgress < 100 ? "▶" : "✓"}
+                      </span>
+                      <span className="text-[7px] font-mono text-[var(--fg-3)] leading-tight">
+                        {line.text}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* START button */}
+              <motion.button
+                onClick={handleStart}
+                className="group relative px-10 py-3 cursor-pointer"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: bootProgress >= 100 ? 1 : 0.3, scale: bootProgress >= 100 ? 1 : 0.95 }}
+                transition={{ delay: 0.2, duration: 0.5, type: "spring", stiffness: 200 }}
+                disabled={bootProgress < 100}
+                whileHover={bootProgress >= 100 ? { scale: 1.05 } : {}}
+                whileTap={bootProgress >= 100 ? { scale: 0.95 } : {}}
+              >
+                {/* Button border — rotating gradient */}
+                <div
+                  className="absolute inset-0 rounded-xl pointer-events-none"
+                  style={{
+                    padding: "1.5px",
+                    background: "conic-gradient(from var(--angle, 0deg), transparent 30%, var(--cyan), var(--violet), transparent 70%)",
+                    WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    WebkitMaskComposite: "xor",
+                    maskComposite: "exclude",
+                    animation: bootProgress >= 100 ? "rotate-gradient 3s linear infinite" : "none",
+                  }}
+                />
+                {/* Button background */}
+                <div
+                  className="absolute inset-0 rounded-xl"
+                  style={{
+                    background: "rgba(0,240,255,0.05)",
+                  }}
+                />
+                {/* Glow */}
+                {bootProgress >= 100 && (
+                  <div
+                    className="absolute -inset-2 rounded-2xl pointer-events-none"
+                    style={{
+                      background: "radial-gradient(circle, rgba(0,240,255,0.1), transparent 70%)",
+                      filter: "blur(12px)",
+                      animation: "loading-pulse 2s ease-in-out infinite",
+                    }}
+                  />
+                )}
+                <span
+                  className="relative text-[11px] font-mono tracking-[0.4em] uppercase font-bold"
+                  style={{
+                    background: bootProgress >= 100
+                      ? "linear-gradient(135deg, var(--cyan), var(--violet))"
+                      : "var(--fg-3)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  {bootProgress >= 100 ? "INITIALIZE" : "BOOTING..."}
+                </span>
+              </motion.button>
+
+              {/* Bottom hint */}
+              {bootProgress >= 100 && (
+                <motion.span
+                  className="text-[8px] font-mono text-[var(--fg-3)]/50 tracking-[0.2em] uppercase mt-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 0.5, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  Press to enter
+                </motion.span>
+              )}
+            </motion.div>
+
+            {/* Bottom status bar */}
+            <motion.div
+              className="absolute bottom-4 left-6 right-6 flex items-center justify-between"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.4 }}
+              transition={{ delay: 0.5 }}
+            >
+              <span className="text-[7px] font-mono text-[var(--fg-3)] tracking-[0.15em]">
+                SYS.UPTIME: 00:00:01
+              </span>
+              <div className="flex items-center gap-3">
+                <span className="text-[7px] font-mono text-[var(--fg-3)] tracking-[0.15em]">
+                  LOCATION: KATHMANDU
+                </span>
+                <span className="text-[7px] font-mono tracking-[0.15em]" style={{ color: "var(--emerald)" }}>
+                  ● ONLINE
+                </span>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Show children underneath (hidden behind HUD overlay until dismissed) */}
+      <div style={{ visibility: showHud ? "hidden" : "visible" }}>
+        {children}
+      </div>
+    </>
+  );
+}
