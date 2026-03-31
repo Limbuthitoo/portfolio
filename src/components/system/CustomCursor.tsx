@@ -1,129 +1,132 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useEffect, useRef, useCallback } from "react";
 
 export default function CustomCursor() {
-  const [hovering, setHovering] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [clicking, setClicking] = useState(false);
-  const [label, setLabel] = useState("");
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
+  const pos = useRef({ x: -100, y: -100 });
+  const ringPos = useRef({ x: -100, y: -100 });
+  const state = useRef({ hovering: false, hidden: false, clicking: false, label: "" });
+  const rafId = useRef(0);
 
-  const x = useMotionValue(-100);
-  const y = useMotionValue(-100);
-  const sx = useSpring(x, { stiffness: 500, damping: 28 });
-  const sy = useSpring(y, { stiffness: 500, damping: 28 });
+  const render = useCallback(() => {
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    const lbl = labelRef.current;
+    if (!dot || !ring) return;
 
-  // Track velocity for cursor stretch effect
-  const velocity = useMotionValue(0);
-  const prevPos = useRef({ x: 0, y: 0, time: 0 });
+    // Lerp ring position toward actual cursor for smooth trailing
+    ringPos.current.x += (pos.current.x - ringPos.current.x) * 0.15;
+    ringPos.current.y += (pos.current.y - ringPos.current.y) * 0.15;
 
-  const cursorScale = useTransform(velocity, [0, 1500], [1, 0.85]);
-  const cursorStretch = useTransform(velocity, [0, 1500], [1, 1.3]);
-  const springScale = useSpring(cursorScale, { stiffness: 200, damping: 20 });
-  const springStretch = useSpring(cursorStretch, { stiffness: 200, damping: 20 });
+    const { hovering, hidden, clicking, label } = state.current;
 
-  const move = useCallback(
-    (e: MouseEvent) => {
-      x.set(e.clientX);
-      y.set(e.clientY);
+    // Dot: instant follow, no lag
+    dot.style.transform = `translate(${pos.current.x}px, ${pos.current.y}px) translate(-50%, -50%)`;
+    dot.style.opacity = hidden ? "0" : "1";
+    dot.style.width = dot.style.height = clicking ? "4px" : "8px";
 
-      const now = performance.now();
-      const dt = now - prevPos.current.time;
-      if (dt > 0) {
-        const dx = e.clientX - prevPos.current.x;
-        const dy = e.clientY - prevPos.current.y;
-        const speed = Math.sqrt(dx * dx + dy * dy) / dt * 1000;
-        velocity.set(speed);
-      }
-      prevPos.current = { x: e.clientX, y: e.clientY, time: now };
-    },
-    [x, y, velocity]
-  );
+    // Ring: smooth follow with lerp
+    ring.style.transform = `translate(${ringPos.current.x}px, ${ringPos.current.y}px) translate(-50%, -50%)`;
+    ring.style.opacity = hidden ? "0" : "1";
+    ring.style.width = ring.style.height = hovering ? "56px" : "32px";
+    ring.style.borderColor = hovering ? "rgba(0,240,255,0.3)" : "rgba(0,240,255,0.12)";
+    ring.style.background = hovering ? "rgba(0,240,255,0.04)" : "transparent";
+
+    if (lbl) {
+      lbl.textContent = label;
+      lbl.style.opacity = label ? "1" : "0";
+    }
+
+    rafId.current = requestAnimationFrame(render);
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(pointer: coarse)").matches) return;
 
-    const handleEnter = () => setHidden(false);
-    const handleLeave = () => setHidden(true);
-    const handleDown = () => setClicking(true);
-    const handleUp = () => setClicking(false);
+    const onMove = (e: MouseEvent) => {
+      pos.current.x = e.clientX;
+      pos.current.y = e.clientY;
+    };
 
-    window.addEventListener("mousemove", move);
-    document.addEventListener("mouseenter", handleEnter);
-    document.addEventListener("mouseleave", handleLeave);
-    document.addEventListener("mousedown", handleDown);
-    document.addEventListener("mouseup", handleUp);
-
-    // Event delegation for hover states
-    const handleMouseOver = (e: MouseEvent) => {
-      const el = (e.target as HTMLElement).closest("a, button, [data-cursor]");
+    const onOver = (e: MouseEvent) => {
+      const el = (e.target as HTMLElement).closest?.("a, button, [data-cursor]");
       if (el) {
-        setHovering(true);
-        setLabel((el as HTMLElement).dataset.cursor || "");
+        state.current.hovering = true;
+        state.current.label = (el as HTMLElement).dataset.cursor || "";
       }
     };
-    const handleMouseOut = (e: MouseEvent) => {
-      const el = (e.target as HTMLElement).closest("a, button, [data-cursor]");
+    const onOut = (e: MouseEvent) => {
+      const el = (e.target as HTMLElement).closest?.("a, button, [data-cursor]");
       if (el) {
-        setHovering(false);
-        setLabel("");
+        state.current.hovering = false;
+        state.current.label = "";
       }
     };
 
-    document.addEventListener("mouseover", handleMouseOver);
-    document.addEventListener("mouseout", handleMouseOut);
+    const onDown = () => { state.current.clicking = true; };
+    const onUp = () => { state.current.clicking = false; };
+    const onEnter = () => { state.current.hidden = false; };
+    const onLeave = () => { state.current.hidden = true; };
 
-    // Decay velocity when mouse stops
-    const decayInterval = setInterval(() => {
-      velocity.set(velocity.get() * 0.9);
-    }, 16);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener("mouseover", onOver, { passive: true });
+    document.addEventListener("mouseout", onOut, { passive: true });
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("mouseup", onUp);
+    document.addEventListener("mouseenter", onEnter);
+    document.addEventListener("mouseleave", onLeave);
+
+    rafId.current = requestAnimationFrame(render);
 
     return () => {
-      window.removeEventListener("mousemove", move);
-      document.removeEventListener("mouseenter", handleEnter);
-      document.removeEventListener("mouseleave", handleLeave);
-      document.removeEventListener("mousedown", handleDown);
-      document.removeEventListener("mouseup", handleUp);
-      document.removeEventListener("mouseover", handleMouseOver);
-      document.removeEventListener("mouseout", handleMouseOut);
-      clearInterval(decayInterval);
+      cancelAnimationFrame(rafId.current);
+      window.removeEventListener("mousemove", onMove);
+      document.removeEventListener("mouseover", onOver);
+      document.removeEventListener("mouseout", onOut);
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("mouseup", onUp);
+      document.removeEventListener("mouseenter", onEnter);
+      document.removeEventListener("mouseleave", onLeave);
     };
-  }, [move, velocity]);
+  }, [render]);
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 pointer-events-none z-[99999] hidden md:block"
-      style={{ x: sx, y: sy }}
-    >
-      <motion.div
-        className="relative -translate-x-1/2 -translate-y-1/2 rounded-full flex items-center justify-center"
-        animate={{
-          width: hovering ? 64 : clicking ? 6 : 8,
-          height: hovering ? 64 : clicking ? 6 : 8,
-          opacity: hidden ? 0 : 1,
-          background: hovering ? "rgba(0,240,255,0.06)" : "rgba(0,240,255,0.8)",
-          backdropFilter: hovering ? "blur(8px)" : "blur(0px)",
-          border: hovering ? "1px solid rgba(0,240,255,0.2)" : "1px solid transparent",
-          boxShadow: hovering ? "none" : "0 0 10px rgba(0,240,255,0.3), 0 0 20px rgba(0,240,255,0.1)",
-        }}
+    <div className="hidden md:block">
+      {/* Dot — instant position */}
+      <div
+        ref={dotRef}
+        className="fixed top-0 left-0 pointer-events-none z-[99999] rounded-full"
         style={{
-          scaleX: hovering ? 1 : springStretch,
-          scaleY: hovering ? 1 : springScale,
+          width: 8,
+          height: 8,
+          background: "rgba(0,240,255,0.9)",
+          boxShadow: "0 0 10px rgba(0,240,255,0.4), 0 0 20px rgba(0,240,255,0.15)",
+          willChange: "transform",
+          transition: "width 0.15s, height 0.15s",
         }}
-        transition={{ type: "spring", stiffness: 300, damping: 22 }}
+      />
+      {/* Ring — smooth trailing */}
+      <div
+        ref={ringRef}
+        className="fixed top-0 left-0 pointer-events-none z-[99999] rounded-full flex items-center justify-center"
+        style={{
+          width: 32,
+          height: 32,
+          border: "1px solid rgba(0,240,255,0.12)",
+          willChange: "transform",
+          transition: "width 0.2s, height 0.2s, border-color 0.2s, background 0.2s",
+        }}
       >
-        {label && (
-          <motion.span
-            className="text-[var(--cyan)] text-[8px] uppercase tracking-[0.2em] font-medium"
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-          >
-            {label}
-          </motion.span>
-        )}
-      </motion.div>
-    </motion.div>
+        <span
+          ref={labelRef}
+          className="text-[var(--cyan)] text-[8px] uppercase tracking-[0.2em] font-medium"
+          style={{ opacity: 0, transition: "opacity 0.15s" }}
+        />
+      </div>
+    </div>
   );
 }

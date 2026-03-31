@@ -136,7 +136,7 @@ export default function TiltCard({ children, className = '', tiltStrength = 8 }:
             WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
             WebkitMaskComposite: 'xor',
             maskComposite: 'exclude',
-            animation: 'rotate-gradient 4s linear infinite',
+            animation: hovered ? 'rotate-gradient 4s linear infinite' : 'none',
             opacity: hovered ? 1 : 0,
             transition: 'opacity 0.4s ease',
           }}
@@ -171,9 +171,10 @@ export default function TiltCard({ children, className = '', tiltStrength = 8 }:
           className="absolute -inset-4 rounded-3xl pointer-events-none z-[-1]"
           style={{
             background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, rgba(0,240,255,0.03) 50%, transparent 70%)',
-            opacity: hovered ? 1 : 0,
+            opacity: hovered ? 0.8 : 0,
             transition: 'opacity 0.5s ease',
-            filter: 'blur(24px)',
+            filter: 'blur(20px)',
+            willChange: hovered ? 'opacity' : 'auto',
           }}
         />
       </motion.div>

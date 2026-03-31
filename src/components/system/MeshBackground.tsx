@@ -1,6 +1,6 @@
 export default function MeshBackground() {
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none" style={{ contain: 'strict' }}>
       {/* Deep base */}
       <div className="absolute inset-0 bg-[var(--bg)]" />
 
@@ -12,6 +12,7 @@ export default function MeshBackground() {
           animation: 'aurora-wave 15s ease-in-out infinite',
           filter: 'blur(60px)',
           transformOrigin: 'center top',
+          willChange: 'transform',
         }}
       />
       <div
@@ -21,6 +22,7 @@ export default function MeshBackground() {
           animation: 'aurora-wave 20s ease-in-out 3s infinite reverse',
           filter: 'blur(80px)',
           transformOrigin: 'center top',
+          willChange: 'transform',
         }}
       />
 
