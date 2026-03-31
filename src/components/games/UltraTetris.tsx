@@ -316,26 +316,34 @@ export default function UltraTetris() {
   // Touch controls
   const touchStart = useRef<{ x: number; y: number; time: number } | null>(null);
   const router = useRouter();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Dynamic cell size: fill available space on mobile
   const [cellSize, setCellSize] = useState(28);
+  const HEADER_H = 36;
+  const CONTROLS_H = 48;
   useEffect(() => {
     const calc = () => {
       const isMobile = window.innerWidth < 640;
       if (isMobile) {
-        // Top bar (~44px) + controls (~56px) + dock (~56px) + safe areas (~32px) = ~188px
-        const availH = window.innerHeight - 196;
-        const availW = window.innerWidth - 16;
+        // Use visualViewport for accurate mobile height (excludes browser chrome)
+        const vh = window.visualViewport?.height || window.innerHeight;
+        const availH = vh - HEADER_H - CONTROLS_H;
+        const availW = window.innerWidth;
         const byH = Math.floor(availH / ROWS);
         const byW = Math.floor(availW / COLS);
-        setCellSize(Math.max(12, Math.min(byH, byW)));
+        setCellSize(Math.max(10, Math.min(byH, byW)));
       } else {
         setCellSize(28);
       }
     };
     calc();
     window.addEventListener("resize", calc);
-    return () => window.removeEventListener("resize", calc);
+    window.visualViewport?.addEventListener("resize", calc);
+    return () => {
+      window.removeEventListener("resize", calc);
+      window.visualViewport?.removeEventListener("resize", calc);
+    };
   }, []);
 
   const boardW = COLS * cellSize;
@@ -344,51 +352,49 @@ export default function UltraTetris() {
   return (
     <>
       {/* ── Mobile: fullscreen overlay ── */}
-      <div className="fixed inset-0 z-[100] bg-[#060606] flex flex-col sm:hidden">
-        {/* Top bar */}
-        <div className="shrink-0 flex items-center justify-between px-3 py-1">
-          <div className="flex items-center gap-4">
+      <div ref={containerRef} className="fixed inset-0 z-[100] bg-[#060606] sm:hidden overflow-hidden" style={{ height: '100dvh' }}>
+        {/* Top bar — fixed height */}
+        <div className="flex items-center justify-between px-3" style={{ height: HEADER_H }}>
+          <div className="flex items-center gap-3">
             <div>
-              <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Score</div>
-              <div className="text-sm font-bold text-white font-mono">{score.toLocaleString()}</div>
+              <div className="text-[7px] font-mono text-white/30 uppercase tracking-widest">Score</div>
+              <div className="text-xs font-bold text-white font-mono">{score.toLocaleString()}</div>
             </div>
             <div>
-              <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Level</div>
-              <div className="text-sm font-bold text-[#a855f7] font-mono">{level}</div>
+              <div className="text-[7px] font-mono text-white/30 uppercase tracking-widest">Level</div>
+              <div className="text-xs font-bold text-[#a855f7] font-mono">{level}</div>
             </div>
             <div>
-              <div className="text-[8px] font-mono text-white/30 uppercase tracking-widest">Lines</div>
-              <div className="text-sm font-bold text-[#06b6d4] font-mono">{lines}</div>
+              <div className="text-[7px] font-mono text-white/30 uppercase tracking-widest">Lines</div>
+              <div className="text-xs font-bold text-[#06b6d4] font-mono">{lines}</div>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            {/* Next piece mini */}
             <div className="flex flex-col items-center">
-              <div className="text-[7px] font-mono text-white/20 uppercase mb-0.5">Next</div>
+              <div className="text-[6px] font-mono text-white/20 uppercase">Next</div>
               <div>
                 {nextPiece.shape.map((row, ri) => (
                   <div key={ri} className="flex">
                     {row.map((cell, ci) => (
-                      <div key={ci} style={{ width: 10, height: 10, margin: 0.5, borderRadius: 2, background: cell ? COLORS[cell] : "transparent" }} />
+                      <div key={ci} style={{ width: 8, height: 8, margin: 0.5, borderRadius: 1, background: cell ? COLORS[cell] : "transparent" }} />
                     ))}
                   </div>
                 ))}
               </div>
             </div>
-            {/* Close button */}
             <button
               onClick={() => router.push("/games")}
-              className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center text-white/50 active:bg-white/[0.12] ml-2"
+              className="w-7 h-7 rounded-lg bg-white/[0.06] flex items-center justify-center text-white/50 active:bg-white/[0.12] ml-1"
             >
               ✕
             </button>
           </div>
         </div>
 
-        {/* Board */}
-        <div className="flex-1 flex items-center justify-center px-1">
+        {/* Board — exact size, centered horizontally */}
+        <div className="flex justify-center" style={{ height: boardH + 2 }}>
           <div
-            className="rounded-xl border border-white/[0.08] bg-[#0a0a0a] overflow-hidden relative"
+            className="rounded-lg border border-white/[0.08] bg-[#0a0a0a] overflow-hidden relative"
             style={{ width: boardW + 2, height: boardH + 2, padding: 1 }}
             onTouchStart={(e) => {
               const t = e.touches[0];
@@ -435,12 +441,29 @@ export default function UltraTetris() {
                 );
               })
             )}
-            {/* Overlays */}
+            {/* Start overlay with high scores */}
             {!started && (
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center z-10">
-                <h2 className="text-xl font-bold text-white mb-1">ULTRA TETRIS</h2>
-                <p className="text-[10px] text-white/30 font-mono mb-4">Stack blocks. Clear lines.</p>
-                <button onClick={startGame} className="px-5 py-2 rounded-lg bg-[#a855f7] hover:bg-[#9333ea] text-white text-sm font-medium">Start Game</button>
+              <div className="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center z-10 p-3">
+                <h2 className="text-lg font-bold text-white mb-0.5">ULTRA TETRIS</h2>
+                <p className="text-[9px] text-white/30 font-mono mb-3">Stack blocks. Clear lines.</p>
+                <button onClick={startGame} className="px-5 py-2 rounded-lg bg-[#a855f7] hover:bg-[#9333ea] text-white text-sm font-medium mb-4">Start Game</button>
+                {/* High Scores */}
+                <div className="w-full max-w-[200px]">
+                  <div className="text-[8px] font-mono text-white/30 uppercase tracking-[0.15em] mb-1.5 text-center">🏆 High Scores</div>
+                  {highScores.length === 0 ? (
+                    <div className="text-white/20 text-[10px] font-mono text-center">No scores yet</div>
+                  ) : (
+                    <div className="space-y-1">
+                      {highScores.map((hs, i) => (
+                        <div key={i} className="flex items-center gap-2 justify-center">
+                          <span className="text-sm leading-none">{i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉"}</span>
+                          <span className="text-white text-xs font-medium truncate max-w-[80px]">{hs.name}</span>
+                          <span className="text-white/30 text-[9px] font-mono">{hs.score.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             )}
             {paused && !gameOver && (
@@ -450,30 +473,45 @@ export default function UltraTetris() {
               </div>
             )}
             {gameOver && (
-              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center z-10 p-4">
+              <div className="absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center z-10 p-3">
                 <div className="text-lg font-bold text-red-400 mb-1">GAME OVER</div>
-                <div className="text-white/50 text-xs font-mono mb-1">Score: <span className="text-white font-bold">{score.toLocaleString()}</span></div>
-                <div className="text-white/30 text-[10px] font-mono mb-3">Level {level} · {lines} lines</div>
+                <div className="text-white/50 text-xs font-mono mb-0.5">Score: <span className="text-white font-bold">{score.toLocaleString()}</span></div>
+                <div className="text-white/30 text-[10px] font-mono mb-2">Level {level} · {lines} lines</div>
                 {showNameInput && !submitted && (
-                  <div className="flex flex-col items-center gap-2 mb-3 w-full max-w-[180px]">
-                    <input type="text" value={playerName} onChange={(e) => setPlayerName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitScore(); }} placeholder="Your name" maxLength={20} autoFocus className="w-full bg-white/[0.06] border border-white/[0.1] text-white text-sm px-3 py-2 rounded-lg outline-none focus:border-[#a855f7]/50 text-center" />
+                  <div className="flex flex-col items-center gap-2 mb-2 w-full max-w-[180px]">
+                    <input type="text" value={playerName} onChange={(e) => setPlayerName(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitScore(); }} placeholder="Your name" maxLength={20} autoFocus className="w-full bg-white/[0.06] border border-white/[0.1] text-white text-sm px-3 py-1.5 rounded-lg outline-none focus:border-[#a855f7]/50 text-center" />
                     <button onClick={submitScore} disabled={!playerName.trim()} className="w-full px-4 py-1.5 rounded-lg bg-[#a855f7] disabled:opacity-40 text-white text-sm font-medium">Save Score</button>
                   </div>
                 )}
-                {submitted && <div className="text-green-400 text-xs font-mono mb-2">Score saved!</div>}
+                {submitted && <div className="text-green-400 text-xs font-mono mb-1">Score saved!</div>}
+                {/* High Scores in game over */}
+                {highScores.length > 0 && (
+                  <div className="mb-2 w-full max-w-[180px]">
+                    <div className="text-[7px] font-mono text-white/30 uppercase tracking-[0.15em] mb-1 text-center">🏆 Top Scores</div>
+                    <div className="space-y-0.5">
+                      {highScores.map((hs, i) => (
+                        <div key={i} className="flex items-center gap-2 justify-center text-[10px]">
+                          <span>{i === 0 ? "🥇" : i === 1 ? "🥈" : "🥉"}</span>
+                          <span className="text-white/70 truncate max-w-[70px]">{hs.name}</span>
+                          <span className="text-white/30 font-mono">{hs.score.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 <button onClick={startGame} className="px-4 py-1.5 rounded-lg bg-white/10 text-white text-sm">Play Again</button>
               </div>
             )}
           </div>
         </div>
 
-        {/* Mobile controls */}
-        <div className="shrink-0 flex justify-center gap-2 px-3 py-1 pb-[max(0.25rem,env(safe-area-inset-bottom))]">
-          <button onClick={moveLeft} className="w-11 h-11 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">←</button>
-          <button onClick={moveDown} className="w-11 h-11 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">↓</button>
-          <button onClick={rotatePiece} className="w-11 h-11 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">↻</button>
-          <button onClick={moveRight} className="w-11 h-11 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">→</button>
-          <button onClick={hardDrop} className="w-11 h-11 rounded-xl bg-[#a855f7]/20 active:bg-[#a855f7]/40 text-[#a855f7] text-lg flex items-center justify-center">⤓</button>
+        {/* Mobile controls — fixed height */}
+        <div className="flex justify-center gap-2 px-3" style={{ height: CONTROLS_H, alignItems: 'center' }}>
+          <button onClick={moveLeft} className="w-10 h-10 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">←</button>
+          <button onClick={moveDown} className="w-10 h-10 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">↓</button>
+          <button onClick={rotatePiece} className="w-10 h-10 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">↻</button>
+          <button onClick={moveRight} className="w-10 h-10 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">→</button>
+          <button onClick={hardDrop} className="w-10 h-10 rounded-xl bg-[#a855f7]/20 active:bg-[#a855f7]/40 text-[#a855f7] text-lg flex items-center justify-center">⤓</button>
         </div>
       </div>
 
