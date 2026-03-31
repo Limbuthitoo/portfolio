@@ -110,72 +110,73 @@ export default function TiltCard({ children, className = '', tiltStrength = 8 }:
   }, []);
 
   return (
-    <motion.div
-      ref={ref}
-      className={`${className} relative group`}
-      style={{
-        rotateX: springRotateX,
-        rotateY: springRotateY,
-        transformStyle: 'preserve-3d',
-        perspective: 1000,
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      whileHover={{ scale: 1.02 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-    >
-      {children}
-
-      {/* ── Rotating conic gradient border (same as dock) ── */}
-      <div
-        className="absolute -inset-px rounded-[inherit] pointer-events-none z-10"
-        style={{
-          padding: '1px',
-          background: 'conic-gradient(from var(--angle, 0deg), transparent 40%, var(--violet), var(--cyan), transparent 60%)',
-          WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-          WebkitMaskComposite: 'xor',
-          maskComposite: 'exclude',
-          animation: 'rotate-gradient 4s linear infinite',
-          opacity: hovered ? 1 : 0,
-          transition: 'opacity 0.4s ease',
-        }}
-      />
-
-      {/* ── Cursor-tracking spotlight ── */}
+    <div style={{ perspective: 1200 }}>
       <motion.div
-        className="absolute inset-0 rounded-[inherit] pointer-events-none z-10"
+        ref={ref}
+        className={`${className} relative group rounded-[var(--card-radius)]`}
         style={{
-          background: spotlight,
-          opacity: hovered ? 1 : 0,
-          transition: 'opacity 0.3s ease',
+          rotateX: springRotateX,
+          rotateY: springRotateY,
+          transformStyle: 'preserve-3d',
         }}
-      />
+        onMouseMove={handleMouseMove}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={handleMouseLeave}
+        whileHover={{ scale: 1.02 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+      >
+        {children}
 
-      {/* ── White shimmer on cursor ── */}
-      <motion.div
-        className="absolute inset-0 rounded-[inherit] pointer-events-none z-10"
-        style={{
-          background: shimmer,
-          opacity: hovered ? 1 : 0,
-          transition: 'opacity 0.3s ease',
-          mixBlendMode: 'overlay',
-        }}
-      />
+        {/* ── Rotating conic gradient border (same as dock) ── */}
+        <div
+          className="absolute -inset-px rounded-[var(--card-radius)] pointer-events-none z-10 overflow-hidden"
+          style={{
+            padding: '1.5px',
+            background: 'conic-gradient(from var(--angle, 0deg), transparent 30%, var(--violet), var(--cyan), transparent 70%)',
+            WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+            WebkitMaskComposite: 'xor',
+            maskComposite: 'exclude',
+            animation: 'rotate-gradient 4s linear infinite',
+            opacity: hovered ? 1 : 0,
+            transition: 'opacity 0.4s ease',
+          }}
+        />
 
-      {/* ── Floating particles ── */}
-      <HoverParticles active={hovered} />
+        {/* ── Cursor-tracking spotlight ── */}
+        <motion.div
+          className="absolute inset-0 rounded-[inherit] pointer-events-none z-10"
+          style={{
+            background: spotlight,
+            opacity: hovered ? 1 : 0,
+            transition: 'opacity 0.3s ease',
+          }}
+        />
 
-      {/* ── Ambient glow behind card ── */}
-      <div
-        className="absolute -inset-4 rounded-3xl pointer-events-none z-[-1]"
-        style={{
-          background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, rgba(0,240,255,0.03) 50%, transparent 70%)',
-          opacity: hovered ? 1 : 0,
-          transition: 'opacity 0.5s ease',
-          filter: 'blur(24px)',
-        }}
-      />
-    </motion.div>
+        {/* ── White shimmer on cursor ── */}
+        <motion.div
+          className="absolute inset-0 rounded-[inherit] pointer-events-none z-10"
+          style={{
+            background: shimmer,
+            opacity: hovered ? 1 : 0,
+            transition: 'opacity 0.3s ease',
+            mixBlendMode: 'overlay',
+          }}
+        />
+
+        {/* ── Floating particles ── */}
+        <HoverParticles active={hovered} />
+
+        {/* ── Ambient glow behind card ── */}
+        <div
+          className="absolute -inset-4 rounded-3xl pointer-events-none z-[-1]"
+          style={{
+            background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, rgba(0,240,255,0.03) 50%, transparent 70%)',
+            opacity: hovered ? 1 : 0,
+            transition: 'opacity 0.5s ease',
+            filter: 'blur(24px)',
+          }}
+        />
+      </motion.div>
+    </div>
   );
 }

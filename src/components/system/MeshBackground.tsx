@@ -4,6 +4,26 @@ export default function MeshBackground() {
       {/* Deep base */}
       <div className="absolute inset-0 bg-[var(--bg)]" />
 
+      {/* ── Aurora borealis waves ── */}
+      <div
+        className="absolute w-[150vw] h-[60vh] -left-[25vw] top-0"
+        style={{
+          background: 'linear-gradient(180deg, transparent 0%, rgba(139,92,246,0.06) 30%, rgba(0,240,255,0.04) 60%, transparent 100%)',
+          animation: 'aurora-wave 15s ease-in-out infinite',
+          filter: 'blur(60px)',
+          transformOrigin: 'center top',
+        }}
+      />
+      <div
+        className="absolute w-[120vw] h-[50vh] -left-[10vw] top-[5%]"
+        style={{
+          background: 'linear-gradient(180deg, transparent 0%, rgba(0,240,255,0.04) 40%, rgba(139,92,246,0.03) 70%, transparent 100%)',
+          animation: 'aurora-wave 20s ease-in-out 3s infinite reverse',
+          filter: 'blur(80px)',
+          transformOrigin: 'center top',
+        }}
+      />
+
       {/* Mesh gradient blobs */}
       <div
         className="absolute w-[800px] h-[800px] rounded-full"
@@ -36,14 +56,42 @@ export default function MeshBackground() {
         }}
       />
 
-      {/* ── Floating micro orbs ── */}
+      {/* ── Pulsing energy rings ── */}
+      <div
+        className="absolute rounded-full"
+        style={{
+          width: 300,
+          height: 300,
+          top: '20%',
+          right: '15%',
+          border: '1px solid rgba(0,240,255,0.08)',
+          animation: 'energy-ring 8s ease-out infinite',
+        }}
+      />
+      <div
+        className="absolute rounded-full"
+        style={{
+          width: 200,
+          height: 200,
+          bottom: '30%',
+          left: '10%',
+          border: '1px solid rgba(139,92,246,0.08)',
+          animation: 'energy-ring 10s ease-out 3s infinite',
+        }}
+      />
+
+      {/* ── Floating orbs (larger, more visible) ── */}
       {[
-        { color: "var(--cyan)", size: 4, x: "15%", y: "25%", dur: 8, del: 0 },
-        { color: "var(--violet)", size: 3, x: "75%", y: "15%", dur: 10, del: 2 },
-        { color: "var(--cyan)", size: 5, x: "85%", y: "60%", dur: 12, del: 1 },
-        { color: "var(--violet)", size: 3, x: "25%", y: "70%", dur: 9, del: 3 },
-        { color: "var(--rose)", size: 2, x: "50%", y: "45%", dur: 11, del: 4 },
-        { color: "var(--cyan)", size: 3, x: "60%", y: "80%", dur: 7, del: 2 },
+        { color: "var(--cyan)", size: 6, x: "12%", y: "20%", dur: 8, del: 0 },
+        { color: "var(--violet)", size: 5, x: "78%", y: "12%", dur: 10, del: 2 },
+        { color: "var(--cyan)", size: 8, x: "88%", y: "55%", dur: 12, del: 1 },
+        { color: "var(--violet)", size: 5, x: "22%", y: "65%", dur: 9, del: 3 },
+        { color: "var(--rose)", size: 4, x: "50%", y: "40%", dur: 11, del: 4 },
+        { color: "var(--cyan)", size: 6, x: "65%", y: "78%", dur: 7, del: 2 },
+        { color: "var(--violet)", size: 4, x: "35%", y: "85%", dur: 13, del: 5 },
+        { color: "var(--cyan)", size: 3, x: "90%", y: "30%", dur: 9, del: 1 },
+        { color: "var(--rose)", size: 5, x: "8%", y: "45%", dur: 14, del: 6 },
+        { color: "var(--violet)", size: 3, x: "55%", y: "10%", dur: 10, del: 3 },
       ].map((orb, i) => (
         <div
           key={i}
@@ -54,12 +102,47 @@ export default function MeshBackground() {
             left: orb.x,
             top: orb.y,
             background: orb.color,
-            boxShadow: `0 0 ${orb.size * 4}px ${orb.color}`,
-            opacity: 0.4,
+            boxShadow: `0 0 ${orb.size * 6}px ${orb.color}, 0 0 ${orb.size * 12}px ${orb.color}`,
+            opacity: 0.5,
             animation: `orb-float ${orb.dur}s ease-in-out ${orb.del}s infinite`,
           }}
         />
       ))}
+
+      {/* ── Shooting lines / streaks ── */}
+      <div
+        className="absolute h-px"
+        style={{
+          width: '15vw',
+          top: '25%',
+          left: '-15vw',
+          background: 'linear-gradient(90deg, transparent, var(--cyan), transparent)',
+          opacity: 0.15,
+          animation: 'shooting-line 8s linear 2s infinite',
+        }}
+      />
+      <div
+        className="absolute h-px"
+        style={{
+          width: '10vw',
+          top: '60%',
+          left: '-10vw',
+          background: 'linear-gradient(90deg, transparent, var(--violet), transparent)',
+          opacity: 0.1,
+          animation: 'shooting-line 12s linear 6s infinite',
+        }}
+      />
+      <div
+        className="absolute h-px"
+        style={{
+          width: '12vw',
+          top: '45%',
+          left: '-12vw',
+          background: 'linear-gradient(90deg, transparent, var(--cyan), transparent)',
+          opacity: 0.12,
+          animation: 'shooting-line 10s linear 0s infinite',
+        }}
+      />
 
       {/* Perspective grid floor */}
       <div
