@@ -318,7 +318,7 @@ export default function UltraTetris() {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Dynamic cell size: fill available space on mobile
+  // Dynamic cell size for mobile — capped to avoid stretching
   const [cellSize, setCellSize] = useState(28);
   const HEADER_H = 36;
   const CONTROLS_H = 48;
@@ -326,24 +326,17 @@ export default function UltraTetris() {
     const calc = () => {
       const isMobile = window.innerWidth < 640;
       if (isMobile) {
-        // Use visualViewport for accurate mobile height (excludes browser chrome)
-        const vh = window.visualViewport?.height || window.innerHeight;
-        const availH = vh - HEADER_H - CONTROLS_H;
-        const availW = window.innerWidth;
-        const byH = Math.floor(availH / ROWS);
-        const byW = Math.floor(availW / COLS);
-        setCellSize(Math.max(10, Math.min(byH, byW)));
+        // Width-constrained: fit 10 cols in screen width with some margin
+        const byW = Math.floor((window.innerWidth - 20) / COLS);
+        // Cap at 16px so the board doesn't stretch too tall
+        setCellSize(Math.min(byW, 16));
       } else {
         setCellSize(28);
       }
     };
     calc();
     window.addEventListener("resize", calc);
-    window.visualViewport?.addEventListener("resize", calc);
-    return () => {
-      window.removeEventListener("resize", calc);
-      window.visualViewport?.removeEventListener("resize", calc);
-    };
+    return () => window.removeEventListener("resize", calc);
   }, []);
 
   const boardW = COLS * cellSize;
@@ -352,8 +345,8 @@ export default function UltraTetris() {
   return (
     <>
       {/* ── Mobile: fullscreen overlay ── */}
-      <div ref={containerRef} className="fixed inset-0 z-[100] bg-[#060606] sm:hidden overflow-hidden" style={{ height: '100dvh' }}>
-        {/* Top bar — fixed height */}
+      <div ref={containerRef} className="fixed inset-0 z-[100] bg-[#060606] sm:hidden overflow-hidden">
+        {/* Top bar */}
         <div className="flex items-center justify-between px-3" style={{ height: HEADER_H }}>
           <div className="flex items-center gap-3">
             <div>
@@ -391,8 +384,8 @@ export default function UltraTetris() {
           </div>
         </div>
 
-        {/* Board — exact size, centered horizontally */}
-        <div className="flex justify-center" style={{ height: boardH + 2 }}>
+        {/* Board */}
+        <div className="flex justify-center">
           <div
             className="rounded-lg border border-white/[0.08] bg-[#0a0a0a] overflow-hidden relative"
             style={{ width: boardW + 2, height: boardH + 2, padding: 1 }}
@@ -505,8 +498,8 @@ export default function UltraTetris() {
           </div>
         </div>
 
-        {/* Mobile controls — fixed height */}
-        <div className="flex justify-center gap-2 px-3" style={{ height: CONTROLS_H, alignItems: 'center' }}>
+        {/* Mobile controls */}
+        <div className="flex justify-center gap-2 px-3 py-1">
           <button onClick={moveLeft} className="w-10 h-10 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">←</button>
           <button onClick={moveDown} className="w-10 h-10 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">↓</button>
           <button onClick={rotatePiece} className="w-10 h-10 rounded-xl bg-white/[0.06] active:bg-white/[0.15] text-white/60 text-lg flex items-center justify-center">↻</button>
