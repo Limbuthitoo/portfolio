@@ -28,7 +28,14 @@ export default function GamesPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <GameCard
             href="/games/tetris"
-            emoji="🧱"
+            icon={
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="6" height="6" rx="1" />
+                <rect x="9" y="3" width="6" height="6" rx="1" />
+                <rect x="9" y="9" width="6" height="6" rx="1" />
+                <rect x="9" y="15" width="6" height="6" rx="1" />
+              </svg>
+            }
             title="Ultra Tetris"
             description="Classic block-stacking with levels, ghost pieces, and a global top 3 leaderboard."
           />
