@@ -25,8 +25,8 @@ export default function CustomCursor() {
     ring.style.transform = `translate(${ringPos.current.x}px, ${ringPos.current.y}px) translate(-50%, -50%)`;
     ring.style.opacity = hidden ? "0" : "1";
     ring.style.width = ring.style.height = hovering ? "56px" : "32px";
-    ring.style.borderColor = hovering ? "rgba(0,240,255,0.3)" : "rgba(0,240,255,0.12)";
-    ring.style.background = hovering ? "rgba(0,240,255,0.04)" : "transparent";
+    ring.style.borderColor = hovering ? "rgba(0,240,255,0.35)" : "rgba(0,240,255,0.15)";
+    ring.style.background = hovering ? "rgba(0,240,255,0.08)" : "rgba(255,255,255,0.03)";
 
     if (lbl) {
       lbl.textContent = label;
@@ -96,9 +96,13 @@ export default function CustomCursor() {
         style={{
           width: 32,
           height: 32,
-          border: "1px solid rgba(0,240,255,0.12)",
+          border: "1px solid rgba(0,240,255,0.15)",
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+          background: "rgba(255,255,255,0.03)",
+          boxShadow: "0 0 12px rgba(0,240,255,0.08), inset 0 0 8px rgba(0,240,255,0.04)",
           willChange: "transform",
-          transition: "width 0.2s, height 0.2s, border-color 0.2s, background 0.2s",
+          transition: "width 0.2s, height 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s",
         }}
       >
         <span
