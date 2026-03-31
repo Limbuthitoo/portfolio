@@ -80,18 +80,18 @@ export default function MeshBackground() {
         }}
       />
 
-      {/* ── Floating orbs (larger, more visible) ── */}
+      {/* ── Floating orbs ── */}
       {[
-        { color: "var(--cyan)", size: 6, x: "12%", y: "20%", dur: 8, del: 0 },
-        { color: "var(--violet)", size: 5, x: "78%", y: "12%", dur: 10, del: 2 },
-        { color: "var(--cyan)", size: 8, x: "88%", y: "55%", dur: 12, del: 1 },
-        { color: "var(--violet)", size: 5, x: "22%", y: "65%", dur: 9, del: 3 },
-        { color: "var(--rose)", size: 4, x: "50%", y: "40%", dur: 11, del: 4 },
-        { color: "var(--cyan)", size: 6, x: "65%", y: "78%", dur: 7, del: 2 },
-        { color: "var(--violet)", size: 4, x: "35%", y: "85%", dur: 13, del: 5 },
-        { color: "var(--cyan)", size: 3, x: "90%", y: "30%", dur: 9, del: 1 },
-        { color: "var(--rose)", size: 5, x: "8%", y: "45%", dur: 14, del: 6 },
-        { color: "var(--violet)", size: 3, x: "55%", y: "10%", dur: 10, del: 3 },
+        { color: "var(--cyan)", size: 3, x: "12%", y: "20%", dur: 8, del: 0 },
+        { color: "var(--violet)", size: 2, x: "78%", y: "12%", dur: 10, del: 2 },
+        { color: "var(--cyan)", size: 4, x: "88%", y: "55%", dur: 12, del: 1 },
+        { color: "var(--violet)", size: 3, x: "22%", y: "65%", dur: 9, del: 3 },
+        { color: "var(--rose)", size: 2, x: "50%", y: "40%", dur: 11, del: 4 },
+        { color: "var(--cyan)", size: 3, x: "65%", y: "78%", dur: 7, del: 2 },
+        { color: "var(--violet)", size: 2, x: "35%", y: "85%", dur: 13, del: 5 },
+        { color: "var(--cyan)", size: 2, x: "90%", y: "30%", dur: 9, del: 1 },
+        { color: "var(--rose)", size: 3, x: "8%", y: "45%", dur: 14, del: 6 },
+        { color: "var(--violet)", size: 2, x: "55%", y: "10%", dur: 10, del: 3 },
       ].map((orb, i) => (
         <div
           key={i}
@@ -102,8 +102,8 @@ export default function MeshBackground() {
             left: orb.x,
             top: orb.y,
             background: orb.color,
-            boxShadow: `0 0 ${orb.size * 6}px ${orb.color}, 0 0 ${orb.size * 12}px ${orb.color}`,
-            opacity: 0.5,
+            boxShadow: `0 0 ${orb.size * 3}px ${orb.color}`,
+            opacity: 0.3,
             animation: `orb-float ${orb.dur}s ease-in-out ${orb.del}s infinite`,
           }}
         />
